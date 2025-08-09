@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../../../contexts/LanguageContext';
-import { usePatientRecords, PatientRecord, Visit } from '../../../contexts/PatientRecordsContext';
+import { usePatientRecords, PatientRecord, Visit, Appointment } from '../../../contexts/PatientRecordsContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Plus, Users, Activity, TrendingUp, Shield, Search, Filter, Download, Trash2, User, Syringe, FlaskConical, Pill, Calendar, FileText } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
-import jsPDF from 'jspdf';
+import jsPDF from 'jspdf/dist/jspdf.umd.min.js';
 import autoTable from 'jspdf-autotable';
 import PatientDetailView from './PatientDetailView';
 import AddPatientDialog from './dialogs/AddPatientDialog';

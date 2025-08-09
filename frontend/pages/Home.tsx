@@ -7,11 +7,8 @@ import { useMoodTracking } from '../contexts/MoodTrackingContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
+import AddAppointmentDialog from './records/components/dialogs/AddAppointmentDialog';
 import { 
   Stethoscope, 
   FileText, 
@@ -47,23 +44,6 @@ const PersonalHome = () => {
   const latestMood = entries[0];
 
   const [showAddAppointment, setShowAddAppointment] = useState(false);
-  const [newAppointment, setNewAppointment] = useState({ title: '', date: '', notes: '' });
-
-  const handleAddAppointment = () => {
-    if (!myProfile || !newAppointment.title || !newAppointment.date) {
-      toast({ title: t('common.error'), description: t('common.pleaseFillFields'), variant: "destructive" });
-      return;
-    }
-    addAppointment({
-      patientId: myProfile.id,
-      title: newAppointment.title,
-      date: new Date(newAppointment.date),
-      notes: newAppointment.notes
-    });
-    setShowAddAppointment(false);
-    setNewAppointment({ title: '', date: '', notes: '' });
-    toast({ title: t('common.success'), description: t('common.appointmentAdded') });
-  };
 
   const tips = [
     t('pages.home.tip1'),
@@ -188,7 +168,22 @@ const PersonalHome = () => {
             </CardContent>
           </Card>
           
-          <Card className="lg:col-span-3 bg-gradient-to-r from-blue-50 to-green-50">
+          {myProfile && (
+            <Card className="lg:col-span-2">
+              <CardHeader>
+                <CardTitle>{t('pages.records.healthSummary')}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                  <div><strong>{t('common.bloodType')}:</strong> <Badge variant="outline">{myProfile.bloodType || 'N/A'}</Badge></div>
+                  <div><strong>{t('common.allergies')}:</strong> {myProfile.allergies?.length ? myProfile.allergies.map(a => <Badge key={a} variant="destructive" className="mr-1">{a}</Badge>) : 'None'}</div>
+                  <div className="md:col-span-2"><strong>{t('pages.records.chronicConditions')}:</strong> {myProfile.chronicConditions?.length ? myProfile.chronicConditions.map(c => <Badge key={c} variant="secondary" className="mr-1">{c}</Badge>) : 'None'}</div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          <Card className="lg:col-span-1 bg-gradient-to-r from-blue-50 to-green-50">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Lightbulb className="h-5 w-5 text-yellow-500" />
@@ -201,28 +196,14 @@ const PersonalHome = () => {
           </Card>
         </div>
       </div>
-      <Dialog open={showAddAppointment} onOpenChange={setShowAddAppointment}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t('common.addAppointment')}</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div>
-              <Label htmlFor="appointmentTitle">{t('common.title')}</Label>
-              <Input id="appointmentTitle" value={newAppointment.title} onChange={(e) => setNewAppointment(p => ({...p, title: e.target.value}))} />
-            </div>
-            <div>
-              <Label htmlFor="appointmentDate">{t('common.dateTime')}</Label>
-              <Input id="appointmentDate" type="datetime-local" value={newAppointment.date} onChange={(e) => setNewAppointment(p => ({...p, date: e.target.value}))} />
-            </div>
-            <div>
-              <Label htmlFor="appointmentNotes">{t('common.notes')}</Label>
-              <Textarea id="appointmentNotes" value={newAppointment.notes} onChange={(e) => setNewAppointment(p => ({...p, notes: e.target.value}))} />
-            </div>
-            <Button onClick={handleAddAppointment} className="w-full">{t('common.addAppointment')}</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {myProfile && (
+        <AddAppointmentDialog
+          isOpen={showAddAppointment}
+          onClose={() => setShowAddAppointment(false)}
+          patientId={myProfile.id}
+          addAppointment={addAppointment}
+        />
+      )}
     </>
   );
 };
