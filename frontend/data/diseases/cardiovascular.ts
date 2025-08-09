@@ -68,7 +68,13 @@ export const cardiovascularDiseases: ComprehensiveDisease[] = [
     source: 'mayo',
     prevalenceInAfrica: 'very-high',
     ageGroup: 'adult',
-    gender: 'all'
+    gender: 'all',
+    quizQuestions: [
+      { en: 'Do you have a family history of high blood pressure?', fr: 'Avez-vous des antécédents familiaux d\'hypertension artérielle ?', sw: 'Je, una historia ya familia ya shinikizo la damu?', isRiskFactor: true },
+      { en: 'Do you smoke or consume alcohol regularly?', fr: 'Fumez-vous ou consommez-vous de l\'alcool régulièrement ?', sw: 'Je, unavuta sigara au unakunywa pombe mara kwa mara?', isRiskFactor: true },
+      { en: 'Is your diet high in salt?', fr: 'Votre alimentation est-elle riche en sel ?', sw: 'Je, mlo wako una chumvi nyingi?', isRiskFactor: true },
+      { en: 'Are you experiencing severe headaches or vision changes?', fr: 'Ressentez-vous des maux de tête sévères ou des changements de vision ?', sw: 'Je, unapata maumivu makali ya kichwa au mabadiliko ya kuona?', isRiskFactor: false }
+    ]
   },
   {
     id: 'heart-attack',
@@ -137,7 +143,13 @@ export const cardiovascularDiseases: ComprehensiveDisease[] = [
     source: 'mayo',
     prevalenceInAfrica: 'high',
     ageGroup: 'adult',
-    gender: 'all'
+    gender: 'all',
+    quizQuestions: [
+      { en: 'Do you have a history of high blood pressure or high cholesterol?', fr: 'Avez-vous des antécédents d\'hypertension artérielle ou d\'hypercholestérolémie ?', sw: 'Je, una historia ya shinikizo la damu la juu au kolesteroli ya juu?', isRiskFactor: true },
+      { en: 'Do you have diabetes?', fr: 'Avez-vous le diabète ?', sw: 'Je, una ugonjwa wa kisukari?', isRiskFactor: true },
+      { en: 'Do you smoke?', fr: 'Fumez-vous ?', sw: 'Je, unavuta sigara?', isRiskFactor: true },
+      { en: 'Is the chest pain radiating to your arm or jaw?', fr: 'La douleur thoracique irradie-t-elle vers votre bras ou votre mâchoire ?', sw: 'Je, maumivu ya kifua yanasambaa kwenye mkono au taya?', isRiskFactor: false }
+    ]
   },
   {
     id: 'heart-failure',

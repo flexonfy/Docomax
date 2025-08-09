@@ -68,7 +68,13 @@ export const infectiousDiseases: ComprehensiveDisease[] = [
     source: 'mayo',
     prevalenceInAfrica: 'very-high',
     ageGroup: 'all',
-    gender: 'all'
+    gender: 'all',
+    quizQuestions: [
+      { en: 'Have you recently traveled to a malaria-prone area?', fr: 'Avez-vous récemment voyagé dans une zone à risque de paludisme ?', sw: 'Je, umesafiri hivi karibuni kwenda eneo lenye malaria?', isRiskFactor: true },
+      { en: 'Do you live in an area with many mosquitoes?', fr: 'Vivez-vous dans une zone avec beaucoup de moustiques ?', sw: 'Je, unaishi katika eneo lenye mbu wengi?', isRiskFactor: true },
+      { en: 'Are you pregnant?', fr: 'Êtes-vous enceinte ?', sw: 'Je, wewe ni mjamzito?', isRiskFactor: true },
+      { en: 'Are you experiencing severe confusion or seizures?', fr: 'Ressentez-vous une confusion sévère ou des convulsions ?', sw: 'Je, unapata mchanganyiko mkali au mshtuko?', isRiskFactor: false }
+    ]
   },
   {
     id: 'tuberculosis',
@@ -137,7 +143,13 @@ export const infectiousDiseases: ComprehensiveDisease[] = [
     source: 'mayo',
     prevalenceInAfrica: 'very-high',
     ageGroup: 'all',
-    gender: 'all'
+    gender: 'all',
+    quizQuestions: [
+      { en: 'Do you have HIV or a weakened immune system?', fr: 'Avez-vous le VIH ou un système immunitaire affaibli ?', sw: 'Je, una VVU au mfumo dhaifu wa kinga?', isRiskFactor: true },
+      { en: 'Do you smoke or abuse alcohol?', fr: 'Fumez-vous ou abusez-vous de l\'alcool ?', sw: 'Je, unavuta sigara au unatumia pombe kupita kiasi?', isRiskFactor: true },
+      { en: 'Do you live in crowded conditions?', fr: 'Vivez-vous dans des conditions surpeuplées ?', sw: 'Je, unaishi katika mazingira ya msongamano?', isRiskFactor: true },
+      { en: 'Have you had close contact with someone with TB?', fr: 'Avez-vous eu un contact étroit avec une personne atteinte de la tuberculose ?', sw: 'Je, umekuwa karibu na mtu mwenye Kifua Kikuu?', isRiskFactor: true }
+    ]
   },
   {
     id: 'covid-19',

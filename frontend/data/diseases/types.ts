@@ -18,4 +18,10 @@ export interface ComprehensiveDisease {
   prevalenceInAfrica: 'very-high' | 'high' | 'medium' | 'low' | 'rare';
   ageGroup: 'all' | 'pediatric' | 'adult' | 'elderly';
   gender: 'all' | 'male' | 'female';
+  quizQuestions?: {
+    en: string;
+    fr: string;
+    sw: string;
+    isRiskFactor: boolean;
+  }[];
 }
