@@ -60,6 +60,11 @@ export const digestiveDiseases: ComprehensiveDisease[] = [
       fr: 'Endoscopie, tests H. pylori (respiratoire, selles, sang), transit œso-gastro-duodénal.',
       sw: 'Endoscopy, vipimo vya H. pylori (pumzi, kinyesi, damu), mfululizo wa GI ya juu.'
     },
+    possibleTests: {
+      en: ['Upper endoscopy (EGD)', 'Helicobacter pylori (H. pylori) test (breath, stool, or blood)', 'Barium swallow (upper GI series)'],
+      fr: ['Endoscopie digestive haute (EGD)', 'Test Helicobacter pylori (H. pylori) (respiratoire, selles ou sang)', 'Transit œso-gastro-duodénal (TOGD)'],
+      sw: ['Endoscopy ya juu (EGD)', 'Kipimo cha Helicobacter pylori (H. pylori) (pumzi, kinyesi, au damu)', 'Kipimo cha Barium (mfululizo wa GI ya juu)']
+    },
     prognosis: {
       en: 'Good with treatment. Recurrence is possible if risk factors are not managed.',
       fr: 'Bon avec traitement. La récidive est possible si les facteurs de risque ne sont pas gérés.',
@@ -129,6 +134,11 @@ export const digestiveDiseases: ComprehensiveDisease[] = [
       fr: 'Généralement basé sur les symptômes. Des tests de selles peuvent être effectués pour identifier la cause.',
       sw: 'Kawaida kulingana na dalili. Vipimo vya kinyesi vinaweza kufanywa ili kubaini chanzo.'
     },
+    possibleTests: {
+      en: ['Stool sample analysis for bacteria, viruses, or parasites', 'Blood tests to check for dehydration and electrolyte imbalance'],
+      fr: ['Analyse d\'échantillons de selles pour les bactéries, virus ou parasites', 'Tests sanguins pour vérifier la déshydratation et le déséquilibre électrolytique'],
+      sw: ['Uchambuzi wa sampuli ya kinyesi kwa bakteria, virusi, au vimelea', 'Vipimo vya damu kuangalia upungufu wa maji mwilini na usawa wa elektroliti']
+    },
     prognosis: {
       en: 'Most people recover within a few days with rest and fluids.',
       fr: 'La plupart des gens se rétablissent en quelques jours avec du repos et des liquides.',
@@ -197,6 +207,11 @@ export const digestiveDiseases: ComprehensiveDisease[] = [
       en: 'Based on symptoms (Rome IV criteria). Tests to rule out other conditions.',
       fr: 'Basé sur les symptômes (critères de Rome IV). Tests pour exclure d\'autres conditions.',
       sw: 'Kulingana na dalili (vigezo vya Rome IV). Vipimo vya kuondoa hali zingine.'
+    },
+    possibleTests: {
+      en: ['Blood tests to rule out celiac disease and inflammation', 'Stool tests to check for infections', 'Colonoscopy if red flag symptoms are present'],
+      fr: ['Tests sanguins pour exclure la maladie cœliaque et l\'inflammation', 'Tests de selles pour vérifier les infections', 'Coloscopie si des symptômes d\'alarme sont présents'],
+      sw: ['Vipimo vya damu kuondoa ugonjwa wa celiac na uvimbe', 'Vipimo vya kinyesi kuangalia maambukizi', 'Colonoscopy ikiwa dalili za hatari zipo']
     },
     prognosis: {
       en: 'Chronic condition that requires long-term management. Symptoms can often be controlled.',

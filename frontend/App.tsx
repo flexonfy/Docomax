@@ -8,7 +8,7 @@ import { ModeProvider } from './contexts/ModeContext';
 import { Toaster } from '@/components/ui/toaster';
 import Layout from './components/Layout';
 import Home from './pages/Home';
-import Triage from './pages/Triage';
+import Triage from './pages/triage';
 import Records from './pages/records';
 import Encyclopedia from './pages/Encyclopedia';
 import Tools from './pages/Tools';

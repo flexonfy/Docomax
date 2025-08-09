@@ -60,6 +60,11 @@ export const respiratoryDiseases: ComprehensiveDisease[] = [
       fr: 'Radiographie thoracique, tests sanguins, culture d\'expectoration, scanner, oxymétrie de pouls.',
       sw: 'X-ray ya kifua, vipimo vya damu, kilimo cha makohozi, CT scan, kipimo cha oksijeni.'
     },
+    possibleTests: {
+      en: ['Chest X-ray to visualize lung inflammation', 'Sputum culture to identify the causative organism', 'Complete Blood Count (CBC) to check for signs of infection', 'Pulse oximetry to measure blood oxygen levels'],
+      fr: ['Radiographie thoracique pour visualiser l\'inflammation pulmonaire', 'Culture des expectorations pour identifier l\'organisme causal', 'Numération formule sanguine (NFS) pour rechercher des signes d\'infection', 'Oxymétrie de pouls pour mesurer les niveaux d\'oxygène dans le sang'],
+      sw: ['X-ray ya kifua kuona uvimbe wa mapafu', 'Kilimo cha makohozi kutambua kimelea kinachosababisha', 'Kipimo kamili cha Damu (CBC) kuangalia dalili za maambukizi', 'Kipimo cha oksijeni kwenye damu']
+    },
     prognosis: {
       en: 'Good with appropriate treatment. Severity depends on age, health status, and causative organism.',
       fr: 'Bon avec un traitement approprié. La gravité dépend de l\'âge, de l\'état de santé et de l\'organisme causatif.',

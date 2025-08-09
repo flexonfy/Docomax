@@ -60,6 +60,11 @@ export const chronicDiseases: ComprehensiveDisease[] = [
       fr: 'Test de glycémie à jeun, test A1C, test de tolérance au glucose.',
       sw: 'Kipimo cha sukari ya damu wakati wa kufunga, kipimo cha A1C, kipimo cha uvumilivu wa glukosi.'
     },
+    possibleTests: {
+      en: ['Glycated hemoglobin (A1C) test', 'Fasting blood sugar test', 'Oral glucose tolerance test'],
+      fr: ['Test d\'hémoglobine glyquée (A1C)', 'Test de glycémie à jeun', 'Test d\'hyperglycémie provoquée par voie orale'],
+      sw: ['Kipimo cha hemoglobini ya glycated (A1C)', 'Kipimo cha sukari ya damu wakati wa kufunga', 'Kipimo cha uvumilivu wa glukosi kwa mdomo']
+    },
     prognosis: {
       en: 'Manageable with proper treatment and lifestyle. Poorly controlled diabetes leads to serious complications.',
       fr: 'Gérable avec un traitement et un mode de vie appropriés. Un diabète mal contrôlé entraîne des complications graves.',
@@ -123,6 +128,11 @@ export const chronicDiseases: ComprehensiveDisease[] = [
       en: 'Blood tests (creatinine, GFR), urine tests (albumin), kidney ultrasound or biopsy.',
       fr: 'Tests sanguins (créatinine, DFG), tests d\'urine (albumine), échographie ou biopsie rénale.',
       sw: 'Vipimo vya damu (creatinine, GFR), vipimo vya mkojo (albumin), ultrasound ya figo au biopsy.'
+    },
+    possibleTests: {
+      en: ['Glomerular filtration rate (GFR) blood test', 'Urine albumin-to-creatinine ratio (UACR)', 'Kidney ultrasound or CT scan'],
+      fr: ['Test sanguin du débit de filtration glomérulaire (DFG)', 'Rapport albumine/créatinine urinaire (RACU)', 'Échographie ou scanner rénal'],
+      sw: ['Kipimo cha damu cha kiwango cha uchujaji wa glomerular (GFR)', 'Uwiano wa albumini kwa kreatini kwenye mkojo (UACR)', 'Ultrasound ya figo au CT scan']
     },
     prognosis: {
       en: 'Progressive disease, but early treatment can slow progression and prevent complications.',
@@ -193,6 +203,11 @@ export const chronicDiseases: ComprehensiveDisease[] = [
       fr: 'Examen physique, radiographies, IRM, analyse du liquide articulaire.',
       sw: 'Uchunguzi wa kimwili, X-ray, MRI, uchambuzi wa maji ya viungo.'
     },
+    possibleTests: {
+      en: ['X-ray of the affected joint', 'MRI for more detailed images', 'Joint fluid analysis to rule out other conditions'],
+      fr: ['Radiographie de l\'articulation touchée', 'IRM pour des images plus détaillées', 'Analyse du liquide articulaire pour exclure d\'autres conditions'],
+      sw: ['X-ray ya kiungo kilichoathirika', 'MRI kwa picha za kina zaidi', 'Uchambuzi wa maji ya kiungo kuondoa hali zingine']
+    },
     prognosis: {
       en: 'Chronic condition that worsens over time, but treatment can manage symptoms.',
       fr: 'Condition chronique qui s\'aggrave avec le temps, mais le traitement peut gérer les symptômes.',
@@ -261,6 +276,11 @@ export const chronicDiseases: ComprehensiveDisease[] = [
       en: 'Joint fluid test, blood test for uric acid, X-ray, ultrasound.',
       fr: 'Analyse du liquide articulaire, test sanguin pour l\'acide urique, radiographie, échographie.',
       sw: 'Kipimo cha maji ya viungo, kipimo cha damu cha asidi ya mkojo, X-ray, ultrasound.'
+    },
+    possibleTests: {
+      en: ['Joint fluid analysis to look for urate crystals', 'Blood test to measure uric acid levels', 'Ultrasound or CT scan of the joint'],
+      fr: ['Analyse du liquide articulaire pour rechercher des cristaux d\'urate', 'Test sanguin pour mesurer les niveaux d\'acide urique', 'Échographie ou scanner de l\'articulation'],
+      sw: ['Uchambuzi wa maji ya kiungo kutafuta fuwele za urate', 'Kipimo cha damu kupima viwango vya asidi ya mkojo', 'Ultrasound au CT scan ya kiungo']
     },
     prognosis: {
       en: 'Highly treatable with medication and lifestyle changes.',
@@ -331,6 +351,11 @@ export const chronicDiseases: ComprehensiveDisease[] = [
       fr: 'Ostéodensitométrie (scan DEXA).',
       sw: 'Uchunguzi wa msongamano wa mifupa (DEXA scan).'
     },
+    possibleTests: {
+      en: ['Bone density scan (DEXA)'],
+      fr: ['Ostéodensitométrie (DEXA)'],
+      sw: ['Kipimo cha msongamano wa mifupa (DEXA)']
+    },
     prognosis: {
       en: 'Manageable with treatment to prevent fractures. Cannot be cured.',
       fr: 'Gérable avec un traitement pour prévenir les fractures. Ne peut pas être guéri.',
@@ -399,6 +424,11 @@ export const chronicDiseases: ComprehensiveDisease[] = [
       en: 'Pelvic exam, ultrasound, MRI, laparoscopy (only definitive way).',
       fr: 'Examen pelvien, échographie, IRM, laparoscopie (seul moyen définitif).',
       sw: 'Uchunguzi wa nyonga, ultrasound, MRI, laparoscopy (njia pekee ya uhakika).'
+    },
+    possibleTests: {
+      en: ['Pelvic exam', 'Transvaginal ultrasound', 'MRI', 'Laparoscopy (for definitive diagnosis)'],
+      fr: ['Examen pelvien', 'Échographie transvaginale', 'IRM', 'Laparoscopie (pour un diagnostic définitif)'],
+      sw: ['Uchunguzi wa nyonga', 'Ultrasound ya uke', 'MRI', 'Laparoscopy (kwa utambuzi wa uhakika)']
     },
     prognosis: {
       en: 'Chronic condition that can be managed with treatment. Symptoms often improve after menopause.',

@@ -60,6 +60,11 @@ export const autoimmuneDiseases: ComprehensiveDisease[] = [
       fr: 'Tests sanguins (facteur rhumatoïde, anti-CCP), imagerie (radiographie, IRM, échographie).',
       sw: 'Vipimo vya damu (kipengele cha rheumatoid, anti-CCP), picha (X-ray, MRI, ultrasound).'
     },
+    possibleTests: {
+      en: ['Rheumatoid factor (RF) blood test', 'Anti-CCP antibody test', 'Erythrocyte sedimentation rate (ESR) or C-reactive protein (CRP) test', 'X-rays of affected joints'],
+      fr: ['Test sanguin du facteur rhumatoïde (FR)', 'Test d\'anticorps anti-CCP', 'Vitesse de sédimentation (VS) ou test de la protéine C-réactive (CRP)', 'Radiographies des articulations touchées'],
+      sw: ['Kipimo cha damu cha Rheumatoid factor (RF)', 'Kipimo cha kingamwili cha Anti-CCP', 'Kipimo cha kiwango cha mchanga wa seli nyekundu (ESR) au protini ya C-reactive (CRP)', 'X-ray za viungo vilivyoathirika']
+    },
     prognosis: {
       en: 'Chronic, progressive disease. Early, aggressive treatment can slow progression and prevent joint damage.',
       fr: 'Maladie chronique et progressive. Un traitement précoce et agressif peut ralentir la progression et prévenir les lésions articulaires.',
@@ -128,6 +133,11 @@ export const autoimmuneDiseases: ComprehensiveDisease[] = [
       en: 'Blood tests (ANA), urine tests, imaging, biopsy.',
       fr: 'Tests sanguins (AAN), tests d\'urine, imagerie, biopsie.',
       sw: 'Vipimo vya damu (ANA), vipimo vya mkojo, picha, biopsy.'
+    },
+    possibleTests: {
+      en: ['Antinuclear antibody (ANA) test', 'Complete Blood Count (CBC)', 'Urinalysis to check for kidney problems', 'Erythrocyte sedimentation rate (ESR)'],
+      fr: ['Test d\'anticorps antinucléaires (AAN)', 'Numération formule sanguine (NFS)', 'Analyse d\'urine pour vérifier les problèmes rénaux', 'Vitesse de sédimentation (VS)'],
+      sw: ['Kipimo cha kingamwili cha Antinuclear (ANA)', 'Kipimo kamili cha Damu (CBC)', 'Uchunguzi wa mkojo kuangalia matatizo ya figo', 'Kiwango cha mchanga wa seli nyekundu (ESR)']
     },
     prognosis: {
       en: 'Chronic condition with flares and remissions. Most people can live a full life with treatment.',
@@ -198,6 +208,11 @@ export const autoimmuneDiseases: ComprehensiveDisease[] = [
       fr: 'Tests sanguins pour les anticorps, tests génétiques, endoscopie avec biopsie de l\'intestin grêle.',
       sw: 'Vipimo vya damu kwa kingamwili, vipimo vya kijeni, endoscopy na biopsy ya utumbo mdogo.'
     },
+    possibleTests: {
+      en: ['Serology testing (tTG-IgA)', 'Genetic testing for HLA-DQ2 and HLA-DQ8', 'Endoscopy with biopsy of the small intestine'],
+      fr: ['Tests sérologiques (tTG-IgA)', 'Tests génétiques pour HLA-DQ2 et HLA-DQ8', 'Endoscopie avec biopsie de l\'intestin grêle'],
+      sw: ['Vipimo vya serolojia (tTG-IgA)', 'Vipimo vya kijeni kwa HLA-DQ2 na HLA-DQ8', 'Endoscopy na biopsy ya utumbo mdogo']
+    },
     prognosis: {
       en: 'Excellent with a strict gluten-free diet. Symptoms improve and intestinal damage heals.',
       fr: 'Excellent avec un régime sans gluten strict. Les symptômes s\'améliorent et les dommages intestinaux guérissent.',
@@ -266,6 +281,11 @@ export const autoimmuneDiseases: ComprehensiveDisease[] = [
       en: 'Colonoscopy, endoscopy, CT scan, MRI, blood tests, stool studies.',
       fr: 'Coloscopie, endoscopie, scanner, IRM, tests sanguins, études des selles.',
       sw: 'Colonoscopy, endoscopy, CT scan, MRI, vipimo vya damu, uchunguzi wa kinyesi.'
+    },
+    possibleTests: {
+      en: ['Colonoscopy with biopsy', 'CT or MRI enterography', 'Blood tests for inflammation (CRP, ESR)', 'Stool tests for infection'],
+      fr: ['Coloscopie avec biopsie', 'Entérographie par CT ou IRM', 'Tests sanguins pour l\'inflammation (CRP, VS)', 'Tests de selles pour infection'],
+      sw: ['Colonoscopy na biopsy', 'CT au MRI enterography', 'Vipimo vya damu kwa uvimbe (CRP, ESR)', 'Vipimo vya kinyesi kwa maambukizi']
     },
     prognosis: {
       en: 'Chronic condition with periods of remission and relapse. No cure, but treatment can manage symptoms.',
@@ -336,6 +356,11 @@ export const autoimmuneDiseases: ComprehensiveDisease[] = [
       fr: 'Coloscopie avec biopsie, sigmoïdoscopie flexible, études des selles, tests sanguins, scanner ou IRM.',
       sw: 'Colonoscopy na biopsy, sigmoidoscopy inayobadilika, uchunguzi wa kinyesi, vipimo vya damu, CT au MRI scan.'
     },
+    possibleTests: {
+      en: ['Colonoscopy with biopsy', 'Stool tests to rule out infection', 'Blood tests for anemia and inflammation'],
+      fr: ['Coloscopie avec biopsie', 'Tests de selles pour exclure une infection', 'Tests sanguins pour l\'anémie et l\'inflammation'],
+      sw: ['Colonoscopy na biopsy', 'Vipimo vya kinyesi kuondoa maambukizi', 'Vipimo vya damu kwa upungufu wa damu na uvimbe']
+    },
     prognosis: {
       en: 'Chronic condition with periods of remission and relapse. Treatment can manage symptoms and induce remission.',
       fr: 'Condition chronique avec des périodes de rémission et de rechute. Le traitement peut gérer les symptômes et induire une rémission.',
@@ -404,6 +429,11 @@ export const autoimmuneDiseases: ComprehensiveDisease[] = [
       en: 'MRI of brain and spinal cord, evoked potential studies, lumbar puncture.',
       fr: 'IRM du cerveau et de la moelle épinière, études des potentiels évoqués, ponction lombaire.',
       sw: 'MRI ya ubongo na uti wa mgongo, tafiti za uwezo ulioamshwa, kuchomwa kwa uti wa mgongo.'
+    },
+    possibleTests: {
+      en: ['MRI of the brain and spinal cord', 'Evoked potential studies', 'Lumbar puncture (spinal tap) to analyze cerebrospinal fluid'],
+      fr: ['IRM du cerveau et de la moelle épinière', 'Études des potentiels évoqués', 'Ponction lombaire pour analyser le liquide céphalo-rachidien'],
+      sw: ['MRI ya ubongo na uti wa mgongo', 'Tafiti za uwezo ulioamshwa', 'Kuchomwa kwa uti wa mgongo kuchambua maji ya ubongo']
     },
     prognosis: {
       en: 'Varies widely. Most people have a normal or near-normal life expectancy with management.',
@@ -474,6 +504,11 @@ export const autoimmuneDiseases: ComprehensiveDisease[] = [
       fr: 'Test d\'hémoglobine glyquée (A1C), test de glycémie aléatoire, test de glycémie à jeun, tests d\'auto-anticorps.',
       sw: 'Kipimo cha hemoglobini ya glycated (A1C), kipimo cha sukari ya damu bila mpangilio, kipimo cha sukari ya damu wakati wa kufunga, vipimo vya kingamwili.'
     },
+    possibleTests: {
+      en: ['Glycated hemoglobin (A1C) test', 'Random blood sugar test', 'Fasting blood sugar test', 'Tests for autoantibodies'],
+      fr: ['Test d\'hémoglobine glyquée (A1C)', 'Test de glycémie aléatoire', 'Test de glycémie à jeun', 'Tests d\'auto-anticorps'],
+      sw: ['Kipimo cha hemoglobini ya glycated (A1C)', 'Kipimo cha sukari ya damu bila mpangilio', 'Kipimo cha sukari ya damu wakati wa kufunga', 'Vipimo vya kingamwili']
+    },
     prognosis: {
       en: 'Manageable with diligent care. Life expectancy is slightly reduced but improving with modern technology.',
       fr: 'Gérable avec des soins diligents. L\'espérance de vie est légèrement réduite mais s\'améliore avec la technologie moderne.',
@@ -542,6 +577,11 @@ export const autoimmuneDiseases: ComprehensiveDisease[] = [
       en: 'Physical examination of skin, nails, and scalp. Skin biopsy may be performed.',
       fr: 'Examen physique de la peau, des ongles et du cuir chevelu. Une biopsie cutanée peut être effectuée.',
       sw: 'Uchunguzi wa kimwili wa ngozi, kucha, na ngozi ya kichwa. Biopsy ya ngozi inaweza kufanywa.'
+    },
+    possibleTests: {
+      en: ['Physical examination', 'Skin biopsy to rule out other disorders'],
+      fr: ['Examen physique', 'Biopsie cutanée pour exclure d\'autres troubles'],
+      sw: ['Uchunguzi wa kimwili', 'Biopsy ya ngozi kuondoa magonjwa mengine']
     },
     prognosis: {
       en: 'Chronic disease with periods of remission and flares. Treatable but not curable.',
@@ -612,6 +652,11 @@ export const autoimmuneDiseases: ComprehensiveDisease[] = [
       fr: 'Tests sanguins pour la TSH, la T4 et les anticorps thyroïdiens (anticorps anti-TPO).',
       sw: 'Vipimo vya damu kwa TSH, T4, na kingamwili za tezi (kingamwili za TPO).'
     },
+    possibleTests: {
+      en: ['Thyroid-stimulating hormone (TSH) test', 'Free T4 (thyroxine) test', 'Thyroid peroxidase (TPO) antibody test'],
+      fr: ['Test de l\'hormone thyréostimulante (TSH)', 'Test de T4 libre (thyroxine)', 'Test d\'anticorps anti-peroxydase thyroïdienne (TPO)'],
+      sw: ['Kipimo cha homoni ya kuchochea tezi (TSH)', 'Kipimo cha T4 huru (thyroxine)', 'Kipimo cha kingamwili cha peroxidase ya tezi (TPO)']
+    },
     prognosis: {
       en: 'Excellent with lifelong hormone replacement therapy.',
       fr: 'Excellent avec une thérapie de remplacement hormonal à vie.',
@@ -680,6 +725,11 @@ export const autoimmuneDiseases: ComprehensiveDisease[] = [
       en: 'Blood tests (TSH, T3, T4, TRAb), radioactive iodine uptake test, ultrasound.',
       fr: 'Tests sanguins (TSH, T3, T4, TRAb), test de captation de l\'iode radioactif, échographie.',
       sw: 'Vipimo vya damu (TSH, T3, T4, TRAb), kipimo cha upokeaji wa iodini ya mionzi, ultrasound.'
+    },
+    possibleTests: {
+      en: ['TSH, T3, and T4 blood tests', 'Thyroid-stimulating immunoglobulin (TSI) test', 'Radioactive iodine uptake test', 'Thyroid ultrasound'],
+      fr: ['Tests sanguins TSH, T3 et T4', 'Test d\'immunoglobuline thyréostimulante (TSI)', 'Test de captation de l\'iode radioactif', 'Échographie de la thyroïde'],
+      sw: ['Vipimo vya damu vya TSH, T3, na T4', 'Kipimo cha immunoglobulini ya kuchochea tezi (TSI)', 'Kipimo cha upokeaji wa iodini ya mionzi', 'Ultrasound ya tezi']
     },
     prognosis: {
       en: 'Treatable, but may require lifelong management, especially if the thyroid is removed or destroyed.',

@@ -24,4 +24,9 @@ export interface ComprehensiveDisease {
     sw: string;
     isRiskFactor: boolean;
   }[];
+  possibleTests?: {
+    en: string[];
+    fr: string[];
+    sw: string[];
+  };
 }

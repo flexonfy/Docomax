@@ -60,6 +60,11 @@ export const infectiousDiseases: ComprehensiveDisease[] = [
       fr: 'Tests sanguins (microscopie, tests de diagnostic rapide, PCR), examen clinique, évaluation de l\'historique de voyage.',
       sw: 'Vipimo vya damu (darubini, vipimo vya haraka vya utambuzi, PCR), uchunguzi wa kimatibabu, tathmini ya historia ya kusafiri.'
     },
+    possibleTests: {
+      en: ['Rapid Diagnostic Test (RDT) for malaria antigens', 'Microscopic examination of a blood smear', 'Complete Blood Count (CBC) to check for anemia and platelet levels'],
+      fr: ['Test de diagnostic rapide (TDR) pour les antigènes du paludisme', 'Examen microscopique d\'un frottis sanguin', 'Numération formule sanguine (NFS) pour vérifier l\'anémie et le taux de plaquettes'],
+      sw: ['Kipimo cha Haraka cha Utambuzi (RDT) kwa antijeni za malaria', 'Uchunguzi wa hadubini wa sampuli ya damu', 'Kipimo kamili cha Damu (CBC) kuangalia upungufu wa damu na viwango vya pletleti']
+    },
     prognosis: {
       en: 'Good with early diagnosis and appropriate treatment. Severe malaria can be fatal without prompt treatment.',
       fr: 'Bon avec un diagnostic précoce et un traitement approprié. Le paludisme sévère peut être mortel sans traitement rapide.',
@@ -134,6 +139,11 @@ export const infectiousDiseases: ComprehensiveDisease[] = [
       en: 'Chest X-ray, sputum tests, tuberculin skin test, interferon-gamma release assays, CT scan.',
       fr: 'Radiographie thoracique, tests d\'expectoration, test cutané à la tuberculine, tests de libération d\'interféron-gamma, scanner.',
       sw: 'X-ray ya kifua, vipimo vya makohozi, kipimo cha ngozi cha tuberculin, vipimo vya kutolewa kwa interferon-gamma, CT scan.'
+    },
+    possibleTests: {
+      en: ['Sputum smear microscopy for acid-fast bacilli', 'Chest X-ray', 'Tuberculin Skin Test (TST) or Interferon-Gamma Release Assay (IGRA)', 'GeneXpert MTB/RIF test on sputum'],
+      fr: ['Examen microscopique des expectorations pour les bacilles acido-alcoolo-résistants', 'Radiographie thoracique', 'Test cutané à la tuberculine (TCT) ou test de libération d\'interféron-gamma (IGRA)', 'Test GeneXpert MTB/RIF sur les expectorations'],
+      sw: ['Uchunguzi wa hadubini wa makohozi kwa basilasi zinazostahimili asidi', 'X-ray ya kifua', 'Kipimo cha Ngozi cha Tuberculin (TST) au Kipimo cha Utoaji wa Interferon-Gamma (IGRA)', 'Kipimo cha GeneXpert MTB/RIF kwenye makohozi']
     },
     prognosis: {
       en: 'Excellent with proper treatment completion. Drug-resistant TB requires longer treatment and has worse outcomes.',

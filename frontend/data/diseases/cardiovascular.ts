@@ -60,6 +60,11 @@ export const cardiovascularDiseases: ComprehensiveDisease[] = [
       fr: 'Mesures de tension artérielle, surveillance 24 heures, tests sanguins, ECG, échocardiogramme.',
       sw: 'Vipimo vya shinikizo la damu, ufuatiliaji wa masaa 24, vipimo vya damu, ECG, echocardiogram.'
     },
+    possibleTests: {
+      en: ['Blood pressure measurement (multiple readings)', 'Ambulatory blood pressure monitoring', 'Electrocardiogram (ECG)', 'Blood and urine tests to check for kidney problems and cholesterol'],
+      fr: ['Mesure de la tension artérielle (plusieurs lectures)', 'Surveillance ambulatoire de la pression artérielle', 'Électrocardiogramme (ECG)', 'Tests sanguins et urinaires pour vérifier les problèmes rénaux et le cholestérol'],
+      sw: ['Kipimo cha shinikizo la damu (vipimo vingi)', 'Ufuatiliaji wa shinikizo la damu wa saa 24', 'Electrocardiogram (ECG)', 'Vipimo vya damu na mkojo kuangalia matatizo ya figo na kolesteroli']
+    },
     prognosis: {
       en: 'Excellent with proper treatment and lifestyle changes. Uncontrolled hypertension can lead to serious complications.',
       fr: 'Excellent avec un traitement approprié et des changements de mode de vie. L\'hypertension non contrôlée peut entraîner des complications graves.',
@@ -134,6 +139,11 @@ export const cardiovascularDiseases: ComprehensiveDisease[] = [
       en: 'ECG, blood tests (troponin), chest X-ray, echocardiogram, cardiac catheterization.',
       fr: 'ECG, tests sanguins (troponine), radiographie thoracique, échocardiogramme, cathétérisme cardiaque.',
       sw: 'ECG, vipimo vya damu (troponin), X-ray ya kifua, echocardiogram, catheterization ya moyo.'
+    },
+    possibleTests: {
+      en: ['Electrocardiogram (ECG)', 'Troponin blood test', 'Echocardiogram', 'Coronary angiogram (cardiac catheterization)'],
+      fr: ['Électrocardiogramme (ECG)', 'Test sanguin de troponine', 'Échocardiogramme', 'Coronarographie (cathétérisme cardiaque)'],
+      sw: ['Electrocardiogram (ECG)', 'Kipimo cha damu cha Troponin', 'Echocardiogram', 'Angiogram ya moyo (catheterization ya moyo)']
     },
     prognosis: {
       en: 'Depends on extent of damage and speed of treatment. Early treatment improves outcomes significantly.',
@@ -210,6 +220,11 @@ export const cardiovascularDiseases: ComprehensiveDisease[] = [
       fr: 'Échocardiogramme, ECG, radiographie thoracique, tests sanguins (BNP), test d\'effort, cathétérisme cardiaque.',
       sw: 'Echocardiogram, ECG, X-ray ya kifua, vipimo vya damu (BNP), kipimo cha msongo, catheterization ya moyo.'
     },
+    possibleTests: {
+      en: ['Echocardiogram to assess heart function', 'B-type natriuretic peptide (BNP) blood test', 'Chest X-ray', 'Electrocardiogram (ECG)'],
+      fr: ['Échocardiogramme pour évaluer la fonction cardiaque', 'Test sanguin du peptide natriurétique de type B (BNP)', 'Radiographie thoracique', 'Électrocardiogramme (ECG)'],
+      sw: ['Echocardiogram kutathmini utendaji wa moyo', 'Kipimo cha damu cha B-type natriuretic peptide (BNP)', 'X-ray ya kifua', 'Electrocardiogram (ECG)']
+    },
     prognosis: {
       en: 'Chronic condition that requires lifelong management. Treatment can improve symptoms and quality of life.',
       fr: 'Condition chronique qui nécessite une gestion à vie. Le traitement peut améliorer les symptômes et la qualité de vie.',
@@ -283,6 +298,11 @@ export const cardiovascularDiseases: ComprehensiveDisease[] = [
       fr: 'Scanner, IRM, examen physique, tests sanguins, échographie carotidienne.',
       sw: 'CT scan, MRI, uchunguzi wa kimwili, vipimo vya damu, ultrasound ya carotid.'
     },
+    possibleTests: {
+      en: ['CT scan or MRI of the brain', 'Carotid ultrasound', 'Echocardiogram', 'Blood tests for clotting factors and cholesterol'],
+      fr: ['Scanner ou IRM du cerveau', 'Échographie carotidienne', 'Échocardiogramme', 'Tests sanguins pour les facteurs de coagulation et le cholestérol'],
+      sw: ['CT scan au MRI ya ubongo', 'Ultrasound ya carotid', 'Echocardiogram', 'Vipimo vya damu kwa sababu za kuganda na kolesteroli']
+    },
     prognosis: {
       en: 'Depends on severity and speed of treatment. Rehabilitation can improve function.',
       fr: 'Dépend de la gravité et de la rapidité du traitement. La rééducation peut améliorer la fonction.',
@@ -355,6 +375,11 @@ export const cardiovascularDiseases: ComprehensiveDisease[] = [
       en: 'Echocardiogram, ECG, chest X-ray, blood tests.',
       fr: 'Échocardiogramme, ECG, radiographie thoracique, tests sanguins.',
       sw: 'Echocardiogram, ECG, X-ray ya kifua, vipimo vya damu.'
+    },
+    possibleTests: {
+      en: ['Echocardiogram to assess heart valve damage', 'Electrocardiogram (ECG)', 'Throat swab for streptococcus bacteria', 'Blood test for anti-streptolysin O (ASO) antibodies'],
+      fr: ['Échocardiogramme pour évaluer les lésions des valves cardiaques', 'Électrocardiogramme (ECG)', 'Prélèvement de gorge pour la bactérie streptocoque', 'Test sanguin d\'anticorps anti-streptolysine O (ASO)'],
+      sw: ['Echocardiogram kutathmini uharibifu wa valvu za moyo', 'Electrocardiogram (ECG)', 'Sampuli ya koo kwa bakteria ya streptococcus', 'Kipimo cha damu cha kingamwili za anti-streptolysin O (ASO)']
     },
     prognosis: {
       en: 'Varies depending on severity of valve damage. Can be a lifelong condition.',
