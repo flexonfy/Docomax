@@ -127,6 +127,12 @@ export default function Triage() {
           baseConfidence += (commonMatches * 15);
           baseConfidence += (rareMatches * 25);
           
+          // Penalize for unmatched symptoms
+          const unmatchedCount = selectedSymptoms.length - totalMatches;
+          if (unmatchedCount > 0) {
+            baseConfidence -= (unmatchedCount * 10);
+          }
+
           if (disease.prevalenceInAfrica === 'very-high') {
             baseConfidence *= 1.4;
           } else if (disease.prevalenceInAfrica === 'high') {
@@ -149,7 +155,7 @@ export default function Triage() {
               break;
           }
 
-          const confidence = Math.min(95, Math.round(baseConfidence));
+          const confidence = Math.min(95, Math.max(5, Math.round(baseConfidence)));
           riskScore = Math.min(100, riskScore);
 
           triageResults.push({
@@ -198,16 +204,19 @@ export default function Triage() {
   const refineConfidence = () => {
     if (!quizForDisease) return;
 
-    let confidenceBoost = 0;
+    let confidenceChange = 0;
     const questions = quizForDisease.disease.quizQuestions || [];
     
     questions.forEach(q => {
-      if (quizAnswers[q.en] === true) {
-        confidenceBoost += q.isRiskFactor ? 15 : 5;
+      const answer = quizAnswers[q.en];
+      if (answer === true) {
+        confidenceChange += q.isRiskFactor ? 10 : 15; // Key symptoms have higher impact
+      } else if (answer === false && !q.isRiskFactor) {
+        confidenceChange -= 10; // Penalize if a key symptom is absent
       }
     });
 
-    const newConfidence = Math.min(98, quizForDisease.confidence + confidenceBoost);
+    const newConfidence = Math.min(98, Math.max(5, quizForDisease.confidence + confidenceChange));
 
     setResults(prevResults => prevResults.map(r => 
       r.disease.id === quizForDisease.disease.id 

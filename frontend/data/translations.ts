@@ -38,7 +38,7 @@ export const translations = {
       treatment: 'Treatment',
       prevention: 'Prevention',
       yes: 'Yes',
-      no: 'Non',
+      no: 'No',
       all: 'All',
       recent: 'Recent',
       chronic: 'Chronic',

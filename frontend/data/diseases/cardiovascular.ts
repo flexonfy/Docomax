@@ -218,7 +218,11 @@ export const cardiovascularDiseases: ComprehensiveDisease[] = [
     source: 'mayo',
     prevalenceInAfrica: 'high',
     ageGroup: 'adult',
-    gender: 'all'
+    gender: 'all',
+    quizQuestions: [
+      { en: 'Do you experience shortness of breath when lying down that improves when you sit up?', fr: 'Ressentez-vous un essoufflement en position allongée qui s\'améliore lorsque vous vous asseyez ?', sw: 'Je, unapata upungufu wa pumzi ukiwa umelala ambao unapungua unapokaa?', isRiskFactor: false },
+      { en: 'Have you noticed a persistent cough or wheezing, especially with white or pink blood-tinged phlegm?', fr: 'Avez-vous remarqué une toux persistante ou une respiration sifflante, en particulier avec des expectorations blanches ou rosées teintées de sang ?', sw: 'Je, umeona kikohozi kinachoendelea au kupiga mbinja, hasa na makohozi meupe au ya waridi yenye damu?', isRiskFactor: false }
+    ]
   },
   {
     id: 'stroke',
@@ -287,7 +291,11 @@ export const cardiovascularDiseases: ComprehensiveDisease[] = [
     source: 'mayo',
     prevalenceInAfrica: 'high',
     ageGroup: 'adult',
-    gender: 'all'
+    gender: 'all',
+    quizQuestions: [
+      { en: 'Have you experienced sudden numbness or weakness in the face, arm, or leg, especially on one side of the body?', fr: 'Avez-vous ressenti un engourdissement ou une faiblesse soudaine du visage, du bras ou de la jambe, en particulier d\'un côté du corps ?', sw: 'Je, umepata ganzi au udhaifu wa ghafla usoni, mkononi, au mguuni, hasa upande mmoja wa mwili?', isRiskFactor: false },
+      { en: 'Are you having trouble speaking or understanding speech?', fr: 'Avez-vous des difficultés à parler ou à comprendre la parole ?', sw: 'Je, una shida ya kuongea au kuelewa mazungumzo?', isRiskFactor: false }
+    ]
   },
   {
     id: 'rheumatic-heart-disease',

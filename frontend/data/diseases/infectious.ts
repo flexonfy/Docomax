@@ -71,9 +71,9 @@ export const infectiousDiseases: ComprehensiveDisease[] = [
     gender: 'all',
     quizQuestions: [
       { en: 'Have you recently traveled to a malaria-prone area?', fr: 'Avez-vous récemment voyagé dans une zone à risque de paludisme ?', sw: 'Je, umesafiri hivi karibuni kwenda eneo lenye malaria?', isRiskFactor: true },
-      { en: 'Do you live in an area with many mosquitoes?', fr: 'Vivez-vous dans une zone avec beaucoup de moustiques ?', sw: 'Je, unaishi katika eneo lenye mbu wengi?', isRiskFactor: true },
-      { en: 'Are you pregnant?', fr: 'Êtes-vous enceinte ?', sw: 'Je, wewe ni mjamzito?', isRiskFactor: true },
-      { en: 'Are you experiencing severe confusion or seizures?', fr: 'Ressentez-vous une confusion sévère ou des convulsions ?', sw: 'Je, unapata mchanganyiko mkali au mshtuko?', isRiskFactor: false }
+      { en: 'Does your fever seem to come in cycles, with periods of feeling better in between?', fr: 'Votre fièvre semble-t-elle cyclique, avec des périodes d\'amélioration entre les deux ?', sw: 'Je, homa yako inaonekana kuja kwa mzunguko, na vipindi vya kujisikia vizuri katikati?', isRiskFactor: false },
+      { en: 'Are you experiencing severe confusion or seizures?', fr: 'Ressentez-vous une confusion sévère ou des convulsions ?', sw: 'Je, unapata mchanganyiko mkali au mshtuko?', isRiskFactor: false },
+      { en: 'Have you noticed any yellowing of your skin or the whites of your eyes (jaundice)?', fr: 'Avez-vous remarqué un jaunissement de votre peau ou du blanc de vos yeux (jaunisse) ?', sw: 'Je, umeona njano yoyote kwenye ngozi yako au weupe wa macho yako (manjano)?', isRiskFactor: false }
     ]
   },
   {
@@ -146,9 +146,9 @@ export const infectiousDiseases: ComprehensiveDisease[] = [
     gender: 'all',
     quizQuestions: [
       { en: 'Do you have HIV or a weakened immune system?', fr: 'Avez-vous le VIH ou un système immunitaire affaibli ?', sw: 'Je, una VVU au mfumo dhaifu wa kinga?', isRiskFactor: true },
-      { en: 'Do you smoke or abuse alcohol?', fr: 'Fumez-vous ou abusez-vous de l\'alcool ?', sw: 'Je, unavuta sigara au unatumia pombe kupita kiasi?', isRiskFactor: true },
-      { en: 'Do you live in crowded conditions?', fr: 'Vivez-vous dans des conditions surpeuplées ?', sw: 'Je, unaishi katika mazingira ya msongamano?', isRiskFactor: true },
-      { en: 'Have you had close contact with someone with TB?', fr: 'Avez-vous eu un contact étroit avec une personne atteinte de la tuberculose ?', sw: 'Je, umekuwa karibu na mtu mwenye Kifua Kikuu?', isRiskFactor: true }
+      { en: 'Have you had close contact with someone with TB?', fr: 'Avez-vous eu un contact étroit avec une personne atteinte de la tuberculose ?', sw: 'Je, umekuwa karibu na mtu mwenye Kifua Kikuu?', isRiskFactor: true },
+      { en: 'Have you been coughing up blood or blood-stained sputum?', fr: 'Avez-vous craché du sang ou des expectorations teintées de sang ?', sw: 'Je, umekuwa ukikohoa damu au makohozi yenye damu?', isRiskFactor: false },
+      { en: 'Are you experiencing drenching night sweats?', fr: 'Ressentez-vous des sueurs nocturnes abondantes ?', sw: 'Je, unapata jasho jingi la usiku?', isRiskFactor: false }
     ]
   },
   {
@@ -218,7 +218,10 @@ export const infectiousDiseases: ComprehensiveDisease[] = [
     source: 'mayo',
     prevalenceInAfrica: 'high',
     ageGroup: 'all',
-    gender: 'all'
+    gender: 'all',
+    quizQuestions: [
+      { en: 'Have you experienced a recent loss of taste or smell?', fr: 'Avez-vous récemment perdu le goût ou l\'odorat ?', sw: 'Je, umepoteza ladha au harufu hivi karibuni?', isRiskFactor: false }
+    ]
   },
   {
     id: 'cholera',
@@ -287,7 +290,10 @@ export const infectiousDiseases: ComprehensiveDisease[] = [
     source: 'mayo',
     prevalenceInAfrica: 'high',
     ageGroup: 'all',
-    gender: 'all'
+    gender: 'all',
+    quizQuestions: [
+      { en: 'Is your diarrhea watery and pale, like "rice-water"?', fr: 'Votre diarrhée est-elle aqueuse et pâle, comme de l\'"eau de riz" ?', sw: 'Je, kuhara kwako ni kwa majimaji na rangi nyeupe, kama "maji ya mchele"?', isRiskFactor: false }
+    ]
   },
   {
     id: 'typhoid',
@@ -356,7 +362,10 @@ export const infectiousDiseases: ComprehensiveDisease[] = [
     source: 'mayo',
     prevalenceInAfrica: 'high',
     ageGroup: 'all',
-    gender: 'all'
+    gender: 'all',
+    quizQuestions: [
+      { en: 'Have you noticed a rash of faint, rose-colored spots on your chest or abdomen?', fr: 'Avez-vous remarqué une éruption de taches pâles et rosées sur votre poitrine ou votre abdomen ?', sw: 'Je, umeona upele wa madoa mepesi, ya waridi kwenye kifua au tumbo lako?', isRiskFactor: false }
+    ]
   },
   {
     id: 'hepatitis-b',
