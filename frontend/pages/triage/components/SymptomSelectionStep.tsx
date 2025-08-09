@@ -62,7 +62,10 @@ export default function SymptomSelectionStep({ selectedSymptoms, onSymptomAdd, o
                     {filteredSymptoms.map((symptom) => (
                       <button
                         key={symptom}
-                        onClick={() => onSymptomAdd(symptom)}
+                        onClick={() => {
+                          onSymptomAdd(symptom);
+                          setShowSymptomSearch(false);
+                        }}
                         className="w-full text-left px-3 py-2 hover:bg-gray-50 border-b last:border-b-0"
                       >
                         {symptom}

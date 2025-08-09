@@ -21,11 +21,26 @@ export default function SymptomDetailsStep({ selectedSymptoms, symptomDetails, o
     return Object.keys(symptomQuestions).find(key => lowerSymptom.includes(key)) || null;
   };
 
+  const symptomsWithQuestions = selectedSymptoms.filter(symptom => {
+    const key = getQuestionKey(symptom);
+    return key && symptomQuestions[key]?.length > 0;
+  });
+
+  if (symptomsWithQuestions.length === 0) {
+    return (
+      <Card>
+        <CardContent className="p-6 text-center">
+          <p className="text-gray-600">No further details are needed for the selected symptoms. You can proceed to the next step.</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <div className="space-y-6">
-      {selectedSymptoms.map(symptom => {
-        const questionKey = getQuestionKey(symptom);
-        const questions = questionKey ? symptomQuestions[questionKey] : [];
+      {symptomsWithQuestions.map(symptom => {
+        const questionKey = getQuestionKey(symptom)!;
+        const questions = symptomQuestions[questionKey];
 
         return (
           <Card key={symptom}>
@@ -34,7 +49,7 @@ export default function SymptomDetailsStep({ selectedSymptoms, symptomDetails, o
               <CardDescription>Please provide more details about this symptom.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {questions.length > 0 ? questions.map((q, index) => (
+              {questions.map((q, index) => (
                 <div key={index}>
                   <Label>{q.question[language]}</Label>
                   {q.type === 'number' && (
@@ -73,9 +88,7 @@ export default function SymptomDetailsStep({ selectedSymptoms, symptomDetails, o
                     </div>
                   )}
                 </div>
-              )) : (
-                <p className="text-sm text-gray-500">No specific questions for this symptom.</p>
-              )}
+              ))}
             </CardContent>
           </Card>
         );

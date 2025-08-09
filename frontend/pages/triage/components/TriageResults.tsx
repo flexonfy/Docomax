@@ -66,7 +66,7 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <CardTitle className="flex items-center space-x-2 text-lg">
                 {getSeverityIcon(result.severity)}
-                <span>{result.disease.name[language]}</span>
+                <span>{result.disease.name?.[language] || result.disease.name?.en}</span>
                 {index === 0 && <Badge variant="secondary" className="animate-pulse">{t('pages.triage.mostLikely')}</Badge>}
               </CardTitle>
               <div className="flex flex-wrap items-center gap-2">
@@ -96,7 +96,7 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
               <div>
                 <h4 className="font-semibold text-gray-900 mb-2 text-sm flex items-center"><TestTube className="h-4 w-4 mr-2" />Possible Medical Tests:</h4>
                 <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
-                  {result.disease.possibleTests[language].map((test, idx) => <li key={idx}>{test}</li>)}
+                  {(result.disease.possibleTests?.[language] || result.disease.possibleTests?.en || []).map((test, idx) => <li key={idx}>{test}</li>)}
                 </ul>
               </div>
             )}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { comprehensiveDiseases, comprehensiveSymptoms } from '../../data/comprehensiveDiseases';
+import { comprehensiveDiseases } from '../../data/comprehensiveDiseases';
 import type { ComprehensiveDisease } from '../../data/diseases/types';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -99,9 +99,9 @@ export default function Triage() {
     }
 
     filteredDiseases.forEach(disease => {
-      const diseaseSymptoms = disease.symptoms[language];
-      const commonSymptoms = disease.commonSymptoms[language];
-      const rareSymptoms = disease.rareSymptoms[language];
+      const diseaseSymptoms = disease.symptoms?.[language] || disease.symptoms?.en || [];
+      const commonSymptoms = disease.commonSymptoms?.[language] || disease.commonSymptoms?.en || [];
+      const rareSymptoms = disease.rareSymptoms?.[language] || disease.rareSymptoms?.en || [];
       const matchedSymptoms: string[] = [];
       
       let commonMatches = 0;
@@ -118,7 +118,7 @@ export default function Triage() {
       });
 
       if (matchedSymptoms.length > 0) {
-        let baseConfidence = (totalMatches / Math.max(diseaseSymptoms.length, selectedSymptoms.length)) * 100;
+        let baseConfidence = (totalMatches / Math.max(diseaseSymptoms.length, selectedSymptoms.length, 1)) * 100;
         baseConfidence += (commonMatches * 15) + (rareMatches * 25);
         const unmatchedCount = selectedSymptoms.length - totalMatches;
         if (unmatchedCount > 0) baseConfidence -= (unmatchedCount * 10);
