@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import LanguageSelector from './LanguageSelector';
-import { Heart, Wifi, WifiOff, Menu, User, Briefcase } from 'lucide-react';
+import { Heart, Wifi, WifiOff, Menu, User, Briefcase, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Link, useLocation } from 'react-router-dom';
@@ -17,6 +17,7 @@ const getPageTitle = (pathname: string, t: (key: string, replacements?: Record<s
     '/encyclopedia': 'common.encyclopedia',
     '/tools': 'common.tools',
     '/guides': 'common.guides',
+    '/faq': 'common.faq',
     '/tools/dosage': 'tools.dosage.title',
     '/tools/bmi': 'tools.bmi.title',
     '/tools/pregnancy': 'tools.pregnancy.title',
@@ -32,7 +33,6 @@ const getPageTitle = (pathname: string, t: (key: string, replacements?: Record<s
     '/tools/glasgow-coma-scale': 'tools.gcs.title',
     '/tools/apgar-score': 'tools.apgar.title',
     '/tools/pain-scale': 'tools.painScale.title',
-    '/tools/health-buddy': 'tools.healthBuddy.title',
   };
 
   const titleKey = routeToTitleKey[pathname];
@@ -73,7 +73,7 @@ export default function Header() {
     { path: '/records', label: t('common.records') },
     { path: '/encyclopedia', label: t('common.encyclopedia') },
     { path: '/tools', label: t('common.tools') },
-    { path: '/guides', label: t('common.guides') }
+    { path: '/faq', label: t('common.faq') }
   ];
 
   return (

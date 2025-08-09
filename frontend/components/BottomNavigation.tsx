@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
-import { Home, Stethoscope, FileText, Book, Wrench, Compass } from 'lucide-react';
+import { Home, Stethoscope, FileText, Book, Wrench, HelpCircle } from 'lucide-react';
 
 export default function BottomNavigation() {
   const location = useLocation();
@@ -13,7 +13,7 @@ export default function BottomNavigation() {
     { path: '/records', icon: FileText, label: t('common.records') },
     { path: '/encyclopedia', icon: Book, label: t('common.encyclopedia') },
     { path: '/tools', icon: Wrench, label: t('common.tools') },
-    { path: '/guides', icon: Compass, label: t('common.guides') }
+    { path: '/faq', icon: HelpCircle, label: t('common.faq') }
   ];
 
   return (

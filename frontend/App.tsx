@@ -13,6 +13,7 @@ import Records from './pages/records';
 import Encyclopedia from './pages/Encyclopedia';
 import Tools from './pages/Tools';
 import Guides from './pages/Guides';
+import FAQ from './pages/FAQ';
 import DosageCalculator from './pages/tools/DosageCalculator';
 import BMICalculator from './pages/tools/BMICalculator';
 import PregnancyTracker from './pages/tools/PregnancyTracker';
@@ -28,7 +29,6 @@ import IVCalculator from './pages/tools/IVCalculator';
 import GlasgowComaScale from './pages/tools/GlasgowComaScale';
 import APGARScore from './pages/tools/APGARScore';
 import PainScale from './pages/tools/PainScale';
-import HealthBuddy from './pages/tools/HealthBuddy';
 
 function App() {
   return (
@@ -46,6 +46,7 @@ function App() {
                     <Route path="/encyclopedia" element={<Encyclopedia />} />
                     <Route path="/tools" element={<Tools />} />
                     <Route path="/guides" element={<Guides />} />
+                    <Route path="/faq" element={<FAQ />} />
                     <Route path="/tools/dosage" element={<DosageCalculator />} />
                     <Route path="/tools/bmi" element={<BMICalculator />} />
                     <Route path="/tools/pregnancy" element={<PregnancyTracker />} />
@@ -61,7 +62,6 @@ function App() {
                     <Route path="/tools/glasgow-coma-scale" element={<GlasgowComaScale />} />
                     <Route path="/tools/apgar-score" element={<APGARScore />} />
                     <Route path="/tools/pain-scale" element={<PainScale />} />
-                    <Route path="/tools/health-buddy" element={<HealthBuddy />} />
                   </Routes>
                 </Layout>
                 <Toaster />

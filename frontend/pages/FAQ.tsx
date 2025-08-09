@@ -1,13 +1,13 @@
 import React, { useState, useMemo } from 'react';
-import { useLanguage } from '../../contexts/LanguageContext';
-import { healthBuddyQA } from '../../data/healthBuddyQA';
+import { useLanguage } from '../contexts/LanguageContext';
+import { healthBuddyQA } from '../data/faqData';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Bot, Search, Shield, Heart, BookOpen, Brain } from 'lucide-react';
+import { Bot, Search, Shield, Heart, BookOpen, Brain, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-export default function HealthBuddy() {
+export default function FAQ() {
   const { t, language } = useLanguage();
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState<string>(healthBuddyQA[0].id);
@@ -32,7 +32,7 @@ export default function HealthBuddy() {
       case 'menstrual_health': return <BookOpen className="h-5 w-5" />;
       case 'body_puberty': return <Brain className="h-5 w-5" />;
       case 'general_health': return <Shield className="h-5 w-5" />;
-      default: return <Bot className="h-5 w-5" />;
+      default: return <HelpCircle className="h-5 w-5" />;
     }
   };
 
@@ -41,14 +41,14 @@ export default function HealthBuddy() {
       <div className="mb-8">
         <div className="flex items-center space-x-3 mb-4">
           <div className="p-3 bg-gradient-to-r from-rose-500 to-fuchsia-600 rounded-xl text-white shadow-lg">
-            <Bot className="h-8 w-8" />
+            <HelpCircle className="h-8 w-8" />
           </div>
           <div>
             <h1 className="text-3xl font-bold bg-gradient-to-r from-rose-600 to-fuchsia-600 bg-clip-text text-transparent">
-              {t('tools.healthBuddy.title')}
+              {t('pages.faq.title')}
             </h1>
             <p className="text-lg text-gray-600">
-              {t('tools.healthBuddy.description')}
+              {t('pages.faq.description')}
             </p>
           </div>
         </div>
@@ -60,7 +60,7 @@ export default function HealthBuddy() {
           <Card>
             <CardHeader>
               <CardTitle>{t('common.categories')}</CardTitle>
-              <CardDescription>{t('tools.healthBuddy.selectTopic')}</CardDescription>
+              <CardDescription>{t('pages.faq.selectTopic')}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
@@ -89,7 +89,7 @@ export default function HealthBuddy() {
               <div className="relative">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <Input
-                  placeholder={t('tools.healthBuddy.searchPlaceholder')}
+                  placeholder={t('pages.faq.searchPlaceholder')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
@@ -122,7 +122,7 @@ export default function HealthBuddy() {
               ) : (
                 <div className="text-center py-8">
                   <Search className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">{t('tools.healthBuddy.noQuestionsFound')}</p>
+                  <p className="text-gray-500">{t('pages.faq.noQuestionsFound')}</p>
                 </div>
               )}
             </CardContent>
@@ -135,10 +135,10 @@ export default function HealthBuddy() {
           <Shield className="h-6 w-6 text-blue-600 mt-0.5" />
           <div>
             <h3 className="font-semibold text-blue-900 mb-2">
-              {t('tools.healthBuddy.privacy')}
+              {t('pages.faq.privacy')}
             </h3>
             <p className="text-blue-800 text-sm">
-              {t('tools.healthBuddy.privacyText')}
+              {t('pages.faq.privacyText')}
             </p>
           </div>
         </div>

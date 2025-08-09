@@ -25,7 +25,8 @@ import {
   AlertTriangle,
   Eye,
   Bot,
-  Search
+  Search,
+  HelpCircle
 } from 'lucide-react';
 
 export default function Tools() {
@@ -183,16 +184,6 @@ export default function Tools() {
       category: 'Assessment',
       priority: 'high',
       audience: ['personal', 'specialist']
-    },
-    {
-      title: t('tools.healthBuddy.title'),
-      description: t('tools.healthBuddy.description'),
-      icon: Bot,
-      path: '/tools/health-buddy',
-      color: 'bg-gradient-to-br from-rose-500 to-fuchsia-600 hover:from-rose-600 hover:to-fuchsia-700',
-      category: 'Education',
-      priority: 'medium',
-      audience: ['personal']
     }
   ], [t]);
 
