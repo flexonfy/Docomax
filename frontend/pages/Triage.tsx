@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogDescription } from '@/components/ui/dialog';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { AlertTriangle, CheckCircle, Clock, Info, Search, Stethoscope, Plus, X, TrendingUp, Users, Loader2, Brain, Filter, RotateCcw, Zap, Shield, Sparkles, HelpCircle } from 'lucide-react';
 
@@ -727,6 +727,9 @@ export default function Triage() {
               <HelpCircle className="h-5 w-5 text-blue-500" />
               <span>Follow-up for {quizForDisease?.disease.name[language]}</span>
             </DialogTitle>
+            <DialogDescription>
+              {t('pages.triage.quizDescription')}
+            </DialogDescription>
           </DialogHeader>
           <div className="py-4 space-y-4">
             {quizForDisease?.disease.quizQuestions?.map((q, i) => (

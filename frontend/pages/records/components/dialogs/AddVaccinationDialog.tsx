@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../../../contexts/LanguageContext';
 import { Vaccination } from '../../../../contexts/PatientRecordsContext';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -48,6 +48,7 @@ export default function AddVaccinationDialog({ isOpen, onClose, patientId, addVa
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{t('common.add')} {t('pages.records.vaccines')}</DialogTitle>
+          <DialogDescription>{t('pages.records.addVaccinationDesc')}</DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div>
