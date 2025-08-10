@@ -107,6 +107,30 @@ export const healthBuddyQA: QACategory[] = [
           fr: 'Oui, il est tout à fait normal qu\'un vagin ait une légère odeur. L\'odeur peut changer tout au long de votre cycle menstruel. Une odeur saine est souvent décrite comme musquée ou charnue. Cependant, une odeur très forte, de poisson ou désagréable, surtout si elle est accompagnée de démangeaisons, de brûlures ou de pertes inhabituelles, pourrait être le signe d\'une infection comme la vaginose bactérienne ou une infection à levures. Une bonne hygiène, comme se laver à l\'eau claire et porter des sous-vêtements en coton, peut aider. Si l\'odeur vous préoccupe, il est préférable de consulter un médecin.',
           sw: 'Ndiyo, ni kawaida kabisa kwa uke kuwa na harufu kidogo. Harufu inaweza kubadilika katika mzunguko wako wa hedhi. Harufu nzuri mara nyingi huelezewa kama ya uvundo au ya nyama. Hata hivyo, harufu kali sana, ya samaki, au isiyopendeza, hasa ikiwa inaambatana na muwasho, kuungua, au kutokwa na majimaji yasiyo ya kawaida, inaweza kuwa ishara ya maambukizi kama vile bacterial vaginosis au maambukizi ya fangasi. Usafi mzuri, kama kuosha kwa maji tupu na kuvaa chupi za pamba, unaweza kusaidia. Ikiwa una wasiwasi kuhusu harufu, ni bora kumuona daktari.'
         }
+      },
+      {
+        question: {
+          en: 'What is HPV and should I be worried?',
+          fr: 'Qu\'est-ce que le VPH et dois-je m\'inquiéter ?',
+          sw: 'HPV ni nini na ninapaswa kuwa na wasiwasi?'
+        },
+        answer: {
+          en: 'Human Papillomavirus (HPV) is a very common STI. Most people with HPV don\'t have any symptoms and the infection often goes away on its own. Some types can cause genital warts, while high-risk types can cause cancers, most notably cervical cancer. The HPV vaccine is highly effective at preventing the most common high-risk types. It\'s recommended for both boys and girls, ideally before they become sexually active.',
+          fr: 'Le papillomavirus humain (VPH) est une IST très courante. La plupart des personnes atteintes du VPH n\'ont aucun symptôme et l\'infection disparaît souvent d\'elle-même. Certains types peuvent provoquer des verrues génitales, tandis que les types à haut risque peuvent provoquer des cancers, notamment le cancer du col de l\'utérus. Le vaccin contre le VPH est très efficace pour prévenir les types à haut risque les plus courants. Il est recommandé pour les garçons et les filles, idéalement avant qu\'ils ne deviennent sexuellement actifs.',
+          sw: 'Human Papillomavirus (HPV) ni ugonjwa wa zinaa unaojulikana sana. Watu wengi wenye HPV hawana dalili zozote na maambukizi mara nyingi huondoka yenyewe. Aina zingine zinaweza kusababisha viungo vya uzazi, wakati aina za hatari kubwa zinaweza kusababisha saratani, haswa saratani ya shingo ya kizazi. Chanjo ya HPV ni nzuri sana katika kuzuia aina za kawaida za hatari kubwa. Inapendekezwa kwa wavulana na wasichana, ikiwezekana kabla ya kuanza kufanya ngono.'
+        }
+      },
+      {
+        question: {
+          en: 'Can you get an STI from oral sex?',
+          fr: 'Peut-on contracter une IST par le sexe oral ?',
+          sw: 'Unaweza kupata ugonjwa wa zinaa kwa ngono ya mdomo?'
+        },
+        answer: {
+          en: 'Yes, it is possible to transmit or get STIs like herpes, gonorrhea, chlamydia, and syphilis through oral sex. Using a barrier method like a condom or dental dam can significantly reduce the risk.',
+          fr: 'Oui, il est possible de transmettre ou de contracter des IST comme l\'herpès, la gonorrhée, la chlamydia et la syphilis par le sexe oral. L\'utilisation d\'une méthode barrière comme un préservatif ou une digue dentaire peut réduire considérablement le risque.',
+          sw: 'Ndio, inawezekana kuambukiza au kupata magonjwa ya zinaa kama vile herpes, kisonono, chlamydia, na kaswende kupitia ngono ya mdomo. Kutumia njia ya kizuizi kama kondomu au dental dam kunaweza kupunguza hatari kwa kiasi kikubwa.'
+        }
       }
     ]
   },
@@ -182,6 +206,30 @@ export const healthBuddyQA: QACategory[] = [
           fr: 'Le Syndrome Prémenstruel (SPM) comprend des symptômes physiques et émotionnels que de nombreuses personnes ressentent dans les jours précédant leurs règles. Les symptômes peuvent inclure des sautes d\'humeur, des ballonnements, une sensibilité des seins et de la fatigue. Pour gérer le SPM, vous pouvez essayer de faire de l\'exercice régulièrement, d\'avoir une alimentation équilibrée avec moins de sel et de sucre, de dormir suffisamment et de pratiquer des activités réduisant le stress comme le yoga ou la méditation. Les analgésiques en vente libre peuvent aider à soulager les crampes et les maux de tête.',
           sw: 'Ugonjwa wa Kabla ya Hedhi (PMS) unajumuisha dalili za kimwili na kihisia ambazo watu wengi hupata katika siku za kabla ya hedhi. Dalili zinaweza kujumuisha mabadiliko ya hisia, kuvimbiwa, maumivu ya matiti, na uchovu. Ili kudhibiti PMS, unaweza kujaribu mazoezi ya mara kwa mara, mlo kamili wenye chumvi na sukari kidogo, kupata usingizi wa kutosha, na shughuli za kupunguza msongo kama yoga au kutafakari. Dawa za maumivu zinazopatikana bila agizo la daktari zinaweza kusaidia kwa maumivu ya tumbo na kichwa.'
         }
+      },
+      {
+        question: {
+          en: 'What\'s the difference between a pad, tampon, and menstrual cup?',
+          fr: 'Quelle est la différence entre une serviette, un tampon et une coupe menstruelle ?',
+          sw: 'Kuna tofauti gani kati ya pedi, tamponi, na kikombe cha hedhi?'
+        },
+        answer: {
+          en: 'Pads are absorbent materials that stick to your underwear. Tampons are inserted into the vagina to absorb blood. Menstrual cups are flexible, reusable cups inserted into the vagina to collect blood. The best choice depends on your comfort, lifestyle, and personal preference.',
+          fr: 'Les serviettes sont des matériaux absorbants qui se collent à vos sous-vêtements. Les tampons sont insérés dans le vagin pour absorber le sang. Les coupes menstruelles sont des coupes flexibles et réutilisables insérées dans le vagin pour recueillir le sang. Le meilleur choix dépend de votre confort, de votre style de vie et de vos préférences personnelles.',
+          sw: 'Pedi ni vifaa vya kunyonya vinavyobandikwa kwenye chupi yako. Tamponi huingizwa ukeni kunyonya damu. Vikombe vya hedhi ni vikombe vinavyoweza kunyumbulika, vinavyoweza kutumika tena vinavyoingizwa ukeni kukusanya damu. Chaguo bora linategemea faraja yako, mtindo wa maisha, na upendeleo wa kibinafsi.'
+        }
+      },
+      {
+        question: {
+          en: 'Is it safe to have sex on my period?',
+          fr: 'Est-il sûr d\'avoir des rapports sexuels pendant mes règles ?',
+          sw: 'Je, ni salama kufanya ngono nikiwa kwenye hedhi?'
+        },
+        answer: {
+          en: 'Yes, it is generally safe to have sex during your period. It can even help relieve menstrual cramps for some people. However, it can be messy, and there is still a small risk of pregnancy and a higher risk of transmitting or contracting STIs, so using a condom is recommended.',
+          fr: 'Oui, il est généralement sûr d\'avoir des rapports sexuels pendant vos règles. Cela peut même aider à soulager les crampes menstruelles pour certaines personnes. Cependant, cela peut être salissant, et il y a toujours un faible risque de grossesse et un risque plus élevé de transmettre ou de contracter des IST, donc l\'utilisation d\'un préservatif est recommandée.',
+          sw: 'Ndio, kwa ujumla ni salama kufanya ngono wakati wa hedhi. Inaweza hata kusaidia kupunguza maumivu ya hedhi kwa baadhi ya watu. Hata hivyo, inaweza kuwa chafu, na bado kuna hatari ndogo ya kupata mimba na hatari kubwa zaidi ya kuambukiza au kuambukizwa magonjwa ya zinaa, kwa hivyo kutumia kondomu kunapendekezwa.'
+        }
       }
     ]
   },
@@ -256,6 +304,93 @@ export const healthBuddyQA: QACategory[] = [
           en: 'During puberty, your sweat glands become more active, especially the apocrine glands in your armpits and groin. When sweat from these glands mixes with bacteria on your skin, it can cause body odor. This is a normal part of growing up. To manage it, you can shower daily with soap, use deodorant or antiperspirant, and wear clean clothes. It\'s a normal change everyone goes through.',
           fr: 'Pendant la puberté, vos glandes sudoripares deviennent plus actives, en particulier les glandes apocrines dans vos aisselles et votre aine. Lorsque la sueur de ces glandes se mélange avec les bactéries sur votre peau, cela peut provoquer une odeur corporelle. C\'est une partie normale de la croissance. Pour la gérer, vous pouvez vous doucher quotidiennement avec du savon, utiliser un déodorant ou un anti-transpirant, et porter des vêtements propres. C\'est un changement normal que tout le monde traverse.',
           sw: 'Wakati wa kubalehe, tezi zako za jasho huwa na shughuli nyingi zaidi, hasa tezi za apocrine kwenye kwapa na sehemu za siri. Jasho kutoka kwenye tezi hizi linapochanganyikana na bakteria kwenye ngozi yako, linaweza kusababisha harufu mbaya ya mwili. Hii ni sehemu ya kawaida ya kukua. Ili kuidhibiti, unaweza kuoga kila siku kwa sabuni, kutumia deodorant au antiperspirant, na kuvaa nguo safi. Ni mabadiliko ya kawaida ambayo kila mtu hupitia.'
+        }
+      },
+      {
+        question: {
+          en: 'Why is my voice changing?',
+          fr: 'Pourquoi ma voix change-t-elle ?',
+          sw: 'Kwa nini sauti yangu inabadilika?'
+        },
+        answer: {
+          en: 'For boys, the voice deepens during puberty because the larynx (voice box) grows larger and the vocal cords get longer and thicker. This is caused by the hormone testosterone. Your voice might "crack" or sound squeaky sometimes as it changes, which is completely normal.',
+          fr: 'Pour les garçons, la voix devient plus grave pendant la puberté car le larynx (boîte vocale) s\'agrandit et les cordes vocales s\'allongent et s\'épaississent. Ceci est causé par l\'hormone testostérone. Votre voix peut "craquer" ou sembler aiguë parfois pendant qu\'elle change, ce qui est tout à fait normal.',
+          sw: 'Kwa wavulana, sauti inakuwa nzito wakati wa kubalehe kwa sababu zoloto (sanduku la sauti) inakuwa kubwa na nyuzi za sauti zinakuwa ndefu na nene. Hii husababishwa na homoni ya testosterone. Sauti yako inaweza "kupasukapasuka" au kusikika nyembamba wakati mwingine inapobadilika, jambo ambalo ni la kawaida kabisa.'
+        }
+      },
+      {
+        question: {
+          en: 'What are stretch marks and are they normal?',
+          fr: 'Que sont les vergetures et sont-elles normales ?',
+          sw: 'Michirizi ni nini na je, ni ya kawaida?'
+        },
+        answer: {
+          en: 'Stretch marks are lines that appear on the skin when it stretches or shrinks quickly, such as during growth spurts in puberty, pregnancy, or rapid weight changes. They are very common and completely normal. They often start as reddish or purplish lines and fade to a lighter, silvery color over time. They are not harmful.',
+          fr: 'Les vergetures sont des lignes qui apparaissent sur la peau lorsqu\'elle s\'étire ou se rétrécit rapidement, comme lors des poussées de croissance à la puberté, de la grossesse ou des changements de poids rapides. Elles sont très courantes et tout à fait normales. Elles commencent souvent par des lignes rougeâtres ou violacées et s\'estompent avec le temps pour prendre une couleur plus claire et argentée. Elles ne sont pas nocives.',
+          sw: 'Michirizi ni mistari inayoonekana kwenye ngozi inaponyooka au kusinyaa haraka, kama vile wakati wa ukuaji wa haraka katika ujana, ujauzito, au mabadiliko ya haraka ya uzito. Ni ya kawaida sana na ni jambo la kawaida kabisa. Mara nyingi huanza kama mistari myekundu au ya zambarau na hufifia na kuwa rangi nyepesi, ya fedha baada ya muda. Sio hatari.'
+        }
+      }
+    ]
+  },
+  {
+    id: 'mental_health',
+    title: {
+      en: 'Mental Health',
+      fr: 'Santé Mentale',
+      sw: 'Afya ya Akili'
+    },
+    description: {
+      en: 'Understanding and managing your mental wellbeing.',
+      fr: 'Comprendre et gérer votre bien-être mental.',
+      sw: 'Kuelewa na kudhibiti ustawi wako wa akili.'
+    },
+    questions: [
+      {
+        question: {
+          en: 'What\'s the difference between feeling sad and depression?',
+          fr: 'Quelle est la différence entre se sentir triste et la dépression ?',
+          sw: 'Kuna tofauti gani kati ya kujisikia huzuni na unyogovu?'
+        },
+        answer: {
+          en: 'Sadness is a normal human emotion that usually passes with time. Depression is a medical illness that involves persistent feelings of sadness, hopelessness, and loss of interest for at least two weeks. Depression affects how you feel, think, and behave and can lead to a variety of emotional and physical problems. Unlike sadness, depression often requires treatment to get better.',
+          fr: 'La tristesse est une émotion humaine normale qui passe généralement avec le temps. La dépression est une maladie médicale qui implique des sentiments persistants de tristesse, de désespoir et de perte d\'intérêt pendant au moins deux semaines. La dépression affecte ce que vous ressentez, pensez et comment vous vous comportez et peut entraîner divers problèmes émotionnels et physiques. Contrairement à la tristesse, la dépression nécessite souvent un traitement pour s\'améliorer.',
+          sw: 'Huzuni ni hisia ya kawaida ya kibinadamu ambayo kwa kawaida hupita na wakati. Unyogovu ni ugonjwa wa kimatibabu unaohusisha hisia za kudumu za huzuni, kukata tamaa, na kupoteza hamu kwa angalau wiki mbili. Unyogovu huathiri jinsi unavyojisikia, kufikiri, na kutenda na unaweza kusababisha matatizo mbalimbali ya kihisia na kimwili. Tofauti na huzuni, unyogovu mara nyingi huhitaji matibabu ili kuwa bora.'
+        }
+      },
+      {
+        question: {
+          en: 'How can I help a friend who is struggling with their mental health?',
+          fr: 'Comment puis-je aider un ami qui a des difficultés avec sa santé mentale ?',
+          sw: 'Ninawezaje kumsaidia rafiki anayepambana na afya yake ya akili?'
+        },
+        answer: {
+          en: 'Listen without judgment, let them know you care, and encourage them to talk to a trusted adult or a professional. Offer to help them find resources or go with them to an appointment. Avoid saying things like "just cheer up." It\'s also important to take care of your own mental health and set boundaries.',
+          fr: 'Écoutez sans juger, faites-leur savoir que vous vous souciez d\'eux et encouragez-les à parler à un adulte de confiance ou à un professionnel. Proposez de les aider à trouver des ressources ou de les accompagner à un rendez-vous. Évitez de dire des choses comme "sois juste plus joyeux". Il est également important de prendre soin de votre propre santé mentale et de fixer des limites.',
+          sw: 'Sikiliza bila kuhukumu, wajulishe unawajali, na wahimize wazungumze na mtu mzima anayeaminika au mtaalamu. Toa msaada wa kuwatafutia rasilimali au kwenda nao kwenye miadi. Epuka kusema vitu kama "changamka tu." Pia ni muhimu kutunza afya yako ya akili na kuweka mipaka.'
+        }
+      },
+      {
+        question: {
+          en: 'What are panic attacks and what should I do if I have one?',
+          fr: 'Que sont les attaques de panique et que dois-je faire si j\'en ai une ?',
+          sw: 'Mashambulizi ya hofu ni nini na nifanye nini nikiwa nayo?'
+        },
+        answer: {
+          en: 'A panic attack is a sudden episode of intense fear that triggers severe physical reactions when there is no real danger. During an attack, try to focus on your breathing: breathe in slowly for 4 seconds, hold for 1-2 seconds, and breathe out slowly for 6 seconds. Remind yourself that the feelings will pass and you are safe. Ground yourself by noticing 5 things you can see, 4 things you can touch, 3 things you can hear, 2 things you can smell, and 1 thing you can taste.',
+          fr: 'Une attaque de panique est un épisode soudain de peur intense qui déclenche des réactions physiques sévères en l\'absence de danger réel. Pendant une crise, essayez de vous concentrer sur votre respiration : inspirez lentement pendant 4 secondes, retenez votre souffle pendant 1-2 secondes et expirez lentement pendant 6 secondes. Rappelez-vous que les sensations passeront et que vous êtes en sécurité. Ancrez-vous en remarquant 5 choses que vous pouvez voir, 4 choses que vous pouvez toucher, 3 choses que vous pouvez entendre, 2 choses que vous pouvez sentir et 1 chose que vous pouvez goûter.',
+          sw: 'Shambulio la hofu ni tukio la ghafla la hofu kali linalosababisha miitikio mikali ya kimwili wakati hakuna hatari halisi. Wakati wa shambulio, jaribu kuzingatia upumuaji wako: vuta pumzi polepole kwa sekunde 4, shikilia kwa sekunde 1-2, na toa pumzi polepole kwa sekunde 6. Jikumbushe kwamba hisia hizo zitapita na uko salama. Jitulize kwa kuona vitu 5 unavyoweza kuona, vitu 4 unavyoweza kugusa, vitu 3 unavyoweza kusikia, vitu 2 unavyoweza kunusa, na kitu 1 unavyoweza kuonja.'
+        }
+      },
+      {
+        question: {
+          en: 'Is it okay to talk about my feelings?',
+          fr: 'Est-ce que c\'est bien de parler de mes sentiments ?',
+          sw: 'Je, ni sawa kuzungumzia hisia zangu?'
+        },
+        answer: {
+          en: 'Absolutely. Talking about your feelings is a sign of strength and is very important for your mental health. It helps you process emotions, feel less alone, and can help others understand what you\'re going through. You can talk to friends, family, a teacher, a counselor, or anyone you trust. Keeping feelings bottled up can make them feel worse over time.',
+          fr: 'Absolument. Parler de vos sentiments est un signe de force et est très important pour votre santé mentale. Cela vous aide à traiter les émotions, à vous sentir moins seul et peut aider les autres à comprendre ce que vous traversez. Vous pouvez parler à des amis, à votre famille, à un enseignant, à un conseiller ou à toute personne en qui vous avez confiance. Garder ses sentiments pour soi peut les aggraver avec le temps.',
+          sw: 'Kabisa. Kuzungumzia hisia zako ni ishara ya nguvu na ni muhimu sana kwa afya yako ya akili. Inakusaidia kuchakata hisia, kujisikia upweke kidogo, na inaweza kusaidia wengine kuelewa unachopitia. Unaweza kuzungumza na marafiki, familia, mwalimu, mshauri, au mtu yeyote unayemwamini. Kuficha hisia kunaweza kuzifanya ziwe mbaya zaidi baada ya muda.'
         }
       }
     ]
