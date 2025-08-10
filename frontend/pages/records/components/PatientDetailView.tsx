@@ -81,10 +81,12 @@ export default function PatientDetailView({
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm" onClick={() => onExportPDF(patient)}>
-                <Download className="h-4 w-4 mr-2" />
-                {t('pages.records.exportPDF')}
-              </Button>
+              {isPersonalView && (
+                <Button variant="outline" size="sm" onClick={() => onExportPDF(patient)}>
+                  <Download className="h-4 w-4 mr-2" />
+                  {t('pages.records.exportPDF')}
+                </Button>
+              )}
               {isPersonalView && onDeleteProfile && (
                 <Dialog>
                   <DialogTrigger asChild>

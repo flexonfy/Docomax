@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Users, Activity, TrendingUp, Shield, Search, Filter, Download, Trash2, User, Upload, FileText, Calendar } from 'lucide-react';
+import { Plus, Users, Activity, TrendingUp, Shield, Search, Filter, Download, Trash2, User, Upload, FileText, Calendar, ChevronDown, DatabaseBackup, DatabaseInput } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import jsPDF from 'jspdf/dist/jspdf.umd.min.js';
 import autoTable from 'jspdf-autotable';
@@ -20,6 +20,14 @@ import AddMedicationDialog from './dialogs/AddMedicationDialog';
 import AddReferralDialog from './dialogs/AddReferralDialog';
 import AddAppointmentDialog from './dialogs/AddAppointmentDialog';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogTrigger } from '@/components/ui/dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export default function SpecialistView() {
   const { t } = useLanguage();
@@ -268,8 +276,28 @@ export default function SpecialistView() {
             
             <div className="flex items-center space-x-2">
               <input type="file" ref={fileInputRef} onChange={handleFileImport} accept=".json" className="hidden" />
-              <Button variant="outline" onClick={handleImportClick}><Upload className="h-4 w-4 mr-2" /> Import Data</Button>
-              <Button variant="outline" onClick={handleExportAllData}><Download className="h-4 w-4 mr-2" /> Export All Data</Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline">Data Actions <ChevronDown className="ml-2 h-4 w-4" /></Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>Data Management</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => selectedPatient && handleExportPDF(selectedPatient)} disabled={!selectedPatient}>
+                    <Download className="mr-2 h-4 w-4" />
+                    <span>Export Patient PDF</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleExportAllData}>
+                    <DatabaseBackup className="mr-2 h-4 w-4" />
+                    <span>Backup All Data (JSON)</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleImportClick}>
+                    <DatabaseInput className="mr-2 h-4 w-4" />
+                    <span>Restore Data (JSON)</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
               <Button className="bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600" onClick={() => setShowAddPatient(true)}>
                 <Plus className="h-4 w-4 mr-2" />
                 {t('pages.records.addPatient')}
@@ -358,17 +386,6 @@ export default function SpecialistView() {
                               </div>
                             </div>
                             <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleExportPDF(patient);
-                                }}
-                                className="h-8 w-8 p-0"
-                              >
-                                <Download className="h-4 w-4 text-blue-500" />
-                              </Button>
                               <Button
                                 variant="ghost"
                                 size="sm"
