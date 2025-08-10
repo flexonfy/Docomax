@@ -2747,5 +2747,266 @@ export const healthcareFacilities: HealthcareFacility[] = [
     address: 'Nationwide',
     phone: '+27-86-999-0601',
     services: ['General Practice', 'Dental', 'Pathology', 'Radiology']
+  },
+  // Europe
+  {
+    id: 'st-thomas-hospital-uk',
+    name: 'St Thomas\' Hospital',
+    type: 'hospital',
+    country: 'United Kingdom',
+    city: 'London',
+    address: 'Westminster Bridge Rd, London',
+    phone: '+44-20-7188-7188',
+    services: ['Emergency', 'Cardiology', 'Maternity', 'Radiology']
+  },
+  {
+    id: 'gosh-uk',
+    name: 'Great Ormond Street Hospital',
+    type: 'hospital',
+    country: 'United Kingdom',
+    city: 'London',
+    address: 'Great Ormond St, London',
+    phone: '+44-20-7405-9200',
+    services: ['Pediatrics', 'Specialist Children\'s Care', 'Surgery']
+  },
+  {
+    id: 'boots-pharmacy-uk',
+    name: 'Boots Pharmacy',
+    type: 'pharmacy',
+    country: 'United Kingdom',
+    city: 'Various',
+    address: 'Nationwide',
+    services: ['Prescription Drugs', 'OTC Medications', 'Health Advice']
+  },
+  {
+    id: 'charite-berlin-de',
+    name: 'Charité - Universitätsmedizin Berlin',
+    type: 'hospital',
+    country: 'Germany',
+    city: 'Berlin',
+    address: 'Charitépl. 1, 10117 Berlin',
+    phone: '+49-30-450-50',
+    services: ['Emergency', 'Research', 'Teaching', 'Specialist Care']
+  },
+  {
+    id: 'heidelberg-hospital-de',
+    name: 'Heidelberg University Hospital',
+    type: 'hospital',
+    country: 'Germany',
+    city: 'Heidelberg',
+    address: 'Im Neuenheimer Feld 672, 69120 Heidelberg',
+    phone: '+49-6221-56-0',
+    services: ['Oncology', 'Cardiology', 'Neurology', 'Transplant']
+  },
+  {
+    id: 'pitie-salpetriere-fr',
+    name: 'Hôpital Pitié-Salpêtrière',
+    type: 'hospital',
+    country: 'France',
+    city: 'Paris',
+    address: '47-83 Boulevard de l\'Hôpital, 75013 Paris',
+    phone: '+33-1-42-16-00-00',
+    services: ['Emergency', 'Neurology', 'Cardiology', 'Oncology']
+  },
+  {
+    id: 'la-paz-madrid-es',
+    name: 'Hospital Universitario La Paz',
+    type: 'hospital',
+    country: 'Spain',
+    city: 'Madrid',
+    address: 'Paseo de la Castellana, 261, 28046 Madrid',
+    phone: '+34-91-727-70-00',
+    services: ['Emergency', 'Pediatrics', 'Transplant', 'Cardiology']
+  },
+  {
+    id: 'gemelli-rome-it',
+    name: 'Policlinico Universitario Agostino Gemelli',
+    type: 'hospital',
+    country: 'Italy',
+    city: 'Rome',
+    address: 'Largo Agostino Gemelli, 8, 00168 Roma RM',
+    phone: '+39-06-30151',
+    services: ['Emergency', 'Oncology', 'Cardiology', 'Surgery']
+  },
+  // Asia
+  {
+    id: 'tokyo-uni-hospital-jp',
+    name: 'The University of Tokyo Hospital',
+    type: 'hospital',
+    country: 'Japan',
+    city: 'Tokyo',
+    address: '7 Chome-3-1 Hongo, Bunkyo City, Tokyo 113-8655',
+    phone: '+81-3-3815-5411',
+    services: ['Emergency', 'Research', 'Specialist Care', 'Surgery']
+  },
+  {
+    id: 'st-lukes-tokyo-jp',
+    name: 'St. Luke\'s International Hospital',
+    type: 'hospital',
+    country: 'Japan',
+    city: 'Tokyo',
+    address: '9-1 Akashi-cho, Chuo City, Tokyo 104-8560',
+    phone: '+81-3-3541-5151',
+    services: ['Emergency', 'General Medicine', 'Pediatrics', 'Maternity']
+  },
+  {
+    id: 'peking-union-hospital-cn',
+    name: 'Peking Union Medical College Hospital',
+    type: 'hospital',
+    country: 'China',
+    city: 'Beijing',
+    address: '1 Shuaifuyuan, Dongcheng District, Beijing',
+    phone: '+86-10-6915-6114',
+    services: ['Emergency', 'Specialist Care', 'Research', 'Surgery']
+  },
+  {
+    id: 'aiims-delhi-in',
+    name: 'All India Institute of Medical Sciences (AIIMS)',
+    type: 'hospital',
+    country: 'India',
+    city: 'New Delhi',
+    address: 'Ansari Nagar, New Delhi, Delhi 110029',
+    phone: '+91-11-2658-8500',
+    services: ['Emergency', 'Trauma', 'Cardiology', 'Neurology']
+  },
+  {
+    id: 'apollo-chennai-in',
+    name: 'Apollo Hospitals, Chennai',
+    type: 'hospital',
+    country: 'India',
+    city: 'Chennai',
+    address: '21, Greams Lane, Off Greams Road, Chennai',
+    phone: '+91-44-2829-3333',
+    services: ['Emergency', 'Cardiology', 'Oncology', 'Transplant']
+  },
+  {
+    id: 'sgh-sg',
+    name: 'Singapore General Hospital',
+    type: 'hospital',
+    country: 'Singapore',
+    city: 'Singapore',
+    address: 'Outram Road, Singapore 169608',
+    phone: '+65-6222-3322',
+    services: ['Emergency', 'Specialist Care', 'Surgery', 'Research']
+  },
+  // North America
+  {
+    id: 'mayo-clinic-us',
+    name: 'Mayo Clinic',
+    type: 'hospital',
+    country: 'USA',
+    city: 'Rochester',
+    address: '200 First St. SW, Rochester, MN 55905',
+    phone: '+1-507-284-2511',
+    services: ['Specialist Care', 'Research', 'Surgery', 'Oncology']
+  },
+  {
+    id: 'cleveland-clinic-us',
+    name: 'Cleveland Clinic',
+    type: 'hospital',
+    country: 'USA',
+    city: 'Cleveland',
+    address: '9500 Euclid Ave, Cleveland, OH 44195',
+    phone: '+1-216-444-2200',
+    services: ['Cardiology', 'Emergency', 'Surgery', 'Neurology']
+  },
+  {
+    id: 'cvs-pharmacy-us',
+    name: 'CVS Pharmacy',
+    type: 'pharmacy',
+    country: 'USA',
+    city: 'Various',
+    address: 'Nationwide',
+    services: ['Prescription Drugs', 'OTC Medications', 'Vaccinations']
+  },
+  {
+    id: 'toronto-general-ca',
+    name: 'Toronto General Hospital',
+    type: 'hospital',
+    country: 'Canada',
+    city: 'Toronto',
+    address: '200 Elizabeth St, Toronto, ON M5G 2C4',
+    phone: '+1-416-340-4800',
+    services: ['Emergency', 'Transplant', 'Cardiology', 'Surgery']
+  },
+  {
+    id: 'shoppers-drug-mart-ca',
+    name: 'Shoppers Drug Mart',
+    type: 'pharmacy',
+    country: 'Canada',
+    city: 'Various',
+    address: 'Nationwide',
+    services: ['Prescription Drugs', 'OTC Medications', 'Health Products']
+  },
+  {
+    id: 'hospital-angeles-mx',
+    name: 'Hospital Angeles Lomas',
+    type: 'hospital',
+    country: 'Mexico',
+    city: 'Mexico City',
+    address: 'Av. Vialidad de la Barranca S/N, Huixquilucan',
+    phone: '+52-55-5246-5000',
+    services: ['Emergency', 'Specialist Care', 'Surgery', 'Radiology']
+  },
+  // South America
+  {
+    id: 'albert-einstein-br',
+    name: 'Hospital Israelita Albert Einstein',
+    type: 'hospital',
+    country: 'Brazil',
+    city: 'São Paulo',
+    address: 'Av. Albert Einstein, 627/701 - Morumbi, São Paulo',
+    phone: '+55-11-2151-1233',
+    services: ['Emergency', 'Oncology', 'Cardiology', 'Neurology']
+  },
+  {
+    id: 'hospital-italiano-ar',
+    name: 'Hospital Italiano de Buenos Aires',
+    type: 'hospital',
+    country: 'Argentina',
+    city: 'Buenos Aires',
+    address: 'Tte. Gral. Juan Domingo Perón 4190, C1199ABB CABA',
+    phone: '+54-11-4959-0200',
+    services: ['Emergency', 'Transplant', 'Surgery', 'High Complexity Care']
+  },
+  {
+    id: 'fundacion-cardioinfantil-co',
+    name: 'Fundación Cardioinfantil',
+    type: 'hospital',
+    country: 'Colombia',
+    city: 'Bogotá',
+    address: 'Cl. 163a #13b-60, Bogotá',
+    phone: '+57-1-667-2727',
+    services: ['Cardiology', 'Pediatrics', 'Transplant', 'Emergency']
+  },
+  // Oceania
+  {
+    id: 'royal-melbourne-au',
+    name: 'The Royal Melbourne Hospital',
+    type: 'hospital',
+    country: 'Australia',
+    city: 'Melbourne',
+    address: '300 Grattan St, Parkville VIC 3050',
+    phone: '+61-3-9342-7000',
+    services: ['Emergency', 'Trauma', 'Neurology', 'Cardiology']
+  },
+  {
+    id: 'chemist-warehouse-au',
+    name: 'Chemist Warehouse',
+    type: 'pharmacy',
+    country: 'Australia',
+    city: 'Various',
+    address: 'Nationwide',
+    services: ['Prescription Drugs', 'OTC Medications', 'Health Products']
+  },
+  {
+    id: 'auckland-city-hospital-nz',
+    name: 'Auckland City Hospital',
+    type: 'hospital',
+    country: 'New Zealand',
+    city: 'Auckland',
+    address: '2 Park Rd, Grafton, Auckland 1023',
+    phone: '+64-9-367-0000',
+    services: ['Emergency', 'Specialist Care', 'Surgery', 'Maternity']
   }
 ];
