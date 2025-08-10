@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Brain, Heart, TrendingUp, Calendar, Trash2 } from 'lucide-react';
+import { Brain, Heart, TrendingUp, Calendar, Trash2, Shield, Activity } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
@@ -47,7 +47,18 @@ export default function MentalHealth() {
     t('tools.mentalHealth.phq9_9')
   ];
 
-  const [assessmentAnswers, setAssessmentAnswers] = useState<(number | undefined)[]>(Array(phq9Questions.length).fill(undefined));
+  const gad7Questions = [
+    "Feeling nervous, anxious, or on edge",
+    "Not being able to stop or control worrying",
+    "Worrying too much about different things",
+    "Trouble relaxing",
+    "Being so restless that it is hard to sit still",
+    "Becoming easily annoyed or irritable",
+    "Feeling afraid as if something awful might happen"
+  ];
+
+  const [assessmentType, setAssessmentType] = useState<'phq9' | 'gad7'>('phq9');
+  const [assessmentAnswers, setAssessmentAnswers] = useState<(number | undefined)[]>(Array(9).fill(undefined));
   const [assessmentResult, setAssessmentResult] = useState<number | null>(null);
   const [journalEntry, setJournalEntry] = useState('');
   const [journalEntries, setJournalEntries] = useState<JournalEntry[]>(() => {
@@ -187,7 +198,7 @@ export default function MentalHealth() {
     ? (recentEntries.reduce((sum, entry) => sum + entry.stressLevel, 0) / recentEntries.length).toFixed(1)
     : '0';
 
-  const phq9Options = [
+  const assessmentOptions = [
     { label: t('tools.mentalHealth.notAtAll'), value: 0 },
     { label: t('tools.mentalHealth.severalDays'), value: 1 },
     { label: t('tools.mentalHealth.moreThanHalf'), value: 2 },
@@ -200,16 +211,28 @@ export default function MentalHealth() {
   };
 
   const resetAssessment = () => {
-    setAssessmentAnswers(Array(phq9Questions.length).fill(undefined));
+    const questions = assessmentType === 'phq9' ? phq9Questions : gad7Questions;
+    setAssessmentAnswers(Array(questions.length).fill(undefined));
     setAssessmentResult(null);
   };
 
-  const getPHQ9Interpretation = (score: number) => {
-    if (score <= 4) return "Minimal depression (Score: 0-4)";
-    if (score <= 9) return "Mild depression (Score: 5-9)";
-    if (score <= 14) return "Moderate depression (Score: 10-14)";
-    if (score <= 19) return "Moderately severe depression (Score: 15-19)";
-    return "Severe depression (Score: 20-27)";
+  useEffect(() => {
+    resetAssessment();
+  }, [assessmentType]);
+
+  const getAssessmentInterpretation = (score: number) => {
+    if (assessmentType === 'phq9') {
+      if (score <= 4) return "Minimal depression (Score: 0-4)";
+      if (score <= 9) return "Mild depression (Score: 5-9)";
+      if (score <= 14) return "Moderate depression (Score: 10-14)";
+      if (score <= 19) return "Moderately severe depression (Score: 15-19)";
+      return "Severe depression (Score: 20-27)";
+    } else { // GAD-7
+      if (score <= 4) return "Minimal anxiety (Score: 0-4)";
+      if (score <= 9) return "Mild anxiety (Score: 5-9)";
+      if (score <= 14) return "Moderate anxiety (Score: 10-14)";
+      return "Severe anxiety (Score: 15-21)";
+    }
   };
 
   const copingStrategies = [
@@ -258,6 +281,8 @@ export default function MentalHealth() {
       ]
     }
   ];
+
+  const currentQuestions = assessmentType === 'phq9' ? phq9Questions : gad7Questions;
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -501,18 +526,26 @@ export default function MentalHealth() {
       {activeTab === 'assessment' && (
         <Card>
           <CardHeader>
-            <CardTitle>{t('tools.mentalHealth.depressionScreening')}</CardTitle>
-            <CardDescription>
-              {t('tools.mentalHealth.screeningDesc')}
-            </CardDescription>
+            <div className="flex justify-between items-center">
+              <div>
+                <CardTitle>{assessmentType === 'phq9' ? t('tools.mentalHealth.depressionScreening') : 'Anxiety Screening (GAD-7)'}</CardTitle>
+                <CardDescription>
+                  {t('tools.mentalHealth.screeningDesc')}
+                </CardDescription>
+              </div>
+              <div className="flex space-x-1 bg-gray-200 p-1 rounded-lg">
+                <Button size="sm" variant={assessmentType === 'phq9' ? 'secondary' : 'ghost'} onClick={() => setAssessmentType('phq9')}>PHQ-9</Button>
+                <Button size="sm" variant={assessmentType === 'gad7' ? 'secondary' : 'ghost'} onClick={() => setAssessmentType('gad7')}>GAD-7</Button>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {phq9Questions.map((question, idx) => (
+              {currentQuestions.map((question, idx) => (
                 <div key={idx} className="border rounded-lg p-4">
                   <p className="font-medium mb-3">{idx + 1}. {question}</p>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                    {phq9Options.map((option, optIdx) => (
+                    {assessmentOptions.map((option, optIdx) => (
                       <Button
                         key={optIdx}
                         variant={assessmentAnswers[idx] === option.value ? 'default' : 'outline'}
@@ -551,10 +584,10 @@ export default function MentalHealth() {
                 <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
                   <h4 className="font-semibold mb-2">{t('tools.mentalHealth.assessmentResult')}</h4>
                   <p className="text-lg font-bold text-blue-800">
-                    {t('tools.mentalHealth.totalScore')} {assessmentResult}/27
+                    {t('tools.mentalHealth.totalScore')} {assessmentResult}/{assessmentType === 'phq9' ? 27 : 21}
                   </p>
                   <p className="text-sm text-blue-700 mt-1">
-                    <strong>Interpretation:</strong> {getPHQ9Interpretation(assessmentResult)}
+                    <strong>Interpretation:</strong> {getAssessmentInterpretation(assessmentResult)}
                   </p>
                   <p className="text-xs text-blue-600 mt-4">
                     {t('tools.mentalHealth.screeningDisclaimer')}

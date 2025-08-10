@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useLanguage } from '../../../contexts/LanguageContext';
 import { usePatientRecords, PatientRecord, Visit, Appointment } from '../../../contexts/PatientRecordsContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Users, Activity, TrendingUp, Shield, Search, Filter, Download, Trash2, User, Syringe, FlaskConical, Pill, Calendar, FileText } from 'lucide-react';
+import { Plus, Users, Activity, TrendingUp, Shield, Search, Filter, Download, Trash2, User, Upload, FileText, Calendar } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import jsPDF from 'jspdf/dist/jspdf.umd.min.js';
 import autoTable from 'jspdf-autotable';
@@ -19,6 +19,7 @@ import AddAttachmentDialog from './dialogs/AddAttachmentDialog';
 import AddMedicationDialog from './dialogs/AddMedicationDialog';
 import AddReferralDialog from './dialogs/AddReferralDialog';
 import AddAppointmentDialog from './dialogs/AddAppointmentDialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogTrigger } from '@/components/ui/dialog';
 
 export default function SpecialistView() {
   const { t } = useLanguage();
@@ -26,7 +27,7 @@ export default function SpecialistView() {
     patients, addPatient, deletePatient, addVisit, updateVisit, deleteVisit,
     addVaccination, deleteVaccination, addLabResult, deleteLabResult, addAttachment, deleteAttachment,
     addMedication, deleteMedication, addReferral, deleteReferral,
-    exportPatientData,
+    exportData, importData,
     appointments, addAppointment, updateAppointment, deleteAppointment, getUpcomingAppointments
   } = usePatientRecords();
   const { toast } = useToast();
@@ -43,8 +44,10 @@ export default function SpecialistView() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [editingVisit, setEditingVisit] = useState<Visit | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const upcomingAppointments = getUpcomingAppointments(30);
+  const recentPatients = [...patients].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()).slice(0, 5);
 
   const filteredPatients = patients.filter(patient => {
     const matchesSearch = searchTerm === '' || 
@@ -201,6 +204,43 @@ export default function SpecialistView() {
     setShowAddVisit(true);
   };
 
+  const handleExportAllData = () => {
+    const dataStr = exportData();
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `docomax_backup_${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast({ title: "Data Exported", description: "All patient and appointment data has been exported." });
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileImport = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const text = e.target?.result;
+      if (typeof text === 'string') {
+        if (importData(text)) {
+          toast({ title: "Data Imported", description: "Patient data has been successfully imported." });
+        } else {
+          toast({ title: "Import Failed", description: "The selected file is not a valid Docomax backup.", variant: "destructive" });
+        }
+      }
+    };
+    reader.readAsText(file);
+    event.target.value = ''; // Reset file input
+  };
+
   const stats = [
     { icon: Users, value: patients.length.toString(), label: t('pages.records.totalPatients'), color: 'text-blue-500' },
     { icon: TrendingUp, value: patients.filter(p => p.visits.length > 0).length.toString(), label: t('pages.records.activePatients'), color: 'text-purple-500' },
@@ -211,7 +251,7 @@ export default function SpecialistView() {
     <>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-wrap items-center justify-between mb-4 gap-4">
             <div className="flex items-center space-x-3">
               <div className="p-3 bg-gradient-to-r from-blue-500 to-green-500 rounded-xl text-white">
                 <FileText className="h-8 w-8" />
@@ -227,6 +267,9 @@ export default function SpecialistView() {
             </div>
             
             <div className="flex items-center space-x-2">
+              <input type="file" ref={fileInputRef} onChange={handleFileImport} accept=".json" className="hidden" />
+              <Button variant="outline" onClick={handleImportClick}><Upload className="h-4 w-4 mr-2" /> Import Data</Button>
+              <Button variant="outline" onClick={handleExportAllData}><Download className="h-4 w-4 mr-2" /> Export All Data</Button>
               <Button className="bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600" onClick={() => setShowAddPatient(true)}>
                 <Plus className="h-4 w-4 mr-2" />
                 {t('pages.records.addPatient')}

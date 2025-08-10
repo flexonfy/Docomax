@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useMode } from '../../contexts/ModeContext';
 import PersonalView from './components/PersonalView';
 import SpecialistView from './components/SpecialistView';

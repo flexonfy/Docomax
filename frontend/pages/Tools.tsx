@@ -28,11 +28,13 @@ import {
   Search,
   HelpCircle
 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export default function Tools() {
   const { t } = useLanguage();
   const { mode } = useMode();
   const [searchTerm, setSearchTerm] = useState('');
+  const [activeCategory, setActiveCategory] = useState('All');
 
   const allTools = useMemo(() => [
     {
@@ -197,13 +199,16 @@ export default function Tools() {
         tool.category.toLowerCase().includes(lowerCaseSearchTerm)
       );
     }
+    if (activeCategory !== 'All') {
+      filtered = filtered.filter(tool => tool.category === activeCategory);
+    }
     return filtered;
-  }, [mode, allTools, searchTerm]);
+  }, [mode, allTools, searchTerm, activeCategory]);
 
-  const categories = [...new Set(tools.map(tool => tool.category))];
+  const categories = ['All', ...new Set(allTools.filter(tool => tool.audience.includes(mode)).map(tool => tool.category))];
 
   const stats = [
-    { icon: Calculator, value: tools.length.toString(), label: t('common.tools'), color: 'text-blue-500' },
+    { icon: Calculator, value: allTools.filter(tool => tool.audience.includes(mode)).length.toString(), label: t('common.tools'), color: 'text-blue-500' },
     { icon: Shield, value: 'WHO', label: t('tools.compliant'), color: 'text-green-500' },
     { icon: Globe, value: '3', label: t('pages.home.languages'), color: 'text-purple-500' },
     { icon: Zap, value: '100%', label: t('tools.offline'), color: 'text-orange-500' }
@@ -265,39 +270,43 @@ export default function Tools() {
           </div>
         </div>
 
-        {categories.length > 0 ? (
-          categories.map((category) => (
-            <div key={category} className="mb-12">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">{category}</h2>
-                <Badge variant="outline" className="bg-white/70 backdrop-blur-sm">
-                  {tools.filter(tool => tool.category === category).length} {t('common.tools')}
-                </Badge>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {tools.filter(tool => tool.category === category).map((tool) => (
-                  <Link key={tool.path} to={tool.path}>
-                    <Card className="hover:shadow-xl transition-all duration-300 cursor-pointer h-full group hover:-translate-y-1 border-0 shadow-lg bg-white/80 backdrop-blur-sm overflow-hidden">
-                      <CardHeader className="text-center pb-4 relative">
-                        <div className="absolute top-3 right-3">
-                          {getPriorityBadge(tool.priority)}
-                        </div>
-                        <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl text-white mb-4 transition-all group-hover:scale-110 group-hover:rotate-3 ${tool.color}`}>
-                          <tool.icon className="h-7 w-7" />
-                        </div>
-                        <CardTitle className="text-lg group-hover:text-green-600 transition-colors">{tool.title}</CardTitle>
-                        <CardDescription className="text-sm">{tool.description}</CardDescription>
-                        <Badge variant="secondary" className="text-xs mt-2 w-fit mx-auto">
-                          {tool.category}
-                        </Badge>
-                      </CardHeader>
-                    </Card>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ))
+        <div className="mb-8 overflow-x-auto">
+          <div className="flex space-x-2 pb-2">
+            {categories.map(category => (
+              <Button
+                key={category}
+                variant={activeCategory === category ? 'default' : 'outline'}
+                onClick={() => setActiveCategory(category)}
+                className="whitespace-nowrap"
+              >
+                {category}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        {tools.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {tools.map((tool) => (
+              <Link key={tool.path} to={tool.path}>
+                <Card className="hover:shadow-xl transition-all duration-300 cursor-pointer h-full group hover:-translate-y-1 border-0 shadow-lg bg-white/80 backdrop-blur-sm overflow-hidden">
+                  <CardHeader className="text-center pb-4 relative">
+                    <div className="absolute top-3 right-3">
+                      {getPriorityBadge(tool.priority)}
+                    </div>
+                    <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl text-white mb-4 transition-all group-hover:scale-110 group-hover:rotate-3 ${tool.color}`}>
+                      <tool.icon className="h-7 w-7" />
+                    </div>
+                    <CardTitle className="text-lg group-hover:text-green-600 transition-colors">{tool.title}</CardTitle>
+                    <CardDescription className="text-sm">{tool.description}</CardDescription>
+                    <Badge variant="secondary" className="text-xs mt-2 w-fit mx-auto">
+                      {tool.category}
+                    </Badge>
+                  </CardHeader>
+                </Card>
+              </Link>
+            ))}
+          </div>
         ) : (
           <Card>
             <CardContent className="text-center py-12">
@@ -307,46 +316,7 @@ export default function Tools() {
           </Card>
         )}
 
-        {/* Feature Highlights */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200 hover:shadow-lg transition-all duration-300 group">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-3 mb-4">
-                <Shield className="h-8 w-8 text-green-600 group-hover:scale-110 transition-transform" />
-                <h3 className="font-semibold text-green-900">{t('tools.whoGuidelines')}</h3>
-              </div>
-              <p className="text-green-800 text-sm">
-                {t('pages.home.whoDescription')}
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 hover:shadow-lg transition-all duration-300 group">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-3 mb-4">
-                <Zap className="h-8 w-8 text-blue-600 group-hover:scale-110 transition-transform" />
-                <h3 className="font-semibold text-blue-900">{t('pages.home.offlineFirst')}</h3>
-              </div>
-              <p className="text-blue-800 text-sm">
-                {t('pages.home.offlineDescription')}
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 hover:shadow-lg transition-all duration-300 group">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-3 mb-4">
-                <Users className="h-8 w-8 text-purple-600 group-hover:scale-110 transition-transform" />
-                <h3 className="font-semibold text-purple-900">{t('tools.expertDesigned')}</h3>
-              </div>
-              <p className="text-purple-800 text-sm">
-                Designed by medical experts for healthcare workers and patients, featuring intuitive interfaces and clinical accuracy.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="bg-gradient-to-r from-green-500 to-blue-500 rounded-2xl p-8 text-white text-center shadow-xl relative overflow-hidden">
+        <div className="mt-12 bg-gradient-to-r from-green-500 to-blue-500 rounded-2xl p-8 text-white text-center shadow-xl relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-green-600/20 via-blue-600/20 to-teal-600/20 animate-pulse"></div>
           <div className="relative z-10">
             <div className="flex items-center justify-center space-x-3 mb-4">
@@ -356,7 +326,7 @@ export default function Tools() {
               </h3>
             </div>
             <p className="text-green-100 text-lg max-w-3xl mx-auto mb-6">
-              {t('tools.toolkitDescription', { count: tools.length })}
+              {t('tools.toolkitDescription', { count: allTools.filter(tool => tool.audience.includes(mode)).length })}
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm">
               <div className="flex items-center space-x-2 bg-white/20 rounded-full px-4 py-2 hover:bg-white/30 transition-colors">

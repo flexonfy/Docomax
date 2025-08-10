@@ -149,8 +149,8 @@ interface PatientRecordsContextType {
   searchPatients: (query: string) => PatientRecord[];
   getPatientsByAge: (minAge: number, maxAge: number) => PatientRecord[];
   getPatientsByCondition: (condition: string) => PatientRecord[];
-  exportPatientData: (patientId: string) => string;
-  importPatientData: (data: string) => boolean;
+  exportData: () => string;
+  importData: (data: string) => boolean;
   appointments: Appointment[];
   addAppointment: (appointment: Omit<Appointment, 'id' | 'completed' | 'patientName'>) => void;
   updateAppointment: (id: string, updates: Partial<Appointment>) => void;
@@ -160,43 +160,37 @@ interface PatientRecordsContextType {
 
 const PatientRecordsContext = createContext<PatientRecordsContextType | undefined>(undefined);
 
+const parseDates = (data: any): any => {
+  if (data === null || typeof data !== 'object') {
+    return data;
+  }
+
+  if (Array.isArray(data)) {
+    return data.map(item => parseDates(item));
+  }
+
+  const newObj: any = {};
+  for (const key in data) {
+    if (Object.prototype.hasOwnProperty.call(data, key)) {
+      const value = data[key];
+      if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(value)) {
+        newObj[key] = new Date(value);
+      } else if (typeof value === 'object') {
+        newObj[key] = parseDates(value);
+      } else {
+        newObj[key] = value;
+      }
+    }
+  }
+  return newObj;
+};
+
 export function PatientRecordsProvider({ children }: { children: ReactNode }) {
   const [patients, setPatients] = useState<PatientRecord[]>(() => {
     const saved = localStorage.getItem('docomax-patients');
     if (saved) {
       try {
-        return JSON.parse(saved).map((p: any) => ({
-          ...p,
-          createdAt: new Date(p.createdAt),
-          updatedAt: new Date(p.updatedAt),
-          visits: p.visits.map((v: any) => ({
-            ...v,
-            date: new Date(v.date),
-            followUpDate: v.followUpDate ? new Date(v.followUpDate) : undefined
-          })),
-          vaccinations: p.vaccinations?.map((v: any) => ({
-            ...v,
-            date: new Date(v.date),
-            nextDueDate: v.nextDueDate ? new Date(v.nextDueDate) : undefined
-          })) || [],
-          labResults: p.labResults?.map((l: any) => ({
-            ...l,
-            date: new Date(l.date)
-          })) || [],
-          attachments: p.attachments?.map((a: any) => ({
-            ...a,
-            date: new Date(a.date)
-          })) || [],
-          referrals: p.referrals?.map((r: any) => ({
-            ...r,
-            date: new Date(r.date)
-          })) || [],
-          currentMedications: p.currentMedications?.map((m: any) => ({
-            ...m,
-            startDate: new Date(m.startDate),
-            endDate: m.endDate ? new Date(m.endDate) : undefined
-          })) || []
-        }));
+        return parseDates(JSON.parse(saved));
       } catch (e) {
         console.error("Failed to parse patients from localStorage", e);
         return [];
@@ -209,10 +203,7 @@ export function PatientRecordsProvider({ children }: { children: ReactNode }) {
     const saved = localStorage.getItem('docomax-appointments');
     if (saved) {
       try {
-        return JSON.parse(saved).map((a: any) => ({
-          ...a,
-          date: new Date(a.date)
-        }));
+        return parseDates(JSON.parse(saved));
       } catch (e) {
         console.error("Failed to parse appointments from localStorage", e);
         return [];
@@ -474,18 +465,20 @@ export function PatientRecordsProvider({ children }: { children: ReactNode }) {
     );
   };
 
-  const exportPatientData = (patientId: string) => {
-    const patient = getPatient(patientId);
-    if (!patient) return '';
-    return JSON.stringify(patient, null, 2);
+  const exportData = () => {
+    const data = {
+      patients,
+      appointments
+    };
+    return JSON.stringify(data, null, 2);
   };
 
-  const importPatientData = (data: string) => {
+  const importData = (data: string) => {
     try {
-      const patientData = JSON.parse(data);
-      // Validate and add patient
-      if (patientData.name && patientData.age) {
-        addPatient(patientData);
+      const parsedData = JSON.parse(data);
+      if (parsedData.patients && Array.isArray(parsedData.patients) && parsedData.appointments && Array.isArray(parsedData.appointments)) {
+        setPatients(parseDates(parsedData.patients));
+        setAppointments(parseDates(parsedData.appointments));
         return true;
       }
       return false;
@@ -548,8 +541,8 @@ export function PatientRecordsProvider({ children }: { children: ReactNode }) {
       searchPatients,
       getPatientsByAge,
       getPatientsByCondition,
-      exportPatientData,
-      importPatientData,
+      exportData,
+      importData,
       appointments,
       addAppointment,
       updateAppointment,
