@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Users, Activity, TrendingUp, Shield, Search, Filter, Download, Trash2, User, Upload, FileText, Calendar, ChevronDown, DatabaseBackup, DatabaseInput } from 'lucide-react';
+import { Plus, Users, Activity, TrendingUp, Shield, Search, Filter, Download, Trash2, User, Upload, FileText, Calendar, ChevronDown, DatabaseBackup, Import } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import jsPDF from 'jspdf/dist/jspdf.umd.min.js';
 import autoTable from 'jspdf-autotable';
@@ -292,7 +292,7 @@ export default function SpecialistView() {
                     <span>Backup All Data (JSON)</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleImportClick}>
-                    <DatabaseInput className="mr-2 h-4 w-4" />
+                    <Import className="mr-2 h-4 w-4" />
                     <span>Restore Data (JSON)</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
