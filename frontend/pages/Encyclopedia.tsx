@@ -375,7 +375,7 @@ export default function Encyclopedia() {
             <Card className="shadow-lg bg-white/80 backdrop-blur-sm">
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center justify-between">
-                  <span>{t('common.symptoms')} ({filteredDiseases.length})</span>
+                  <span>{t('common.diseases')} ({filteredDiseases.length})</span>
                   {filteredDiseases.length > 0 && (
                     <Badge variant="outline" className="text-xs">
                       {Math.round((filteredDiseases.length / totalDiseases) * 100)}%
@@ -686,7 +686,7 @@ export default function Encyclopedia() {
                           <div className="font-medium text-sm">
                             {category.charAt(0).toUpperCase() + category.slice(1)}
                           </div>
-                          <div className="text-xs text-gray-500">{count} {t('common.symptoms')}</div>
+                          <div className="text-xs text-gray-500">{count} {t('common.diseases')}</div>
                         </div>
                       </Button>
                     ))}

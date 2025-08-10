@@ -55,7 +55,6 @@ export default function SpecialistView() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const upcomingAppointments = getUpcomingAppointments(30);
-  const recentPatients = [...patients].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()).slice(0, 5);
 
   const filteredPatients = patients.filter(patient => {
     const matchesSearch = searchTerm === '' || 
@@ -68,7 +67,7 @@ export default function SpecialistView() {
       (filterType === 'chronic' && patient.chronicConditions && patient.chronicConditions.length > 0) ||
       (filterType === 'allergies' && patient.allergies && patient.allergies.length > 0) ||
       (filterType === 'recent' && patient.visits.length > 0 && 
-        new Date(patient.visits[patient.visits.length - 1].date) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000));
+        new Date(patient.visits[0].date) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000));
 
     return matchesSearch && matchesFilter;
   });
@@ -251,8 +250,9 @@ export default function SpecialistView() {
 
   const stats = [
     { icon: Users, value: patients.length.toString(), label: t('pages.records.totalPatients'), color: 'text-blue-500' },
-    { icon: TrendingUp, value: patients.filter(p => p.visits.length > 0).length.toString(), label: t('pages.records.activePatients'), color: 'text-purple-500' },
-    { icon: Shield, value: '100%', label: t('pages.records.secureStorage'), color: 'text-orange-500' }
+    { icon: Activity, value: patients.filter(p => p.visits.length > 0).length.toString(), label: t('pages.records.activePatients'), color: 'text-purple-500' },
+    { icon: Shield, value: '100%', label: t('pages.records.secureStorage'), color: 'text-orange-500' },
+    { icon: Calendar, value: upcomingAppointments.length.toString(), label: t('pages.home.upcomingAppointments'), color: 'text-green-500' }
   ];
 
   return (

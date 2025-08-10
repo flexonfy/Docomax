@@ -94,6 +94,7 @@ export const translations = {
       dateTime: 'Date & Time',
       completed: 'Completed',
       weeks: 'Weeks',
+      diseases: 'Diseases',
     },
     pages: {
       home: {
@@ -915,6 +916,7 @@ export const translations = {
       dateTime: 'Date & Heure',
       completed: 'Terminé',
       weeks: 'Semaines',
+      diseases: 'Maladies',
     },
     pages: {
       home: {
@@ -1736,6 +1738,7 @@ export const translations = {
       dateTime: 'Tarehe na Wakati',
       completed: 'Imekamilika',
       weeks: 'Wiki',
+      diseases: 'Magonjwa',
     },
     pages: {
       home: {
