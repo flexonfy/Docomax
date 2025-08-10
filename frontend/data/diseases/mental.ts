@@ -139,4 +139,142 @@ export const mentalDiseases: ComprehensiveDisease[] = [
     ageGroup: 'all',
     gender: 'all'
   },
+  {
+    id: 'bipolar-disorder',
+    name: {
+      en: 'Bipolar Disorder',
+      fr: 'Trouble Bipolaire',
+      sw: 'Ugonjwa wa Bipolar'
+    },
+    category: 'mental',
+    severity: 'high',
+    symptoms: {
+      en: ['manic episodes (high energy, euphoria, racing thoughts)', 'depressive episodes (low energy, sadness, hopelessness)', 'mood swings', 'changes in sleep and activity levels', 'impulsive behavior'],
+      fr: ['épisodes maniaques (haute énergie, euphorie, pensées rapides)', 'épisodes dépressifs (basse énergie, tristesse, désespoir)', 'sautes d\'humeur', 'changements dans le sommeil et les niveaux d\'activité', 'comportement impulsif'],
+      sw: ['vipindi vya mania (nguvu nyingi, furaha tele, mawazo ya haraka)', 'vipindi vya unyogovu (nguvu kidogo, huzuni, kukata tamaa)', 'mabadiliko ya hisia', 'mabadiliko katika usingizi na viwango vya shughuli', 'tabia ya msukumo']
+    },
+    commonSymptoms: {
+      en: ['mood swings', 'manic episodes', 'depressive episodes'],
+      fr: ['sautes d\'humeur', 'épisodes maniaques', 'épisodes dépressifs'],
+      sw: ['mabadiliko ya hisia', 'vipindi vya mania', 'vipindi vya unyogovu']
+    },
+    rareSymptoms: {
+      en: ['psychosis during severe episodes', 'mixed episodes (mania and depression at same time)'],
+      fr: ['psychose pendant les épisodes sévères', 'épisodes mixtes (manie et dépression en même temps)'],
+      sw: ['saikolojia wakati wa vipindi vikali', 'vipindi mchanganyiko (mania na unyogovu kwa wakati mmoja)']
+    },
+    causes: {
+      en: ['genetics', 'brain structure and chemistry', 'stressful life events can trigger episodes'],
+      fr: ['génétique', 'structure et chimie du cerveau', 'les événements de vie stressants peuvent déclencher des épisodes'],
+      sw: ['maumbile', 'muundo na kemia ya ubongo', 'matukio ya maisha yenye msongo yanaweza kusababisha vipindi']
+    },
+    riskFactors: {
+      en: ['family history', 'periods of high stress', 'drug or alcohol abuse', 'major life changes'],
+      fr: ['antécédents familiaux', 'périodes de grand stress', 'abus de drogues ou d\'alcool', 'changements de vie majeurs'],
+      sw: ['historia ya familia', 'vipindi vya msongo mwingi', 'matumizi mabaya ya dawa za kulevya au pombe', 'mabadiliko makubwa ya maisha']
+    },
+    treatment: {
+      en: 'Lifelong treatment with mood stabilizers, antipsychotics, antidepressants, psychotherapy (counseling), and education.',
+      fr: 'Traitement à vie avec des stabilisateurs de l\'humeur, des antipsychotiques, des antidépresseurs, une psychothérapie (conseil) et une éducation.',
+      sw: 'Matibabu ya maisha yote na vidhibiti hisia, antipsychotics, antidepressants, tiba ya kisaikolojia (ushauri), na elimu.'
+    },
+    prevention: {
+      en: 'No known way to prevent. Early treatment can help prevent episodes from worsening.',
+      fr: 'Aucun moyen connu de prévenir. Un traitement précoce peut aider à empêcher l\'aggravation des épisodes.',
+      sw: 'Hakuna njia inayojulikana ya kuzuia. Matibabu ya mapema yanaweza kusaidia kuzuia vipindi kuwa vibaya zaidi.'
+    },
+    whenToSeekHelp: {
+      en: 'Seek help if you experience extreme mood swings that interfere with your life. Seek immediate help for suicidal thoughts.',
+      fr: 'Consultez si vous ressentez des sautes d\'humeur extrêmes qui interfèrent avec votre vie. Cherchez de l\'aide immédiate pour des pensées suicidaires.',
+      sw: 'Tafuta msaada ikiwa unapata mabadiliko makubwa ya hisia yanayoingilia maisha yako. Tafuta msaada wa haraka kwa mawazo ya kujiua.'
+    },
+    complications: {
+      en: ['suicide attempts', 'substance abuse', 'financial or legal problems', 'damaged relationships'],
+      fr: ['tentatives de suicide', 'abus de substances', 'problèmes financiers ou juridiques', 'relations endommagées'],
+      sw: ['majaribio ya kujiua', 'matumizi mabaya ya dawa za kulevya', 'matatizo ya kifedha au kisheria', 'uhusiano ulioharibika']
+    },
+    diagnosis: {
+      en: 'Clinical evaluation by a mental health professional, mood charting, ruling out other conditions.',
+      fr: 'Évaluation clinique par un professionnel de la santé mentale, suivi de l\'humeur, exclusion d\'autres conditions.',
+      sw: 'Tathmini ya kliniki na mtaalamu wa afya ya akili, ufuatiliaji wa hisia, kuondoa hali zingine.'
+    },
+    prognosis: {
+      en: 'A lifelong condition that requires ongoing management, but people can lead full and productive lives.',
+      fr: 'Une condition à vie qui nécessite une gestion continue, mais les gens peuvent mener une vie pleine et productive.',
+      sw: 'Hali ya maisha yote inayohitaji usimamizi unaoendelea, lakini watu wanaweza kuishi maisha kamili na yenye tija.'
+    },
+    source: 'nhs',
+    prevalenceInAfrica: 'medium',
+    ageGroup: 'all',
+    gender: 'all'
+  },
+  {
+    id: 'schizophrenia',
+    name: {
+      en: 'Schizophrenia',
+      fr: 'Schizophrénie',
+      sw: 'Schizophrenia'
+    },
+    category: 'mental',
+    severity: 'high',
+    symptoms: {
+      en: ['hallucinations (seeing or hearing things that aren\'t there)', 'delusions (false beliefs)', 'disorganized thinking and speech', 'abnormal motor behavior', 'negative symptoms (lack of emotion, social withdrawal)'],
+      fr: ['hallucinations (voir ou entendre des choses qui n\'existent pas)', 'délires (fausses croyances)', 'pensée et discours désorganisés', 'comportement moteur anormal', 'symptômes négatifs (manque d\'émotion, retrait social)'],
+      sw: ['maono (kuona au kusikia vitu visivyokuwepo)', 'udanganyifu (imani za uwongo)', 'mawazo na usemi uliovurugika', 'tabia isiyo ya kawaida ya mwendo', 'dalili hasi (ukosefu wa hisia, kujitenga na jamii)']
+    },
+    commonSymptoms: {
+      en: ['hallucinations', 'delusions', 'disorganized speech', 'social withdrawal'],
+      fr: ['hallucinations', 'délires', 'discours désorganisé', 'retrait social'],
+      sw: ['maono', 'udanganyifu', 'usemi uliovurugika', 'kujitenga na jamii']
+    },
+    rareSymptoms: {
+      en: ['catatonia (unresponsiveness)', 'cognitive deficits'],
+      fr: ['catatonie (absence de réactivité)', 'déficits cognitifs'],
+      sw: ['catatonia (kutojibu)', 'upungufu wa utambuzi']
+    },
+    causes: {
+      en: ['combination of genetics, brain chemistry (dopamine, glutamate), and environmental factors'],
+      fr: ['combinaison de génétique, de chimie du cerveau (dopamine, glutamate) et de facteurs environnementaux'],
+      sw: ['mchanganyiko wa maumbile, kemia ya ubongo (dopamine, glutamate), na mambo ya kimazingira']
+    },
+    riskFactors: {
+      en: ['family history', 'pregnancy and birth complications', 'mind-altering drug use during teen years'],
+      fr: ['antécédents familiaux', 'complications de la grossesse et de la naissance', 'consommation de drogues psychotropes à l\'adolescence'],
+      sw: ['historia ya familia', 'matatizo ya ujauzito na kuzaliwa', 'matumizi ya dawa za kulevya wakati wa ujana']
+    },
+    treatment: {
+      en: 'Lifelong treatment with antipsychotic medications, psychotherapy, and social support services.',
+      fr: 'Traitement à vie avec des médicaments antipsychotiques, une psychothérapie et des services de soutien social.',
+      sw: 'Matibabu ya maisha yote na dawa za antipsychotic, tiba ya kisaikolojia, na huduma za msaada wa kijamii.'
+    },
+    prevention: {
+      en: 'No sure way to prevent. Early identification and treatment can improve long-term outcomes.',
+      fr: 'Aucun moyen sûr de prévenir. L\'identification et le traitement précoces peuvent améliorer les résultats à long terme.',
+      sw: 'Hakuna njia ya uhakika ya kuzuia. Utambuzi na matibabu ya mapema yanaweza kuboresha matokeo ya muda mrefu.'
+    },
+    whenToSeekHelp: {
+      en: 'Seek help immediately if someone is showing signs of psychosis, is unable to care for themselves, or is a danger to themselves or others.',
+      fr: 'Cherchez de l\'aide immédiatement si quelqu\'un montre des signes de psychose, est incapable de prendre soin de lui-même, ou est un danger pour lui-même ou pour les autres.',
+      sw: 'Tafuta msaada mara moja ikiwa mtu anaonyesha dalili za saikolojia, hawezi kujitunza, au ni hatari kwake mwenyewe au kwa wengine.'
+    },
+    complications: {
+      en: ['suicide', 'anxiety disorders', 'depression', 'substance abuse', 'inability to work or attend school', 'social isolation'],
+      fr: ['suicide', 'troubles anxieux', 'dépression', 'abus de substances', 'incapacité de travailler ou d\'aller à l\'école', 'isolement social'],
+      sw: ['kujiua', 'magonjwa ya wasiwasi', 'unyogovu', 'matumizi mabaya ya dawa za kulevya', 'kutoweza kufanya kazi au kwenda shule', 'kujitenga na jamii']
+    },
+    diagnosis: {
+      en: 'Clinical evaluation by a psychiatrist, ruling out other mental health disorders and substance use.',
+      fr: 'Évaluation clinique par un psychiatre, exclusion d\'autres troubles de santé mentale et de la consommation de substances.',
+      sw: 'Tathmini ya kliniki na daktari wa akili, kuondoa magonjwa mengine ya akili na matumizi ya dawa za kulevya.'
+    },
+    prognosis: {
+      en: 'A serious, lifelong illness that requires ongoing treatment. With treatment, many can manage their symptoms.',
+      fr: 'Une maladie grave et à vie qui nécessite un traitement continu. Avec un traitement, beaucoup peuvent gérer leurs symptômes.',
+      sw: 'Ugonjwa mbaya, wa maisha yote unaohitaji matibabu endelevu. Kwa matibabu, wengi wanaweza kudhibiti dalili zao.'
+    },
+    source: 'mayo',
+    prevalenceInAfrica: 'medium',
+    ageGroup: 'adult',
+    gender: 'all'
+  }
 ];

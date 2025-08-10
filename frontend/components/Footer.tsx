@@ -11,7 +11,10 @@ export default function Footer() {
       <div className="flex items-center justify-center space-x-1">
         <span>Created with</span>
         <Heart className="h-4 w-4 text-red-500" />
-        <span>by BUGINGO Flexon</span>
+        <span>by&nbsp;</span>
+        <a href="https://x.com/bugingoflexon" target="_blank" rel="noopener noreferrer" className="font-semibold text-green-600 hover:underline">
+          BUGINGO Flexon
+        </a>
       </div>
     </footer>
   );

@@ -912,5 +912,74 @@ export const digestiveDiseases: ComprehensiveDisease[] = [
     prevalenceInAfrica: 'high',
     ageGroup: 'adult',
     gender: 'all'
+  },
+  {
+    id: 'gerd',
+    name: {
+      en: 'Gastroesophageal Reflux Disease (GERD)',
+      fr: 'Reflux Gastro-œsophagien (RGO)',
+      sw: 'Ugonjwa wa Kiungulia (GERD)'
+    },
+    category: 'digestive',
+    severity: 'medium',
+    symptoms: {
+      en: ['heartburn', 'regurgitation of food or sour liquid', 'chest pain', 'difficulty swallowing', 'chronic cough', 'sensation of a lump in your throat'],
+      fr: ['brûlures d\'estomac', 'régurgitation d\'aliments ou de liquide acide', 'douleur thoracique', 'difficulté à avaler', 'toux chronique', 'sensation de boule dans la gorge'],
+      sw: ['kiungulia', 'kucheua chakula au maji machachu', 'maumivu ya kifua', 'ugumu wa kumeza', 'kikohozi sugu', 'hisia ya donge kooni']
+    },
+    commonSymptoms: {
+      en: ['heartburn', 'regurgitation', 'chest pain'],
+      fr: ['brûlures d\'estomac', 'régurgitation', 'douleur thoracique'],
+      sw: ['kiungulia', 'kucheua', 'maumivu ya kifua']
+    },
+    rareSymptoms: {
+      en: ['laryngitis', 'new or worsening asthma', 'disrupted sleep'],
+      fr: ['laryngite', 'asthme nouveau ou aggravé', 'sommeil perturbé'],
+      sw: ['laryngitis', 'pumu mpya au inayozidi', 'usingizi uliovurugika']
+    },
+    causes: {
+      en: ['frequent acid reflux', 'weakening of the lower esophageal sphincter (LES)'],
+      fr: ['reflux acide fréquent', 'affaiblissement du sphincter œsophagien inférieur (SOI)'],
+      sw: ['kiungulia cha mara kwa mara', 'kudhoofika kwa sfincta ya chini ya umio (LES)']
+    },
+    riskFactors: {
+      en: ['obesity', 'pregnancy', 'smoking', 'hiatal hernia', 'certain foods (fatty, fried, spicy)', 'alcohol', 'caffeine'],
+      fr: ['obésité', 'grossesse', 'tabagisme', 'hernie hiatale', 'certains aliments (gras, frits, épicés)', 'alcool', 'caféine'],
+      sw: ['unene', 'ujauzito', 'uvutaji sigara', 'ngiri ya hiatal', 'vyakula fulani (mafuta, vya kukaanga, viungo)', 'pombe', 'kafeini']
+    },
+    treatment: {
+      en: 'Lifestyle changes (diet, weight loss), antacids, H2 blockers, proton pump inhibitors (PPIs), surgery in severe cases.',
+      fr: 'Changements de mode de vie (alimentation, perte de poids), antiacides, inhibiteurs H2, inhibiteurs de la pompe à protons (IPP), chirurgie dans les cas graves.',
+      sw: 'Mabadiliko ya mtindo wa maisha (lishe, kupunguza uzito), antacids, vizuizi vya H2, vizuizi vya pampu ya protoni (PPIs), upasuaji katika kesi kali.'
+    },
+    prevention: {
+      en: 'Maintain a healthy weight, avoid trigger foods, eat smaller meals, don\'t lie down after eating, elevate head of bed.',
+      fr: 'Maintenir un poids santé, éviter les aliments déclencheurs, manger de plus petits repas, ne pas s\'allonger après avoir mangé, surélever la tête du lit.',
+      sw: 'Dumisha uzito wenye afya, epuka vyakula vinavyochochea, kula milo midogo, usilale baada ya kula, inua kichwa cha kitanda.'
+    },
+    whenToSeekHelp: {
+      en: 'See a doctor if you have severe or frequent GERD symptoms, or if over-the-counter medications are not effective.',
+      fr: 'Consultez un médecin si vous avez des symptômes de RGO sévères ou fréquents, ou si les médicaments en vente libre ne sont pas efficaces.',
+      sw: 'Muone daktari ikiwa una dalili kali au za mara kwa mara za GERD, au ikiwa dawa za dukani hazifanyi kazi.'
+    },
+    complications: {
+      en: ['esophagitis (inflammation of the esophagus)', 'esophageal stricture', 'Barrett\'s esophagus', 'esophageal cancer'],
+      fr: ['œsophagite (inflammation de l\'œsophage)', 'sténose œsophagienne', 'œsophage de Barrett', 'cancer de l\'œsophage'],
+      sw: ['esophagitis (uvimbe wa umio)', 'mkazo wa umio', 'umio wa Barrett', 'saratani ya umio']
+    },
+    diagnosis: {
+      en: 'Based on symptoms, endoscopy, ambulatory acid (pH) probe test, esophageal manometry.',
+      fr: 'Basé sur les symptômes, endoscopie, test de sonde pH ambulatoire, manométrie œsophagienne.',
+      sw: 'Kulingana na dalili, endoscopy, kipimo cha uchunguzi wa asidi (pH), manometry ya umio.'
+    },
+    prognosis: {
+      en: 'Manageable with lifestyle changes and medication. Long-term condition that requires ongoing management.',
+      fr: 'Gérable avec des changements de mode de vie et des médicaments. Condition à long terme qui nécessite une gestion continue.',
+      sw: 'Inaweza kudhibitiwa na mabadiliko ya mtindo wa maisha na dawa. Hali ya muda mrefu inayohitaji usimamizi unaoendelea.'
+    },
+    source: 'mayo',
+    prevalenceInAfrica: 'high',
+    ageGroup: 'adult',
+    gender: 'all'
   }
 ];

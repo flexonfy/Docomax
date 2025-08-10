@@ -626,5 +626,74 @@ export const respiratoryDiseases: ComprehensiveDisease[] = [
     prevalenceInAfrica: 'high',
     ageGroup: 'adult',
     gender: 'all'
+  },
+  {
+    id: 'common-cold',
+    name: {
+      en: 'Common Cold',
+      fr: 'Rhume',
+      sw: 'Mafua ya Kawaida'
+    },
+    category: 'respiratory',
+    severity: 'low',
+    symptoms: {
+      en: ['runny or stuffy nose', 'sore throat', 'cough', 'congestion', 'slight body aches', 'mild headache', 'sneezing', 'low-grade fever'],
+      fr: ['nez qui coule ou bouché', 'mal de gorge', 'toux', 'congestion', 'légères courbatures', 'léger mal de tête', 'éternuements', 'fièvre légère'],
+      sw: ['mafua au pua iliyoziba', 'maumivu ya koo', 'kikohozi', 'msongamano', 'maumivu kidogo ya mwili', 'maumivu kidogo ya kichwa', 'kupiga chafya', 'homa kidogo']
+    },
+    commonSymptoms: {
+      en: ['runny nose', 'sore throat', 'cough', 'sneezing'],
+      fr: ['nez qui coule', 'mal de gorge', 'toux', 'éternuements'],
+      sw: ['mafua', 'maumivu ya koo', 'kikohozi', 'kupiga chafya']
+    },
+    rareSymptoms: {
+      en: ['sinus infection', 'ear infection'],
+      fr: ['infection des sinus', 'otite'],
+      sw: ['maambukizi ya sinus', 'maambukizi ya sikio']
+    },
+    causes: {
+      en: ['various viruses, most commonly rhinoviruses', 'airborne droplets', 'direct contact with infected person or surfaces'],
+      fr: ['divers virus, le plus souvent des rhinovirus', 'gouttelettes aéroportées', 'contact direct avec une personne ou des surfaces infectées'],
+      sw: ['virusi mbalimbali, mara nyingi rhinoviruses', 'matone ya hewani', 'mawasiliano ya moja kwa moja na mtu aliyeambukizwa au nyuso']
+    },
+    riskFactors: {
+      en: ['age (children are more susceptible)', 'weakened immune system', 'time of year (fall and winter)', 'crowded places'],
+      fr: ['âge (les enfants sont plus susceptibles)', 'système immunitaire affaibli', 'période de l\'année (automne et hiver)', 'lieux bondés'],
+      sw: ['umri (watoto wako katika hatari zaidi)', 'mfumo dhaifu wa kinga', 'msimu wa mwaka (vuli na baridi)', 'maeneo yenye watu wengi']
+    },
+    treatment: {
+      en: 'Rest, fluids, over-the-counter pain relievers, decongestants, and cough syrups. No cure exists.',
+      fr: 'Repos, liquides, analgésiques en vente libre, décongestionnants et sirops contre la toux. Il n\'existe pas de remède.',
+      sw: 'Pumziko, maji, dawa za maumivu za dukani, dawa za kupunguza msongamano, na sharubati za kikohozi. Hakuna tiba.'
+    },
+    prevention: {
+      en: 'Frequent handwashing, avoid touching face, avoid close contact with sick people.',
+      fr: 'Lavage fréquent des mains, éviter de se toucher le visage, éviter le contact étroit avec les personnes malades.',
+      sw: 'Kunawa mikono mara kwa mara, epuka kugusa uso, epuka mawasiliano ya karibu na watu wagonjwa.'
+    },
+    whenToSeekHelp: {
+      en: 'See a doctor if symptoms last more than 10 days, fever is high, or if you have severe shortness of breath.',
+      fr: 'Consultez un médecin si les symptômes durent plus de 10 jours, si la fièvre est élevée ou si vous avez un essoufflement sévère.',
+      sw: 'Muone daktari ikiwa dalili zinadumu zaidi ya siku 10, homa ni kali, au ikiwa una upungufu mkubwa wa pumzi.'
+    },
+    complications: {
+      en: ['acute ear infection (otitis media)', 'sinusitis', 'secondary bacterial infections like strep throat'],
+      fr: ['otite moyenne aiguë', 'sinusite', 'infections bactériennes secondaires comme l\'angine streptococcique'],
+      sw: ['maambukizi ya sikio ya ghafla (otitis media)', 'sinusitis', 'maambukizi ya pili ya bakteria kama strep throat']
+    },
+    diagnosis: {
+      en: 'Based on signs and symptoms.',
+      fr: 'Basé sur les signes et symptômes.',
+      sw: 'Kulingana na ishara na dalili.'
+    },
+    prognosis: {
+      en: 'Excellent. Most people recover in 7-10 days.',
+      fr: 'Excellent. La plupart des gens se rétablissent en 7-10 jours.',
+      sw: 'Nzuri sana. Watu wengi hupona ndani ya siku 7-10.'
+    },
+    source: 'cdc',
+    prevalenceInAfrica: 'very-high',
+    ageGroup: 'all',
+    gender: 'all'
   }
 ];
