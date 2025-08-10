@@ -26,7 +26,8 @@ import {
   Eye,
   Bot,
   Search,
-  HelpCircle
+  HelpCircle,
+  HeartHandshake
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -115,6 +116,16 @@ export default function Tools() {
       color: 'bg-gradient-to-br from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700',
       category: 'Mental Health',
       priority: 'medium',
+      audience: ['personal']
+    },
+    {
+      title: t('tools.antiAddiction.title'),
+      description: t('tools.antiAddiction.description'),
+      icon: HeartHandshake,
+      path: '/tools/anti-addiction',
+      color: 'bg-gradient-to-br from-lime-500 to-lime-600 hover:from-lime-600 hover:to-lime-700',
+      category: 'Mental Health',
+      priority: 'high',
       audience: ['personal']
     },
     {

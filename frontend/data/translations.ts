@@ -821,6 +821,10 @@ export const translations = {
         tip3: 'Utilisez des échelles adaptées à l\'âge pour une évaluation précise',
         tip4: 'Documentez les scores de douleur et les interventions',
       },
+      antiAddiction: {
+        title: 'Anti-Addiction Toolkit',
+        description: 'Support and tools for overcoming addiction',
+      },
     },
   },
   fr: {
@@ -1643,6 +1647,10 @@ export const translations = {
         tip3: 'Utilisez des échelles adaptées à l\'âge pour une évaluation précise',
         tip4: 'Documentez les scores de douleur et les interventions',
       },
+      antiAddiction: {
+        title: 'Boîte à Outils Anti-Addiction',
+        description: 'Soutien et outils pour surmonter la dépendance',
+      },
     },
   },
   sw: {
@@ -2464,6 +2472,10 @@ export const translations = {
         tip2: 'Zingatia umri na uwezo wa mawasiliano wa mgonjwa',
         tip3: 'Tumia vipimo vinavyofaa umri kwa tathmini sahihi',
         tip4: 'Andika alama za maumivu na hatua zilizochukuliwa',
+      },
+      antiAddiction: {
+        title: 'Zana ya Kupambana na Uraibu',
+        description: 'Msaada na zana za kushinda uraibu',
       },
     },
   }

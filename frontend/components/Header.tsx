@@ -33,6 +33,7 @@ const getPageTitle = (pathname: string, t: (key: string, replacements?: Record<s
     '/tools/glasgow-coma-scale': 'tools.gcs.title',
     '/tools/apgar-score': 'tools.apgar.title',
     '/tools/pain-scale': 'tools.painScale.title',
+    '/tools/anti-addiction': 'tools.antiAddiction.title',
   };
 
   const titleKey = routeToTitleKey[pathname];
