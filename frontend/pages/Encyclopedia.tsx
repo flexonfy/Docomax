@@ -7,11 +7,15 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Search, Book, AlertTriangle, CheckCircle, Clock, Info, Globe, Shield, Filter, X, TrendingUp, Users, Stethoscope, Heart, RotateCcw } from 'lucide-react';
+import { Search, Book, AlertTriangle, CheckCircle, Clock, Info, Globe, Shield, Filter, X, TrendingUp, Users, Stethoscope, Heart, RotateCcw, TestTube, Star, FileQuestion, ArrowRight } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import { useToast } from '@/components/ui/use-toast';
+import FavoritesManager from '../lib/favorites';
 
 // Renders a comprehensive disease encyclopedia from a static JSON data source. Features client-side search and filtering by various attributes like category, prevalence, and severity.
 export default function Encyclopedia() {
   const { t, language } = useLanguage();
+  const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedSource, setSelectedSource] = useState('all');
@@ -20,6 +24,15 @@ export default function Encyclopedia() {
   const [selectedAgeGroup, setSelectedAgeGroup] = useState('all');
   const [selectedDisease, setSelectedDisease] = useState<ComprehensiveDisease | null>(null);
   const [showFilters, setShowFilters] = useState(window.innerWidth >= 1024);
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [quizAnswers, setQuizAnswers] = useState<Record<string, boolean>>({});
+  const [quizCompleted, setQuizCompleted] = useState(false);
+
+  useEffect(() => {
+    setFavoriteIds(FavoritesManager.getFavoriteIds());
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -36,6 +49,10 @@ export default function Encyclopedia() {
 
     if (searchTerm.trim()) {
       diseases = searchComprehensiveDiseases(searchTerm);
+    }
+
+    if (showFavoritesOnly) {
+      diseases = diseases.filter(d => favoriteIds.includes(d.id));
     }
 
     if (selectedCategory !== 'all') {
@@ -59,7 +76,75 @@ export default function Encyclopedia() {
     }
 
     return diseases;
-  }, [searchTerm, selectedCategory, selectedSource, selectedSeverity, selectedPrevalence, selectedAgeGroup]);
+  }, [searchTerm, selectedCategory, selectedSource, selectedSeverity, selectedPrevalence, selectedAgeGroup, showFavoritesOnly, favoriteIds]);
+
+  const getRelatedDiseases = (disease: ComprehensiveDisease): ComprehensiveDisease[] => {
+    if (!disease) return [];
+    
+    const related = comprehensiveDiseases.filter(d => {
+      if (d.id === disease.id) return false;
+      
+      // Same category
+      if (d.category === disease.category) return true;
+      
+      // Overlapping common symptoms
+      const commonSymptomOverlap = d.commonSymptoms[language]?.some(symptom => 
+        disease.commonSymptoms[language]?.includes(symptom)
+      );
+      if (commonSymptomOverlap) return true;
+      
+      // Overlapping risk factors
+      const riskFactorOverlap = d.riskFactors[language]?.some(factor => 
+        disease.riskFactors[language]?.includes(factor)
+      );
+      if (riskFactorOverlap) return true;
+      
+      return false;
+    });
+    
+    // Sort by relevance and return top 5
+    return related.slice(0, 5);
+  };
+
+  const handleToggleFavorite = () => {
+    if (!selectedDisease) return;
+    
+    const isNowFavorite = FavoritesManager.toggleFavorite(
+      selectedDisease.id,
+      selectedDisease.name[language],
+      selectedDisease.category
+    );
+    
+    setFavoriteIds(FavoritesManager.getFavoriteIds());
+    
+    toast({
+      title: isNowFavorite ? 'Added to Favorites' : 'Removed from Favorites',
+      description: `${selectedDisease.name[language]} ${isNowFavorite ? 'added to' : 'removed from'} your favorites.`
+    });
+  };
+
+  const handleStartQuiz = () => {
+    setQuizAnswers({});
+    setQuizCompleted(false);
+    setShowQuiz(true);
+  };
+
+  const handleQuizAnswer = (questionKey: string, answer: boolean) => {
+    setQuizAnswers(prev => ({ ...prev, [questionKey]: answer }));
+  };
+
+  const handleCompleteQuiz = () => {
+    setQuizCompleted(true);
+  };
+
+  const getQuizSummary = () => {
+    if (!selectedDisease?.quizQuestions) return { yesCount: 0, totalCount: 0 };
+    
+    const totalCount = selectedDisease.quizQuestions.length;
+    const yesCount = Object.values(quizAnswers).filter(answer => answer === true).length;
+    
+    return { yesCount, totalCount };
+  };
 
   const getSeverityIcon = (severity?: string) => {
     switch (severity) {
@@ -149,15 +234,18 @@ export default function Encyclopedia() {
     setSelectedSeverity('all');
     setSelectedPrevalence('all');
     setSelectedAgeGroup('all');
+    setShowFavoritesOnly(false);
   };
 
-  const hasActiveFilters = searchTerm.trim() || selectedCategory !== 'all' || selectedSource !== 'all' || selectedSeverity !== 'all' || selectedPrevalence !== 'all' || selectedAgeGroup !== 'all';
+  const hasActiveFilters = searchTerm.trim() || selectedCategory !== 'all' || selectedSource !== 'all' || selectedSeverity !== 'all' || selectedPrevalence !== 'all' || selectedAgeGroup !== 'all' || showFavoritesOnly;
 
   const totalDiseases = comprehensiveDiseases.length;
   const categoryStats = categories.map(cat => ({
     category: cat,
     count: comprehensiveDiseases.filter(d => d.category === cat).length
   })).sort((a, b) => b.count - a.count);
+
+  const relatedDiseases = selectedDisease ? getRelatedDiseases(selectedDisease) : [];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
@@ -213,13 +301,13 @@ export default function Encyclopedia() {
                 </div>
               </CardContent>
             </Card>
-            <Card className="border-l-4 border-l-orange-500 bg-white/70 backdrop-blur-sm">
+            <Card className="border-l-4 border-l-yellow-500 bg-white/70 backdrop-blur-sm">
               <CardContent className="p-3 sm:p-4">
                 <div className="flex items-center space-x-2">
-                  <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-orange-500" />
+                  <Star className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500" />
                   <div>
-                    <div className="text-lg sm:text-2xl font-bold text-orange-600">{filteredDiseases.length}</div>
-                    <div className="text-xs sm:text-sm text-gray-600">{t('pages.encyclopedia.filteredResults')}</div>
+                    <div className="text-lg sm:text-2xl font-bold text-yellow-600">{favoriteIds.length}</div>
+                    <div className="text-xs sm:text-sm text-gray-600">Favorites</div>
                   </div>
                 </div>
               </CardContent>
@@ -258,6 +346,16 @@ export default function Encyclopedia() {
                     className="pl-10 text-sm"
                   />
                 </div>
+
+                {/* Favorites Toggle */}
+                <Button
+                  variant={showFavoritesOnly ? 'default' : 'outline'}
+                  onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+                  className="w-full justify-start"
+                >
+                  <Star className={`h-4 w-4 mr-2 ${showFavoritesOnly ? 'text-yellow-400' : 'text-gray-400'}`} />
+                  Show Favorites Only ({favoriteIds.length})
+                </Button>
 
                 <div className={`transition-all duration-500 ease-in-out overflow-hidden ${showFilters ? 'max-h-screen' : 'max-h-0'}`}>
                   <div className="space-y-4 pt-4 border-t lg:border-t-0">
@@ -398,6 +496,9 @@ export default function Encyclopedia() {
                           {disease.prevalenceInAfrica && (
                             <div className="w-2 h-2 rounded-full bg-current opacity-60" />
                           )}
+                          {favoriteIds.includes(disease.id) && (
+                            <Star className="h-3 w-3 text-yellow-500 fill-current" />
+                          )}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="font-medium text-sm truncate">
@@ -474,6 +575,28 @@ export default function Encyclopedia() {
                           </div>
                         </div>
                       </div>
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleToggleFavorite}
+                          className={`${favoriteIds.includes(selectedDisease.id) ? 'bg-yellow-50 border-yellow-300' : ''}`}
+                        >
+                          <Star className={`h-4 w-4 mr-2 ${favoriteIds.includes(selectedDisease.id) ? 'text-yellow-500 fill-current' : 'text-gray-400'}`} />
+                          {favoriteIds.includes(selectedDisease.id) ? 'Favorited' : 'Add to Favorites'}
+                        </Button>
+                        {selectedDisease.quizQuestions && selectedDisease.quizQuestions.length > 0 && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleStartQuiz}
+                            className="bg-blue-50 border-blue-300"
+                          >
+                            <FileQuestion className="h-4 w-4 mr-2 text-blue-500" />
+                            Self-Assessment Quiz
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   </CardHeader>
                 </Card>
@@ -532,6 +655,28 @@ export default function Encyclopedia() {
                     </CardContent>
                   </Card>
                 </div>
+
+                {/* Possible Tests */}
+                {selectedDisease.possibleTests && selectedDisease.possibleTests[language] && selectedDisease.possibleTests[language].length > 0 && (
+                  <Card className="shadow-lg bg-white/90 backdrop-blur-sm">
+                    <CardHeader>
+                      <CardTitle className="flex items-center space-x-2 text-lg">
+                        <TestTube className="h-4 w-4 sm:h-5 sm:w-5 text-purple-500" />
+                        <span>Possible Medical Tests</span>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2">
+                        {selectedDisease.possibleTests[language].map((test: string, idx: number) => (
+                          <div key={idx} className="flex items-start space-x-2">
+                            <TestTube className="h-4 w-4 text-purple-500 mt-0.5 flex-shrink-0" />
+                            <span className="text-sm text-gray-700">{test}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
 
                 {/* Treatment */}
                 <Card className="shadow-lg bg-white/90 backdrop-blur-sm">
@@ -657,6 +802,46 @@ export default function Encyclopedia() {
                     </Card>
                   )}
                 </div>
+
+                {/* Related Diseases */}
+                {relatedDiseases.length > 0 && (
+                  <Card className="shadow-lg bg-white/90 backdrop-blur-sm">
+                    <CardHeader>
+                      <CardTitle className="flex items-center space-x-2 text-lg">
+                        <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-purple-500" />
+                        <span>Related Diseases</span>
+                      </CardTitle>
+                      <CardDescription>
+                        Diseases with similar symptoms, causes, or risk factors
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {relatedDiseases.map((disease) => (
+                          <Button
+                            key={disease.id}
+                            variant="outline"
+                            onClick={() => setSelectedDisease(disease)}
+                            className="h-auto p-3 text-left justify-start hover:shadow-md transition-all group"
+                          >
+                            <div className="flex items-center space-x-2 w-full">
+                              {getSeverityIcon(disease.severity)}
+                              <div className="flex-1 min-w-0">
+                                <div className="font-medium text-sm truncate group-hover:text-blue-600">
+                                  {disease.name[language]}
+                                </div>
+                                <Badge className={`${getCategoryColor(disease.category)} text-xs mt-1`}>
+                                  {disease.category}
+                                </Badge>
+                              </div>
+                              <ArrowRight className="h-4 w-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                            </div>
+                          </Button>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
               </div>
             ) : (
               <Card className="shadow-lg bg-white/90 backdrop-blur-sm">
@@ -770,6 +955,77 @@ export default function Encyclopedia() {
           </div>
         </div>
       </div>
+
+      {/* Self-Assessment Quiz Modal */}
+      <Dialog open={showQuiz} onOpenChange={setShowQuiz}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center space-x-2">
+              <FileQuestion className="h-5 w-5 text-blue-500" />
+              <span>Self-Assessment Quiz: {selectedDisease?.name[language]}</span>
+            </DialogTitle>
+            <DialogDescription>
+              Answer these questions to better understand how your experience relates to this condition. This is for educational purposes only and is not a medical diagnosis.
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedDisease?.quizQuestions && (
+            <div className="py-4 space-y-4">
+              {selectedDisease.quizQuestions.map((question, idx) => (
+                <div key={idx} className="p-4 border rounded-lg">
+                  <p className="font-medium mb-3 text-sm">
+                    {idx + 1}. {question[language]}
+                  </p>
+                  <div className="flex space-x-2">
+                    <Button
+                      variant={quizAnswers[question.en] === true ? 'default' : 'outline'}
+                      onClick={() => handleQuizAnswer(question.en, true)}
+                      className="flex-1"
+                      size="sm"
+                    >
+                      Yes
+                    </Button>
+                    <Button
+                      variant={quizAnswers[question.en] === false ? 'default' : 'outline'}
+                      onClick={() => handleQuizAnswer(question.en, false)}
+                      className="flex-1"
+                      size="sm"
+                    >
+                      No
+                    </Button>
+                  </div>
+                </div>
+              ))}
+              
+              {!quizCompleted && Object.keys(quizAnswers).length === selectedDisease.quizQuestions.length && (
+                <Button onClick={handleCompleteQuiz} className="w-full">
+                  Complete Assessment
+                </Button>
+              )}
+              
+              {quizCompleted && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-blue-900 mb-2">Assessment Summary</h4>
+                  <p className="text-blue-800 text-sm mb-3">
+                    You answered "Yes" to {getQuizSummary().yesCount} out of {getQuizSummary().totalCount} questions.
+                  </p>
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                    <p className="text-yellow-800 text-xs">
+                      <strong>Important:</strong> This self-assessment is for educational purposes only and should not be used as a substitute for professional medical advice, diagnosis, or treatment. Always consult with a qualified healthcare provider for proper medical evaluation.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+          
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Close</Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
