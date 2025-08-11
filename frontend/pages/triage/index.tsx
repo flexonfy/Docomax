@@ -2,16 +2,19 @@ import React, { useState } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { comprehensiveDiseases } from '../../data/comprehensiveDiseases';
 import type { ComprehensiveDisease } from '../../data/diseases/types';
+import { triageQuestions, TriageQuestion } from '../../data/triageQuestions';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogDescription } from '@/components/ui/dialog';
 import { AlertTriangle, Brain, Stethoscope, User, ListChecks, FileQuestion, Sparkles, ArrowLeft, ArrowRight, RotateCcw } from 'lucide-react';
-import StepIndicator from './components/StepIndicator';
 import UserInfoStep from './components/UserInfoStep';
 import SymptomSelectionStep from './components/SymptomSelectionStep';
-import SymptomDetailsStep from './components/SymptomDetailsStep';
 import TriageResults from './components/TriageResults';
 import { useToast } from '@/components/ui/use-toast';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface TriageResult {
   disease: ComprehensiveDisease;
@@ -25,46 +28,64 @@ interface TriageResult {
 export default function Triage() {
   const { t, language } = useLanguage();
   const { toast } = useToast();
-  const [currentStep, setCurrentStep] = useState(1);
+  const [stage, setStage] = useState<'userInfo' | 'symptomSelection' | 'detailedQuestions' | 'results'>('userInfo');
   const [userInfo, setUserInfo] = useState({ age: '', gender: 'all', riskFactors: { smoking: false, chronic: false } });
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
-  const [symptomDetails, setSymptomDetails] = useState<Record<string, any>>({});
   const [results, setResults] = useState<TriageResult[]>([]);
   const [quizForDisease, setQuizForDisease] = useState<TriageResult | null>(null);
   const [quizAnswers, setQuizAnswers] = useState<Record<string, boolean>>({});
 
-  const steps = [
-    { id: 1, name: 'User Info' },
-    { id: 2, name: 'Symptoms' },
-    { id: 3, name: 'Details' },
-    { id: 4, name: 'Results' },
-  ];
+  // New state for detailed questions
+  const [questionsToAsk, setQuestionsToAsk] = useState<TriageQuestion[]>([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [answers, setAnswers] = useState<Record<string, any>>({});
 
   const handleNext = () => {
-    if (currentStep === 1 && (!userInfo.age || parseInt(userInfo.age) <= 0)) {
-      toast({
-        title: "Information Required",
-        description: "Please enter a valid age to proceed.",
-        variant: "destructive",
-      });
-      return;
+    if (stage === 'userInfo') {
+      if (!userInfo.age || parseInt(userInfo.age) <= 0) {
+        toast({ title: "Information Required", description: "Please enter a valid age to proceed.", variant: "destructive" });
+        return;
+      }
+      setStage('symptomSelection');
+    } else if (stage === 'symptomSelection') {
+      if (selectedSymptoms.length === 0) {
+        toast({ title: "Symptoms Required", description: "Please select at least one symptom to continue.", variant: "destructive" });
+        return;
+      }
+      // Determine which detailed questions to ask
+      const relevantQuestions = triageQuestions.filter(q => 
+        q.relevantSymptoms.some(symptomKeyword => 
+          selectedSymptoms.some(selected => selected.toLowerCase().includes(symptomKeyword))
+        )
+      );
+      if (relevantQuestions.length > 0) {
+        setQuestionsToAsk(relevantQuestions);
+        setCurrentQuestionIndex(0);
+        setStage('detailedQuestions');
+      } else {
+        analyzeSymptoms();
+        setStage('results');
+      }
+    } else if (stage === 'detailedQuestions') {
+      if (currentQuestionIndex < questionsToAsk.length - 1) {
+        setCurrentQuestionIndex(prev => prev + 1);
+      } else {
+        analyzeSymptoms();
+        setStage('results');
+      }
     }
-    if (currentStep === 2 && selectedSymptoms.length === 0) {
-      toast({
-        title: "Symptoms Required",
-        description: "Please select at least one symptom to continue.",
-        variant: "destructive",
-      });
-      return;
-    }
-    if (currentStep === 3) {
-      analyzeSymptoms();
-    }
-    setCurrentStep(prev => Math.min(prev + 1, steps.length));
   };
 
   const handleBack = () => {
-    setCurrentStep(prev => Math.max(prev - 1, 1));
+    if (stage === 'results') setStage('detailedQuestions');
+    else if (stage === 'detailedQuestions') {
+      if (currentQuestionIndex > 0) {
+        setCurrentQuestionIndex(prev => prev - 1);
+      } else {
+        setStage('symptomSelection');
+      }
+    }
+    else if (stage === 'symptomSelection') setStage('userInfo');
   };
 
   const handleSymptomAdd = (symptom: string) => {
@@ -75,27 +96,18 @@ export default function Triage() {
 
   const handleSymptomRemove = (symptom: string) => {
     setSelectedSymptoms(selectedSymptoms.filter(s => s !== symptom));
-    const newDetails = { ...symptomDetails };
-    delete newDetails[symptom];
-    setSymptomDetails(newDetails);
   };
 
   const handleClearAll = () => {
     setSelectedSymptoms([]);
-    setSymptomDetails({});
   };
 
-  const handleDetailChange = (symptom: string, detail: string, value: any) => {
-    setSymptomDetails(prev => ({
-      ...prev,
-      [symptom]: {
-        ...prev[symptom],
-        [detail]: value
-      }
-    }));
+  const handleAnswerChange = (questionId: string, value: any) => {
+    setAnswers(prev => ({ ...prev, [questionId]: value }));
   };
 
   const analyzeSymptoms = () => {
+    // A more advanced implementation would use the `answers` state to refine the confidence score.
     const triageResults: TriageResult[] = [];
     let filteredDiseases = comprehensiveDiseases;
 
@@ -128,11 +140,11 @@ export default function Triage() {
         if (diseaseSymptoms.some(ds => ds.toLowerCase() === lowerSelected)) {
           matchedSymptoms.push(selectedSymptom);
           if (rareSymptoms.some(rs => rs.toLowerCase() === lowerSelected)) {
-            score += 2.5; // Rare symptoms are highly indicative
+            score += 2.5;
           } else if (commonSymptoms.some(cs => cs.toLowerCase() === lowerSelected)) {
-            score += 1.0; // Common symptoms are expected
+            score += 1.0;
           } else {
-            score += 1.5; // Other symptoms
+            score += 1.5;
           }
         }
       });
@@ -199,10 +211,6 @@ export default function Triage() {
     setQuizAnswers({});
   };
 
-  const handleQuizAnswer = (question: string, answer: boolean) => {
-    setQuizAnswers(prev => ({ ...prev, [question]: answer }));
-  };
-
   const refineConfidence = () => {
     if (!quizForDisease) return;
     let confidenceChange = 0;
@@ -236,11 +244,80 @@ export default function Triage() {
   };
 
   const resetTriage = () => {
-    setCurrentStep(1);
+    setStage('userInfo');
     setUserInfo({ age: '', gender: 'all', riskFactors: { smoking: false, chronic: false } });
     setSelectedSymptoms([]);
-    setSymptomDetails({});
     setResults([]);
+    setQuestionsToAsk([]);
+    setCurrentQuestionIndex(0);
+    setAnswers({});
+  };
+
+  const renderCurrentQuestion = () => {
+    if (stage !== 'detailedQuestions' || !questionsToAsk[currentQuestionIndex]) {
+      return null;
+    }
+    const q = questionsToAsk[currentQuestionIndex];
+    return (
+      <Card className="max-w-2xl mx-auto">
+        <CardHeader>
+          <CardTitle>Question {currentQuestionIndex + 1} of {questionsToAsk.length}</CardTitle>
+          <CardDescription>Please provide more details to help refine the assessment.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Label className="text-lg">{q.question[language]}</Label>
+          {q.type === 'number' && (
+            <Input
+              type="number"
+              value={answers[q.id] || ''}
+              onChange={(e) => handleAnswerChange(q.id, e.target.value)}
+              placeholder={q.unit}
+            />
+          )}
+          {q.type === 'select' && q.options && (
+            <Select
+              value={answers[q.id] || ''}
+              onValueChange={(value) => handleAnswerChange(q.id, value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select an option" />
+              </SelectTrigger>
+              <SelectContent>
+                {q.options.map((opt, optIndex) => (
+                  <SelectItem key={optIndex} value={opt.value}>{opt.label[language]}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+          {q.type === 'boolean' && (
+            <div className="flex items-center space-x-4 pt-2">
+              <Button variant={answers[q.id] === true ? 'default' : 'outline'} onClick={() => handleAnswerChange(q.id, true)} className="flex-1">{t('common.yes')}</Button>
+              <Button variant={answers[q.id] === false ? 'default' : 'outline'} onClick={() => handleAnswerChange(q.id, false)} className="flex-1">{t('common.no')}</Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    );
+  };
+
+  const getStageIcon = () => {
+    switch(stage) {
+      case 'userInfo': return <User className="h-8 w-8" />;
+      case 'symptomSelection': return <ListChecks className="h-8 w-8" />;
+      case 'detailedQuestions': return <FileQuestion className="h-8 w-8" />;
+      case 'results': return <Brain className="h-8 w-8" />;
+      default: return <Stethoscope className="h-8 w-8" />;
+    }
+  };
+
+  const getStageTitle = () => {
+    switch(stage) {
+      case 'userInfo': return "Let's start with some basics";
+      case 'symptomSelection': return "What symptoms are you experiencing?";
+      case 'detailedQuestions': return "A few more questions...";
+      case 'results': return "Analysis Results";
+      default: return t('pages.triage.title');
+    }
   };
 
   return (
@@ -250,32 +327,29 @@ export default function Triage() {
           <div className="mb-8">
             <div className="flex items-center space-x-3 mb-4">
               <div className="p-3 bg-gradient-to-br from-blue-500 to-green-500 rounded-xl text-white shadow-lg">
-                <Stethoscope className="h-8 w-8" />
+                {getStageIcon()}
               </div>
               <div>
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
-                  {t('pages.triage.title')}
+                  {getStageTitle()}
                 </h1>
                 <p className="text-lg text-gray-600">{t('pages.triage.aiDescription')}</p>
               </div>
             </div>
-            <div className="mt-6">
-              <StepIndicator current={currentStep} steps={steps} />
-            </div>
           </div>
 
-          {currentStep === 1 && <UserInfoStep userInfo={userInfo} onInfoChange={(field, value) => setUserInfo(prev => ({ ...prev, [field]: value }))} />}
-          {currentStep === 2 && <SymptomSelectionStep selectedSymptoms={selectedSymptoms} onSymptomAdd={handleSymptomAdd} onSymptomRemove={handleSymptomRemove} onClearAll={handleClearAll} />}
-          {currentStep === 3 && <SymptomDetailsStep selectedSymptoms={selectedSymptoms} symptomDetails={symptomDetails} onDetailChange={handleDetailChange} />}
-          {currentStep === 4 && <TriageResults results={results} onStartQuiz={startQuiz} />}
+          {stage === 'userInfo' && <UserInfoStep userInfo={userInfo} onInfoChange={(field, value) => setUserInfo(prev => ({ ...prev, [field]: value }))} />}
+          {stage === 'symptomSelection' && <SymptomSelectionStep selectedSymptoms={selectedSymptoms} onSymptomAdd={handleSymptomAdd} onSymptomRemove={handleSymptomRemove} onClearAll={handleClearAll} />}
+          {stage === 'detailedQuestions' && renderCurrentQuestion()}
+          {stage === 'results' && <TriageResults results={results} onStartQuiz={startQuiz} />}
 
           <div className="mt-8 flex justify-between">
-            <Button onClick={handleBack} disabled={currentStep === 1}>
+            <Button onClick={handleBack} disabled={stage === 'userInfo'}>
               <ArrowLeft className="h-4 w-4 mr-2" /> {t('common.back')}
             </Button>
-            {currentStep < steps.length ? (
-              <Button onClick={handleNext} disabled={currentStep === 2 && selectedSymptoms.length === 0}>
-                {t('common.next')} <ArrowRight className="h-4 w-4 ml-2" />
+            {stage !== 'results' ? (
+              <Button onClick={handleNext} disabled={stage === 'symptomSelection' && selectedSymptoms.length === 0}>
+                {stage === 'detailedQuestions' && currentQuestionIndex === questionsToAsk.length - 1 ? 'Analyze' : t('common.next')} <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
             ) : (
               <Button onClick={resetTriage}>
@@ -284,7 +358,7 @@ export default function Triage() {
             )}
           </div>
 
-          {currentStep === 4 && (
+          {stage === 'results' && (
             <div className="mt-8 bg-yellow-50 border border-yellow-200 rounded-xl p-6 shadow-lg">
               <div className="flex items-start space-x-3">
                 <AlertTriangle className="h-6 w-6 text-yellow-600 mt-0.5 flex-shrink-0" />
