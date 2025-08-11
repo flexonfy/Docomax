@@ -211,6 +211,10 @@ export default function Triage() {
     setQuizAnswers({});
   };
 
+  const handleQuizAnswer = (question: string, answer: boolean) => {
+    setQuizAnswers(prev => ({ ...prev, [question]: answer }));
+  };
+
   const refineConfidence = () => {
     if (!quizForDisease) return;
     let confidenceChange = 0;

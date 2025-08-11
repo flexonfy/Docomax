@@ -118,15 +118,6 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
             </CardContent>
           </Card>
         ))}
-        <div className="mt-8 bg-yellow-50 border border-yellow-200 rounded-xl p-6 shadow-lg">
-          <div className="flex items-start space-x-3">
-            <AlertTriangle className="h-6 w-6 text-yellow-600 mt-0.5 flex-shrink-0" />
-            <div>
-              <h3 className="font-semibold text-yellow-900 mb-2">{t('pages.triage.disclaimer')}</h3>
-              <p className="text-yellow-800 text-sm leading-relaxed">{t('pages.triage.disclaimerText')}</p>
-            </div>
-          </div>
-        </div>
       </div>
 
       <Dialog open={!!showDetailsFor} onOpenChange={() => setShowDetailsFor(null)}>
