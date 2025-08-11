@@ -6,7 +6,7 @@ import { triageQuestions, TriageQuestion } from '../../data/triageQuestions';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogDescription } from '@/components/ui/dialog';
-import { AlertTriangle, Brain, Stethoscope, User, ListChecks, FileQuestion, Sparkles, ArrowLeft, ArrowRight, RotateCcw } from 'lucide-react';
+import { AlertTriangle, Brain, Stethoscope, User, ListChecks, FileQuestion, Sparkles, ArrowLeft, ArrowRight, RotateCcw, HelpCircle } from 'lucide-react';
 import UserInfoStep from './components/UserInfoStep';
 import SymptomSelectionStep from './components/SymptomSelectionStep';
 import TriageResults from './components/TriageResults';
@@ -14,7 +14,6 @@ import { useToast } from '@/components/ui/use-toast';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
 
 interface TriageResult {
   disease: ComprehensiveDisease;
@@ -42,8 +41,9 @@ export default function Triage() {
 
   const handleNext = () => {
     if (stage === 'userInfo') {
-      if (!userInfo.age || parseInt(userInfo.age) <= 0) {
-        toast({ title: "Information Required", description: "Please enter a valid age to proceed.", variant: "destructive" });
+      const ageNum = parseInt(userInfo.age);
+      if (!userInfo.age || isNaN(ageNum) || ageNum < 1 || ageNum > 120) {
+        toast({ title: "Invalid Age", description: "Please enter a valid age between 1 and 120.", variant: "destructive" });
         return;
       }
       setStage('symptomSelection');
@@ -67,6 +67,21 @@ export default function Triage() {
         setStage('results');
       }
     } else if (stage === 'detailedQuestions') {
+      const q = questionsToAsk[currentQuestionIndex];
+      const answer = answers[q.id];
+
+      if (q.type === 'number' && answer) {
+        const numAnswer = parseFloat(answer);
+        if (q.id === 'fever_temp' && (numAnswer < 35 || numAnswer > 43)) {
+          toast({ title: "Invalid Temperature", description: "Please enter a temperature between 35°C and 43°C.", variant: "destructive" });
+          return;
+        }
+        if (q.id === 'diarrhea_frequency' && (numAnswer < 1 || numAnswer > 50)) {
+          toast({ title: "Invalid Frequency", description: "Please enter a number between 1 and 50.", variant: "destructive" });
+          return;
+        }
+      }
+
       if (currentQuestionIndex < questionsToAsk.length - 1) {
         setCurrentQuestionIndex(prev => prev + 1);
       } else {
@@ -353,7 +368,29 @@ export default function Triage() {
           {stage === 'userInfo' && <UserInfoStep userInfo={userInfo} onInfoChange={(field, value) => setUserInfo(prev => ({ ...prev, [field]: value }))} />}
           {stage === 'symptomSelection' && <SymptomSelectionStep selectedSymptoms={selectedSymptoms} onSymptomAdd={handleSymptomAdd} onSymptomRemove={handleSymptomRemove} onClearAll={handleClearAll} />}
           {stage === 'detailedQuestions' && renderCurrentQuestion()}
-          {stage === 'results' && <TriageResults results={results} onStartQuiz={startQuiz} />}
+          {stage === 'results' && (
+            results.length > 0 ? (
+              <TriageResults results={results} onStartQuiz={startQuiz} />
+            ) : (
+              <Card className="text-center shadow-lg bg-white/90 backdrop-blur-sm">
+                <CardHeader>
+                  <div className="mx-auto w-12 h-12 flex items-center justify-center bg-blue-100 rounded-full mb-4">
+                    <HelpCircle className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <CardTitle>{t('pages.triage.noMatchTitle')}</CardTitle>
+                  <CardDescription>{t('pages.triage.noMatchDescription')}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-700 mb-4">{t('pages.triage.noMatchAdvice')}</p>
+                  <ul className="list-disc list-inside text-left max-w-md mx-auto text-gray-600 space-y-2">
+                    <li>{t('pages.triage.noMatchPoint1')}</li>
+                    <li>{t('pages.triage.noMatchPoint2')}</li>
+                    <li>{t('pages.triage.noMatchPoint3')}</li>
+                  </ul>
+                </CardContent>
+              </Card>
+            )
+          )}
 
           <div className="mt-8 flex justify-between">
             <Button onClick={handleBack} disabled={stage === 'userInfo'}>
