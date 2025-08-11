@@ -11,6 +11,7 @@ import UserInfoStep from './components/UserInfoStep';
 import SymptomSelectionStep from './components/SymptomSelectionStep';
 import SymptomDetailsStep from './components/SymptomDetailsStep';
 import TriageResults from './components/TriageResults';
+import { useToast } from '@/components/ui/use-toast';
 
 interface TriageResult {
   disease: ComprehensiveDisease;
@@ -23,6 +24,7 @@ interface TriageResult {
 
 export default function Triage() {
   const { t, language } = useLanguage();
+  const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [userInfo, setUserInfo] = useState({ age: '', gender: 'all' });
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
@@ -39,7 +41,22 @@ export default function Triage() {
   ];
 
   const handleNext = () => {
-    if (currentStep === 2 && selectedSymptoms.length === 0) return;
+    if (currentStep === 1 && (!userInfo.age || parseInt(userInfo.age) <= 0)) {
+      toast({
+        title: "Information Required",
+        description: "Please enter a valid age to proceed.",
+        variant: "destructive",
+      });
+      return;
+    }
+    if (currentStep === 2 && selectedSymptoms.length === 0) {
+      toast({
+        title: "Symptoms Required",
+        description: "Please select at least one symptom to continue.",
+        variant: "destructive",
+      });
+      return;
+    }
     if (currentStep === 3) {
       analyzeSymptoms();
     }
