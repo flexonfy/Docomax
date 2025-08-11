@@ -73,7 +73,11 @@ export const respiratoryDiseases: ComprehensiveDisease[] = [
     source: 'mayo',
     prevalenceInAfrica: 'very-high',
     ageGroup: 'all',
-    gender: 'all'
+    gender: 'all',
+    quizQuestions: [
+      { en: 'Are you experiencing chills or sweating?', fr: 'Ressentez-vous des frissons ou des sueurs ?', sw: 'Unapata baridi au jasho?', isRiskFactor: false },
+      { en: 'Is your breathing rapid?', fr: 'Votre respiration est-elle rapide ?', sw: 'Je, unapumua haraka?', isRiskFactor: false }
+    ]
   },
   {
     id: 'asthma',
@@ -134,6 +138,11 @@ export const respiratoryDiseases: ComprehensiveDisease[] = [
       fr: 'Tests de fonction pulmonaire, mesure du débit de pointe, radiographie thoracique, tests d\'allergie, antécédents médicaux.',
       sw: 'Vipimo vya utendaji wa mapafu, kipimo cha kasi ya kupumua, X-ray ya kifua, vipimo vya mzio, historia ya matibabu.'
     },
+    possibleTests: {
+      en: ['Spirometry (lung function test)', 'Peak expiratory flow (PEF) measurement', 'Allergy testing', 'Chest X-ray'],
+      fr: ['Spirométrie (test de la fonction pulmonaire)', 'Mesure du débit expiratoire de pointe (DEP)', 'Tests d\'allergie', 'Radiographie thoracique'],
+      sw: ['Spirometry (kipimo cha utendaji wa mapafu)', 'Kipimo cha kilele cha mtiririko wa hewa (PEF)', 'Upimaji wa mzio', 'X-ray ya kifua']
+    },
     prognosis: {
       en: 'Good with proper management. Most people with asthma can live normal, active lives.',
       fr: 'Bon avec une gestion appropriée. La plupart des personnes asthmatiques peuvent vivre une vie normale et active.',
@@ -142,7 +151,11 @@ export const respiratoryDiseases: ComprehensiveDisease[] = [
     source: 'mayo',
     prevalenceInAfrica: 'high',
     ageGroup: 'all',
-    gender: 'all'
+    gender: 'all',
+    quizQuestions: [
+      { en: 'Do your symptoms get worse with exercise or exposure to cold air?', fr: 'Vos symptômes s\'aggravent-ils avec l\'exercice ou l\'exposition à l\'air froid ?', sw: 'Je, dalili zako huwa mbaya zaidi kwa mazoezi au kukabiliwa na hewa baridi?', isRiskFactor: false },
+      { en: 'Do you have a history of allergies or eczema?', fr: 'Avez-vous des antécédents d\'allergies ou d\'eczéma ?', sw: 'Je, una historia ya mzio au ukurutu?', isRiskFactor: true }
+    ]
   },
   {
     id: 'copd',

@@ -73,7 +73,11 @@ export const digestiveDiseases: ComprehensiveDisease[] = [
     source: 'mayo',
     prevalenceInAfrica: 'high',
     ageGroup: 'adult',
-    gender: 'all'
+    gender: 'all',
+    quizQuestions: [
+      { en: 'Does eating make the pain better or worse?', fr: 'Manger améliore-t-il ou aggrave-t-il la douleur ?', sw: 'Kula kunafanya maumivu kuwa bora au mabaya zaidi?', isRiskFactor: false },
+      { en: 'Are you regularly taking NSAIDs like ibuprofen or aspirin?', fr: 'Prenez-vous régulièrement des AINS comme l\'ibuprofène ou l\'aspirine ?', sw: 'Unatumia mara kwa mara dawa za NSAID kama ibuprofen au aspirin?', isRiskFactor: true }
+    ]
   },
   {
     id: 'gastroenteritis',
@@ -147,7 +151,11 @@ export const digestiveDiseases: ComprehensiveDisease[] = [
     source: 'mayo',
     prevalenceInAfrica: 'very-high',
     ageGroup: 'all',
-    gender: 'all'
+    gender: 'all',
+    quizQuestions: [
+      { en: 'Have you recently eaten food from a restaurant or street vendor?', fr: 'Avez-vous récemment mangé dans un restaurant ou chez un vendeur de rue ?', sw: 'Je, hivi karibuni umekula chakula kutoka mgahawani au kwa muuzaji wa mtaani?', isRiskFactor: true },
+      { en: 'Are others who ate the same food as you also sick?', fr: 'Est-ce que d\'autres personnes qui ont mangé la même chose que vous sont également malades ?', sw: 'Je, wengine waliokula chakula sawa na wewe pia ni wagonjwa?', isRiskFactor: false }
+    ]
   },
   {
     id: 'irritable-bowel-syndrome',
@@ -221,7 +229,11 @@ export const digestiveDiseases: ComprehensiveDisease[] = [
     source: 'nhs',
     prevalenceInAfrica: 'high',
     ageGroup: 'adult',
-    gender: 'female'
+    gender: 'female',
+    quizQuestions: [
+      { en: 'Does your abdominal pain improve after a bowel movement?', fr: 'Votre douleur abdominale s\'améliore-t-elle après être allé à la selle ?', sw: 'Je, maumivu yako ya tumbo hupungua baada ya kwenda haja kubwa?', isRiskFactor: false },
+      { en: 'Are your symptoms worse during times of stress?', fr: 'Vos symptômes sont-ils pires en période de stress ?', sw: 'Je, dalili zako huwa mbaya zaidi wakati wa msongo?', isRiskFactor: true }
+    ]
   },
   {
     id: 'gallstones',

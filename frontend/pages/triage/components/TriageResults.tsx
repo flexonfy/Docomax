@@ -75,7 +75,15 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge variant="outline" className="flex items-center">
                     {result.refinedConfidence && <Sparkles className="h-3 w-3 mr-1 text-yellow-500" />}
-                    {t('pages.triage.confidence')}: {result.refinedConfidence ? `${result.refinedConfidence}%` : `${result.confidence}%`}
+                    {t('pages.triage.confidence')}: 
+                    {result.refinedConfidence ? (
+                      <>
+                        <span className="line-through text-gray-500 mr-1">{result.confidence}%</span>
+                        <span className="font-bold">{result.refinedConfidence}%</span>
+                      </>
+                    ) : (
+                      `${result.confidence}%`
+                    )}
                   </Badge>
                   <Badge className={getRiskColor(result.riskScore)}>{t('pages.triage.risk')}: {result.riskScore}%</Badge>
                   <Badge className={getSeverityColor(result.severity)}>{result.severity.toUpperCase()}</Badge>
@@ -95,14 +103,6 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
                 <h4 className="font-semibold mb-1 text-sm">{t('pages.triage.recommendations')}:</h4>
                 <p className="text-sm">{getRecommendation(result.severity, result.riskScore)}</p>
               </div>
-              {result.disease.possibleTests && (
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2 text-sm flex items-center"><TestTube className="h-4 w-4 mr-2" />Possible Medical Tests:</h4>
-                  <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
-                    {(result.disease.possibleTests?.[language] || result.disease.possibleTests?.en || []).map((test, idx) => <li key={idx}>{test}</li>)}
-                  </ul>
-                </div>
-              )}
               <div className="flex flex-wrap gap-2 mt-4">
                 {result.disease.quizQuestions && result.disease.quizQuestions.length > 0 && (
                   <Button onClick={() => onStartQuiz(result)} size="sm" variant="outline" className="flex-1">
@@ -165,6 +165,15 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
                     {showDetailsFor.disease.riskFactors[language].map((factor, idx) => <li key={idx}>{factor}</li>)}
                   </ul>
                 </div>
+
+                {showDetailsFor.disease.possibleTests && (
+                  <div className="space-y-2">
+                    <h3 className="font-semibold flex items-center"><TestTube className="h-4 w-4 mr-2" />Possible Medical Tests</h3>
+                    <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
+                      {(showDetailsFor.disease.possibleTests?.[language] || showDetailsFor.disease.possibleTests?.en || []).map((test, idx) => <li key={idx}>{test}</li>)}
+                    </ul>
+                  </div>
+                )}
 
                 <div className="space-y-2">
                   <h3 className="font-semibold flex items-center"><Heart className="h-4 w-4 mr-2" />Treatment</h3>

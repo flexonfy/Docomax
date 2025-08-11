@@ -26,7 +26,7 @@ export default function Triage() {
   const { t, language } = useLanguage();
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
-  const [userInfo, setUserInfo] = useState({ age: '', gender: 'all' });
+  const [userInfo, setUserInfo] = useState({ age: '', gender: 'all', riskFactors: { smoking: false, chronic: false } });
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
   const [symptomDetails, setSymptomDetails] = useState<Record<string, any>>({});
   const [results, setResults] = useState<TriageResult[]>([]);
@@ -119,42 +119,66 @@ export default function Triage() {
       const diseaseSymptoms = disease.symptoms?.[language] || disease.symptoms?.en || [];
       const commonSymptoms = disease.commonSymptoms?.[language] || disease.commonSymptoms?.en || [];
       const rareSymptoms = disease.rareSymptoms?.[language] || disease.rareSymptoms?.en || [];
-      const matchedSymptoms: string[] = [];
       
-      let commonMatches = 0;
-      let rareMatches = 0;
-      let totalMatches = 0;
-
+      const matchedSymptoms: string[] = [];
+      let score = 0;
+      
       selectedSymptoms.forEach(selectedSymptom => {
-        if (diseaseSymptoms.some(ds => ds.toLowerCase() === selectedSymptom.toLowerCase())) {
+        const lowerSelected = selectedSymptom.toLowerCase();
+        if (diseaseSymptoms.some(ds => ds.toLowerCase() === lowerSelected)) {
           matchedSymptoms.push(selectedSymptom);
-          totalMatches++;
-          if (commonSymptoms.some(cs => cs.toLowerCase() === selectedSymptom.toLowerCase())) commonMatches++;
-          if (rareSymptoms.some(rs => rs.toLowerCase() === selectedSymptom.toLowerCase())) rareMatches++;
+          if (rareSymptoms.some(rs => rs.toLowerCase() === lowerSelected)) {
+            score += 2.5; // Rare symptoms are highly indicative
+          } else if (commonSymptoms.some(cs => cs.toLowerCase() === lowerSelected)) {
+            score += 1.0; // Common symptoms are expected
+          } else {
+            score += 1.5; // Other symptoms
+          }
         }
       });
 
       if (matchedSymptoms.length > 0) {
-        let baseConfidence = (totalMatches / Math.max(diseaseSymptoms.length, selectedSymptoms.length, 1)) * 100;
-        baseConfidence += (commonMatches * 15) + (rareMatches * 25);
-        const unmatchedCount = selectedSymptoms.length - totalMatches;
-        if (unmatchedCount > 0) baseConfidence -= (unmatchedCount * 10);
-        if (disease.prevalenceInAfrica === 'very-high') baseConfidence *= 1.4;
-        else if (disease.prevalenceInAfrica === 'high') baseConfidence *= 1.2;
+        const maxPossibleScore = selectedSymptoms.reduce((acc, selectedSymptom) => {
+          const lowerSelected = selectedSymptom.toLowerCase();
+          if (rareSymptoms.some(rs => rs.toLowerCase() === lowerSelected)) return acc + 2.5;
+          if (commonSymptoms.some(cs => cs.toLowerCase() === lowerSelected)) return acc + 1.0;
+          return acc + 1.5;
+        }, 0);
 
-        let riskScore = 0;
-        switch (disease.severity) {
-          case 'emergency': riskScore = 90; break;
-          case 'high': riskScore = 70; break;
-          case 'medium': riskScore = 50; break;
-          case 'low': riskScore = 30; break;
+        let confidence = (score / Math.max(maxPossibleScore, 1)) * 100;
+
+        const commonMatchedRatio = commonSymptoms.length > 0 ? (matchedSymptoms.filter(s => commonSymptoms.includes(s)).length / commonSymptoms.length) : 0;
+        confidence += commonMatchedRatio * 20;
+
+        const unmatchedPenalty = (selectedSymptoms.length - matchedSymptoms.length) * 5;
+        confidence -= unmatchedPenalty;
+
+        const prevalenceMultiplier = {
+          'very-high': 1.2, 'high': 1.1, 'medium': 1.0, 'low': 0.9, 'rare': 0.8
+        };
+        confidence *= prevalenceMultiplier[disease.prevalenceInAfrica] || 1.0;
+
+        if (userInfo.riskFactors.smoking && disease.riskFactors.en.some(rf => rf.toLowerCase().includes('smoking'))) {
+          confidence *= 1.05;
         }
-        riskScore += (commonMatches * 2) + (rareMatches * 3);
+        if (userInfo.riskFactors.chronic && disease.riskFactors.en.some(rf => ['diabetes', 'high blood pressure', 'heart disease'].some(c => rf.toLowerCase().includes(c)))) {
+          confidence *= 1.1;
+        }
 
-        const confidence = Math.min(95, Math.max(5, Math.round(baseConfidence)));
-        riskScore = Math.min(100, riskScore);
+        const severityScore = { 'emergency': 90, 'high': 70, 'medium': 50, 'low': 20 };
+        let riskScore = severityScore[disease.severity] || 30;
+        riskScore += matchedSymptoms.length * 2;
+        if (userInfo.age && parseInt(userInfo.age) > 60 && disease.ageGroup === 'elderly') {
+          riskScore += 10;
+        }
 
-        triageResults.push({ disease, confidence, matchedSymptoms, severity: disease.severity, riskScore });
+        triageResults.push({
+          disease,
+          confidence: Math.min(95, Math.max(5, Math.round(confidence))),
+          matchedSymptoms,
+          severity: disease.severity,
+          riskScore: Math.min(100, Math.round(riskScore))
+        });
       }
     });
 
@@ -183,19 +207,37 @@ export default function Triage() {
     if (!quizForDisease) return;
     let confidenceChange = 0;
     const questions = quizForDisease.disease.quizQuestions || [];
+    
     questions.forEach(q => {
       const answer = quizAnswers[q.en];
-      if (answer === true) confidenceChange += q.isRiskFactor ? 10 : 15;
-      else if (answer === false && !q.isRiskFactor) confidenceChange -= 10;
+      if (answer === true) {
+        confidenceChange += q.isRiskFactor ? 5 : 10;
+      } else if (answer === false) {
+        confidenceChange -= q.isRiskFactor ? 0 : 15;
+      }
     });
-    const newConfidence = Math.min(98, Math.max(5, quizForDisease.confidence + confidenceChange));
-    setResults(prevResults => prevResults.map(r => r.disease.id === quizForDisease.disease.id ? { ...r, refinedConfidence: newConfidence } : r));
+
+    const currentResult = results.find(r => r.disease.id === quizForDisease.disease.id);
+    const originalConfidence = currentResult?.confidence || quizForDisease.confidence;
+
+    const newConfidence = Math.min(98, Math.max(5, originalConfidence + confidenceChange));
+    
+    setResults(prevResults => {
+      const newResults = prevResults.map(r => 
+        r.disease.id === quizForDisease.disease.id 
+          ? { ...r, refinedConfidence: newConfidence, confidence: originalConfidence }
+          : r
+      );
+      newResults.sort((a, b) => (b.refinedConfidence || b.confidence) - (a.refinedConfidence || a.confidence));
+      return newResults;
+    });
+
     setQuizForDisease(null);
   };
 
   const resetTriage = () => {
     setCurrentStep(1);
-    setUserInfo({ age: '', gender: 'all' });
+    setUserInfo({ age: '', gender: 'all', riskFactors: { smoking: false, chronic: false } });
     setSelectedSymptoms([]);
     setSymptomDetails({});
     setResults([]);

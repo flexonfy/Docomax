@@ -60,6 +60,11 @@ export const neurologicalDiseases: ComprehensiveDisease[] = [
       fr: 'Examen neurologique, EEG, scanner, IRM, tests sanguins.',
       sw: 'Uchunguzi wa neva, EEG, CT scan, MRI, vipimo vya damu.'
     },
+    possibleTests: {
+      en: ['Electroencephalogram (EEG)', 'Magnetic Resonance Imaging (MRI)', 'Computed Tomography (CT) scan', 'Blood tests'],
+      fr: ['Électroencéphalogramme (EEG)', 'Imagerie par résonance magnétique (IRM)', 'Tomodensitométrie (TDM)', 'Analyses de sang'],
+      sw: ['Electroencephalogram (EEG)', 'Upigaji picha wa sumaku (MRI)', 'Skani ya Tomografia ya Kompyuta (CT)', 'Vipimo vya damu']
+    },
     prognosis: {
       en: 'Many people can control seizures with medication. Some children outgrow epilepsy.',
       fr: 'Beaucoup de gens peuvent contrôler les crises avec des médicaments. Certains enfants guérissent de l\'épilepsie en grandissant.',
@@ -68,7 +73,11 @@ export const neurologicalDiseases: ComprehensiveDisease[] = [
     source: 'mayo',
     prevalenceInAfrica: 'high',
     ageGroup: 'all',
-    gender: 'all'
+    gender: 'all',
+    quizQuestions: [
+      { en: 'Did you lose consciousness during the event?', fr: 'Avez-vous perdu connaissance pendant l\'événement ?', sw: 'Je, ulipoteza fahamu wakati wa tukio?', isRiskFactor: false },
+      { en: 'Did you experience uncontrollable jerking movements of your arms or legs?', fr: 'Avez-vous eu des mouvements saccadés incontrôlables des bras ou des jambes ?', sw: 'Je, ulipata miondoko isiyodhibitiwa ya mikono au miguu?', isRiskFactor: false }
+    ]
   },
   {
     id: 'migraine',
@@ -129,6 +138,11 @@ export const neurologicalDiseases: ComprehensiveDisease[] = [
       fr: 'Basé sur les antécédents médicaux, les symptômes et l\'examen neurologique. Des tests d\'imagerie (IRM, scanner) peuvent être utilisés pour exclure d\'autres causes.',
       sw: 'Kulingana na historia ya matibabu, dalili, na uchunguzi wa neva. Vipimo vya picha (MRI, CT) vinaweza kutumika kuondoa sababu zingine.'
     },
+    possibleTests: {
+      en: ['Neurological examination', 'MRI or CT scan to rule out other conditions', 'Keeping a headache diary'],
+      fr: ['Examen neurologique', 'IRM ou scanner pour exclure d\'autres conditions', 'Tenir un journal des maux de tête'],
+      sw: ['Uchunguzi wa neva', 'MRI au CT scan kuondoa hali zingine', 'Kuweka shajara ya maumivu ya kichwa']
+    },
     prognosis: {
       en: 'Chronic condition, but can be managed with treatment and lifestyle changes.',
       fr: 'Condition chronique, mais peut être gérée avec un traitement et des changements de mode de vie.',
@@ -137,6 +151,10 @@ export const neurologicalDiseases: ComprehensiveDisease[] = [
     source: 'mayo',
     prevalenceInAfrica: 'high',
     ageGroup: 'all',
-    gender: 'female'
+    gender: 'female',
+    quizQuestions: [
+      { en: 'Is your headache typically on one side of your head?', fr: 'Votre mal de tête est-il généralement d\'un seul côté de la tête ?', sw: 'Je, maumivu yako ya kichwa huwa upande mmoja wa kichwa?', isRiskFactor: false },
+      { en: 'Are you sensitive to light and sound during the headache?', fr: 'Êtes-vous sensible à la lumière et au son pendant le mal de tête ?', sw: 'Je, unahisi usumbufu kwa mwanga na sauti wakati wa maumivu ya kichwa?', isRiskFactor: false }
+    ]
   }
 ];
