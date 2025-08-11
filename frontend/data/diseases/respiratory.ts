@@ -292,9 +292,9 @@ export const respiratoryDiseases: ComprehensiveDisease[] = [
     category: 'respiratory',
     severity: 'medium',
     symptoms: {
-      en: ['fever', 'cough', 'sore throat', 'runny or stuffy nose', 'muscle or body aches', 'headaches', 'fatigue'],
-      fr: ['fièvre', 'toux', 'mal de gorge', 'nez qui coule ou bouché', 'douleurs musculaires ou corporelles', 'maux de tête', 'fatigue'],
-      sw: ['homa', 'kikohozi', 'maumivu ya koo', 'mafua au pua iliyoziba', 'maumivu ya misuli au mwili', 'maumivu ya kichwa', 'uchovu']
+      en: ['fever', 'cough', 'sore throat', 'runny or stuffy nose', 'muscle or body aches', 'headaches', 'fatigue', 'high fever'],
+      fr: ['fièvre', 'toux', 'mal de gorge', 'nez qui coule ou bouché', 'douleurs musculaires ou corporelles', 'maux de tête', 'fatigue', 'fièvre élevée'],
+      sw: ['homa', 'kikohozi', 'maumivu ya koo', 'mafua au pua iliyoziba', 'maumivu ya misuli au mwili', 'maumivu ya kichwa', 'uchovu', 'homa kali']
     },
     commonSymptoms: {
       en: ['fever', 'cough', 'muscle aches', 'fatigue'],

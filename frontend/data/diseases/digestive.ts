@@ -95,9 +95,9 @@ export const digestiveDiseases: ComprehensiveDisease[] = [
       sw: ['kuhara', 'kutapika', 'kichefuchefu', 'maumivu ya tumbo']
     },
     rareSymptoms: {
-      en: ['severe dehydration', 'bloody diarrhea', 'high fever'],
-      fr: ['déshydratation sévère', 'diarrhée sanglante', 'fièvre élevée'],
-      sw: ['upungufu mkubwa wa maji mwilini', 'kuhara damu', 'homa kali']
+      en: ['severe dehydration', 'bloody diarrhea', 'high fever', 'severe diarrhea'],
+      fr: ['déshydratation sévère', 'diarrhée sanglante', 'fièvre élevée', 'diarrhée sévère'],
+      sw: ['upungufu mkubwa wa maji mwilini', 'kuhara damu', 'homa kali', 'kuhara kwingi']
     },
     causes: {
       en: ['viruses (norovirus, rotavirus)', 'bacteria (E. coli, Salmonella)', 'parasites (Giardia)'],
@@ -674,7 +674,7 @@ export const digestiveDiseases: ComprehensiveDisease[] = [
     treatment: {
       en: 'Increase fiber and fluid intake, regular exercise, laxatives (short-term use), treating underlying cause.',
       fr: 'Augmenter l\'apport en fibres et en liquides, exercice régulier, laxatifs (utilisation à court terme), traiter la cause sous-jacente.',
-      sw: 'Ongeza ulaji wa nyuzi na maji, mazoezi ya mara kwa mara, laxatives (matumizi ya muda mfupi), kutibu chanzo.'
+      sw: 'Ongeza ulaji wa nyuzi na maji, mazoezi ya mara kwa mara, laxatives (matumizi ya muda mrefu), kutibu chanzo.'
     },
     prevention: {
       en: 'Eat a well-balanced, high-fiber diet. Drink plenty of fluids. Get regular exercise.',

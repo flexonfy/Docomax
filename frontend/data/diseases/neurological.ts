@@ -80,9 +80,9 @@ export const neurologicalDiseases: ComprehensiveDisease[] = [
     category: 'neurological',
     severity: 'medium',
     symptoms: {
-      en: ['throbbing or pulsing headache, often on one side', 'sensitivity to light, sound, and sometimes smell', 'nausea and vomiting', 'aura (visual disturbances like flashes of light or blind spots)'],
-      fr: ['mal de tête pulsatile, souvent d\'un seul côté', 'sensibilité à la lumière, au son et parfois aux odeurs', 'nausées et vomissements', 'aura (troubles visuels comme des éclairs de lumière ou des angles morts)'],
-      sw: ['maumivu ya kichwa yanayopiga, mara nyingi upande mmoja', 'unyeti kwa mwanga, sauti, na wakati mwingine harufu', 'kichefuchefu na kutapika', 'aura (usumbufu wa kuona kama miale ya mwanga au maeneo yasiyoonekana)']
+      en: ['throbbing or pulsing headache, often on one side', 'sensitivity to light, sound, and sometimes smell', 'nausea and vomiting', 'aura (visual disturbances like flashes of light or blind spots)', 'throbbing headache', 'severe headache'],
+      fr: ['mal de tête pulsatile, souvent d\'un seul côté', 'sensibilité à la lumière, au son et parfois aux odeurs', 'nausées et vomissements', 'aura (troubles visuels comme des éclairs de lumière ou des angles morts)', 'mal de tête pulsatile', 'mal de tête sévère'],
+      sw: ['maumivu ya kichwa yanayopiga, mara nyingi upande mmoja', 'unyeti kwa mwanga, sauti, na wakati mwingine harufu', 'kichefuchefu na kutapika', 'aura (usumbufu wa kuona kama miale ya mwanga au maeneo yasiyoonekana)', 'maumivu ya kichwa yanayopiga', 'maumivu makali ya kichwa']
     },
     commonSymptoms: {
       en: ['throbbing headache', 'sensitivity to light', 'nausea'],

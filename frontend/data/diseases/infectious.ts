@@ -11,9 +11,9 @@ export const infectiousDiseases: ComprehensiveDisease[] = [
     category: 'infectious',
     severity: 'high',
     symptoms: {
-      en: ['fever', 'chills', 'headache', 'nausea', 'vomiting', 'muscle pain', 'fatigue', 'sweating', 'abdominal pain', 'diarrhea'],
-      fr: ['fièvre', 'frissons', 'mal de tête', 'nausée', 'vomissement', 'douleur musculaire', 'fatigue', 'transpiration', 'douleur abdominale', 'diarrhée'],
-      sw: ['homa', 'baridi', 'maumivu ya kichwa', 'kichefuchefu', 'kutapika', 'maumivu ya misuli', 'uchovu', 'jasho', 'maumivu ya tumbo', 'kuhara']
+      en: ['fever', 'chills', 'headache', 'nausea', 'vomiting', 'muscle pain', 'fatigue', 'sweating', 'abdominal pain', 'diarrhea', 'high fever'],
+      fr: ['fièvre', 'frissons', 'mal de tête', 'nausée', 'vomissement', 'douleur musculaire', 'fatigue', 'transpiration', 'douleur abdominale', 'diarrhée', 'fièvre élevée'],
+      sw: ['homa', 'baridi', 'maumivu ya kichwa', 'kichefuchefu', 'kutapika', 'maumivu ya misuli', 'uchovu', 'jasho', 'maumivu ya tumbo', 'kuhara', 'homa kali']
     },
     commonSymptoms: {
       en: ['fever', 'chills', 'headache', 'muscle pain', 'fatigue'],
