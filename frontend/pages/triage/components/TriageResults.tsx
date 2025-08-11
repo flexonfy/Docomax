@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '../../../contexts/LanguageContext';
 import { ComprehensiveDisease } from '../../../data/diseases/types';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { AlertTriangle, CheckCircle, Clock, Info, Shield, Sparkles, Stethoscope, TestTube } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import { AlertTriangle, CheckCircle, Clock, Info, Shield, Sparkles, Stethoscope, TestTube, Heart, Activity } from 'lucide-react';
 
 interface TriageResult {
   disease: ComprehensiveDisease;
@@ -22,6 +23,7 @@ interface TriageResultsProps {
 
 export default function TriageResults({ results, onStartQuiz }: TriageResultsProps) {
   const { t, language } = useLanguage();
+  const [showDetailsFor, setShowDetailsFor] = useState<TriageResult | null>(null);
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
@@ -58,66 +60,145 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
   };
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-gray-900">Differential Diagnosis</h2>
-      {results.map((result, index) => (
-        <Card key={result.disease.id} className={`border-l-4 shadow-lg ${getSeverityColor(result.severity).replace('bg-', 'border-l-').replace('-100', '-500').replace(' text-red-800', '')}`}>
-          <CardHeader>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <CardTitle className="flex items-center space-x-2 text-lg">
-                {getSeverityIcon(result.severity)}
-                <span>{result.disease.name?.[language] || result.disease.name?.en}</span>
-                {index === 0 && <Badge variant="secondary" className="animate-pulse">{t('pages.triage.mostLikely')}</Badge>}
-              </CardTitle>
-              <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="outline" className="flex items-center">
-                  {result.refinedConfidence && <Sparkles className="h-3 w-3 mr-1 text-yellow-500" />}
-                  {t('pages.triage.confidence')}: {result.refinedConfidence ? `${result.refinedConfidence}%` : `${result.confidence}%`}
-                </Badge>
-                <Badge className={getRiskColor(result.riskScore)}>{t('pages.triage.risk')}: {result.riskScore}%</Badge>
-                <Badge className={getSeverityColor(result.severity)}>{result.severity.toUpperCase()}</Badge>
+    <>
+      <div className="space-y-6">
+        <h2 className="text-2xl font-bold text-gray-900">Differential Diagnosis</h2>
+        {results.map((result, index) => (
+          <Card key={result.disease.id} className={`border-l-4 shadow-lg ${getSeverityColor(result.severity).replace('bg-', 'border-l-').replace('-100', '-500').replace(' text-red-800', '')}`}>
+            <CardHeader>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <CardTitle className="flex items-center space-x-2 text-lg">
+                  {getSeverityIcon(result.severity)}
+                  <span>{result.disease.name?.[language] || result.disease.name?.en}</span>
+                  {index === 0 && <Badge variant="secondary" className="animate-pulse">{t('pages.triage.mostLikely')}</Badge>}
+                </CardTitle>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge variant="outline" className="flex items-center">
+                    {result.refinedConfidence && <Sparkles className="h-3 w-3 mr-1 text-yellow-500" />}
+                    {t('pages.triage.confidence')}: {result.refinedConfidence ? `${result.refinedConfidence}%` : `${result.confidence}%`}
+                  </Badge>
+                  <Badge className={getRiskColor(result.riskScore)}>{t('pages.triage.risk')}: {result.riskScore}%</Badge>
+                  <Badge className={getSeverityColor(result.severity)}>{result.severity.toUpperCase()}</Badge>
+                </div>
               </div>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-2 text-sm">{t('pages.triage.matchedSymptoms')}:</h4>
-              <div className="flex flex-wrap gap-1">
-                {result.matchedSymptoms.map((symptom, idx) => (
-                  <Badge key={idx} variant="secondary" className="bg-orange-50 text-orange-800">{symptom}</Badge>
-                ))}
-              </div>
-            </div>
-            <div className={`p-3 rounded-lg border ${getSeverityColor(result.severity)}`}>
-              <h4 className="font-semibold mb-1 text-sm">{t('pages.triage.recommendations')}:</h4>
-              <p className="text-sm">{getRecommendation(result.severity, result.riskScore)}</p>
-            </div>
-            {result.disease.possibleTests && (
+            </CardHeader>
+            <CardContent className="space-y-4">
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2 text-sm flex items-center"><TestTube className="h-4 w-4 mr-2" />Possible Medical Tests:</h4>
-                <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
-                  {(result.disease.possibleTests?.[language] || result.disease.possibleTests?.en || []).map((test, idx) => <li key={idx}>{test}</li>)}
-                </ul>
+                <h4 className="font-semibold text-gray-900 mb-2 text-sm">{t('pages.triage.matchedSymptoms')}:</h4>
+                <div className="flex flex-wrap gap-1">
+                  {result.matchedSymptoms.map((symptom, idx) => (
+                    <Badge key={idx} variant="secondary" className="bg-orange-50 text-orange-800">{symptom}</Badge>
+                  ))}
+                </div>
               </div>
-            )}
-            {result.disease.quizQuestions && result.disease.quizQuestions.length > 0 && (
-              <Button onClick={() => onStartQuiz(result)} size="sm" variant="outline" className="w-full">
-                <Sparkles className="h-4 w-4 mr-2 text-yellow-500" />
-                Refine with Follow-up Questions
-              </Button>
-            )}
-          </CardContent>
-        </Card>
-      ))}
-      <div className="mt-8 bg-yellow-50 border border-yellow-200 rounded-xl p-6 shadow-lg">
-        <div className="flex items-start space-x-3">
-          <AlertTriangle className="h-6 w-6 text-yellow-600 mt-0.5 flex-shrink-0" />
-          <div>
-            <h3 className="font-semibold text-yellow-900 mb-2">{t('pages.triage.disclaimer')}</h3>
-            <p className="text-yellow-800 text-sm leading-relaxed">{t('pages.triage.disclaimerText')}</p>
+              <div className={`p-3 rounded-lg border ${getSeverityColor(result.severity)}`}>
+                <h4 className="font-semibold mb-1 text-sm">{t('pages.triage.recommendations')}:</h4>
+                <p className="text-sm">{getRecommendation(result.severity, result.riskScore)}</p>
+              </div>
+              {result.disease.possibleTests && (
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-2 text-sm flex items-center"><TestTube className="h-4 w-4 mr-2" />Possible Medical Tests:</h4>
+                  <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+                    {(result.disease.possibleTests?.[language] || result.disease.possibleTests?.en || []).map((test, idx) => <li key={idx}>{test}</li>)}
+                  </ul>
+                </div>
+              )}
+              <div className="flex flex-wrap gap-2 mt-4">
+                {result.disease.quizQuestions && result.disease.quizQuestions.length > 0 && (
+                  <Button onClick={() => onStartQuiz(result)} size="sm" variant="outline" className="flex-1">
+                    <Sparkles className="h-4 w-4 mr-2 text-yellow-500" />
+                    Refine with Follow-up Questions
+                  </Button>
+                )}
+                <Button onClick={() => setShowDetailsFor(result)} size="sm" variant="outline" className="flex-1">
+                  <Info className="h-4 w-4 mr-2" />
+                  More Info
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+        <div className="mt-8 bg-yellow-50 border border-yellow-200 rounded-xl p-6 shadow-lg">
+          <div className="flex items-start space-x-3">
+            <AlertTriangle className="h-6 w-6 text-yellow-600 mt-0.5 flex-shrink-0" />
+            <div>
+              <h3 className="font-semibold text-yellow-900 mb-2">{t('pages.triage.disclaimer')}</h3>
+              <p className="text-yellow-800 text-sm leading-relaxed">{t('pages.triage.disclaimerText')}</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      <Dialog open={!!showDetailsFor} onOpenChange={() => setShowDetailsFor(null)}>
+        <DialogContent className="max-w-3xl">
+          {showDetailsFor && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-2xl">{showDetailsFor.disease.name[language]}</DialogTitle>
+                <DialogDescription>
+                  Detailed information about {showDetailsFor.disease.name[language]}.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="max-h-[70vh] overflow-y-auto pr-4 space-y-6">
+                <div className="space-y-2">
+                  <h3 className="font-semibold flex items-center"><Stethoscope className="h-4 w-4 mr-2" />All Symptoms</h3>
+                  <p className="text-xs text-gray-500">Symptoms you selected are highlighted.</p>
+                  <div className="flex flex-wrap gap-1">
+                    {showDetailsFor.disease.symptoms[language].map((symptom, idx) => (
+                      <Badge key={idx} variant={showDetailsFor.matchedSymptoms.includes(symptom) ? "default" : "outline"}>
+                        {symptom}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="font-semibold flex items-center"><Info className="h-4 w-4 mr-2" />Causes</h3>
+                  <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
+                    {showDetailsFor.disease.causes[language].map((cause, idx) => <li key={idx}>{cause}</li>)}
+                  </ul>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="font-semibold flex items-center"><AlertTriangle className="h-4 w-4 mr-2" />Risk Factors</h3>
+                  <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
+                    {showDetailsFor.disease.riskFactors[language].map((factor, idx) => <li key={idx}>{factor}</li>)}
+                  </ul>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="font-semibold flex items-center"><Heart className="h-4 w-4 mr-2" />Treatment</h3>
+                  <p className="text-sm text-gray-700">{showDetailsFor.disease.treatment[language]}</p>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="font-semibold flex items-center"><Shield className="h-4 w-4 mr-2" />Prevention</h3>
+                  <p className="text-sm text-gray-700">{showDetailsFor.disease.prevention[language]}</p>
+                </div>
+
+                <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <h3 className="font-semibold flex items-center text-red-800"><AlertTriangle className="h-4 w-4 mr-2" />When to Seek Help</h3>
+                  <p className="text-sm text-red-700 mt-1">{showDetailsFor.disease.whenToSeekHelp[language]}</p>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="font-semibold flex items-center"><Activity className="h-4 w-4 mr-2" />Possible Complications</h3>
+                  <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
+                    {showDetailsFor.disease.complications[language].map((comp, idx) => <li key={idx}>{comp}</li>)}
+                  </ul>
+                </div>
+              </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button type="button" variant="secondary">
+                    Close
+                  </Button>
+                </DialogClose>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
