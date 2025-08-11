@@ -7,8 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 
 interface UserInfoStepProps {
-  userInfo: { age: string; gender: string; riskFactors: { smoking: boolean; chronic: boolean; } };
-  onInfoChange: (field: 'age' | 'gender' | 'riskFactors', value: any) => void;
+  userInfo: { age: string; gender: string; smoking: string; chronic: boolean; };
+  onInfoChange: (field: 'age' | 'gender' | 'smoking' | 'chronic', value: any) => void;
 }
 
 export default function UserInfoStep({ userInfo, onInfoChange }: UserInfoStepProps) {
@@ -48,22 +48,25 @@ export default function UserInfoStep({ userInfo, onInfoChange }: UserInfoStepPro
         </div>
         <div>
           <Label>Risk Factors</Label>
-          <div className="space-y-2 mt-2 p-4 border rounded-lg">
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="smoking"
-                checked={userInfo.riskFactors.smoking}
-                onCheckedChange={(checked) => onInfoChange('riskFactors', { ...userInfo.riskFactors, smoking: !!checked })}
-              />
-              <label htmlFor="smoking" className="text-sm font-medium leading-none">
-                Do you smoke?
-              </label>
+          <div className="space-y-4 mt-2 p-4 border rounded-lg">
+            <div>
+              <Label htmlFor="smoking">{t('pages.triage.smokingStatus')}</Label>
+              <Select value={userInfo.smoking} onValueChange={(value) => onInfoChange('smoking', value)}>
+                <SelectTrigger id="smoking">
+                  <SelectValue placeholder={t('pages.triage.selectSmokingStatus')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="never">{t('pages.triage.neverSmoked')}</SelectItem>
+                  <SelectItem value="former">{t('pages.triage.formerSmoker')}</SelectItem>
+                  <SelectItem value="current">{t('pages.triage.currentSmoker')}</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="chronic"
-                checked={userInfo.riskFactors.chronic}
-                onCheckedChange={(checked) => onInfoChange('riskFactors', { ...userInfo.riskFactors, chronic: !!checked })}
+                checked={userInfo.chronic}
+                onCheckedChange={(checked) => onInfoChange('chronic', !!checked)}
               />
               <label htmlFor="chronic" className="text-sm font-medium leading-none">
                 Do you have known chronic conditions (e.g., diabetes, hypertension)?

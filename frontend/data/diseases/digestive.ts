@@ -77,7 +77,10 @@ export const digestiveDiseases: ComprehensiveDisease[] = [
     quizQuestions: [
       { en: 'Does eating make the pain better or worse?', fr: 'Manger améliore-t-il ou aggrave-t-il la douleur ?', sw: 'Kula kunafanya maumivu kuwa bora au mabaya zaidi?', isRiskFactor: false },
       { en: 'Are you regularly taking NSAIDs like ibuprofen or aspirin?', fr: 'Prenez-vous régulièrement des AINS comme l\'ibuprofène ou l\'aspirine ?', sw: 'Unatumia mara kwa mara dawa za NSAID kama ibuprofen au aspirin?', isRiskFactor: true }
-    ]
+    ],
+    triageRules: {
+      abdominal_pain_character: { 'burning': 1.3 }
+    },
   },
   {
     id: 'gastroenteritis',

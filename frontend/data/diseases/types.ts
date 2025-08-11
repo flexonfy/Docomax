@@ -29,4 +29,5 @@ export interface ComprehensiveDisease {
     fr: string[];
     sw: string[];
   };
+  triageRules?: Record<string, Record<string, number>>;
 }

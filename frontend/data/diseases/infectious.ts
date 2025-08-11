@@ -79,7 +79,12 @@ export const infectiousDiseases: ComprehensiveDisease[] = [
       { en: 'Does your fever seem to come in cycles, with periods of feeling better in between?', fr: 'Votre fièvre semble-t-elle cyclique, avec des périodes d\'amélioration entre les deux ?', sw: 'Je, homa yako inaonekana kuja kwa mzunguko, na vipindi vya kujisikia vizuri katikati?', isRiskFactor: false },
       { en: 'Are you experiencing severe confusion or seizures?', fr: 'Ressentez-vous une confusion sévère ou des convulsions ?', sw: 'Je, unapata mchanganyiko mkali au mshtuko?', isRiskFactor: false },
       { en: 'Have you noticed any yellowing of your skin or the whites of your eyes (jaundice)?', fr: 'Avez-vous remarqué un jaunissement de votre peau ou du blanc de vos yeux (jaunisse) ?', sw: 'Je, umeona njano yoyote kwenye ngozi yako au weupe wa macho yako (manjano)?', isRiskFactor: false }
-    ]
+    ],
+    triageRules: {
+      fever_duration: { '>3days': 1.2, '1-3days': 1.1 },
+      fever_temp: { '>39': 1.15 },
+      headache_type: { 'throbbing': 1.1 }
+    },
   },
   {
     id: 'tuberculosis',

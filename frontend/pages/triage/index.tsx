@@ -29,7 +29,7 @@ export default function Triage() {
   const { t, language } = useLanguage();
   const { toast } = useToast();
   const [stage, setStage] = useState<'userInfo' | 'symptomSelection' | 'detailedQuestions' | 'results'>('userInfo');
-  const [userInfo, setUserInfo] = useState({ age: '', gender: 'all', riskFactors: { smoking: false, chronic: false } });
+  const [userInfo, setUserInfo] = useState({ age: '', gender: 'all', smoking: 'never', chronic: false });
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
   const [results, setResults] = useState<TriageResult[]>([]);
   const [quizForDisease, setQuizForDisease] = useState<TriageResult | null>(null);
@@ -107,7 +107,6 @@ export default function Triage() {
   };
 
   const analyzeSymptoms = () => {
-    // A more advanced implementation would use the `answers` state to refine the confidence score.
     const triageResults: TriageResult[] = [];
     let filteredDiseases = comprehensiveDiseases;
 
@@ -170,11 +169,20 @@ export default function Triage() {
         };
         confidence *= prevalenceMultiplier[disease.prevalenceInAfrica] || 1.0;
 
-        if (userInfo.riskFactors.smoking && disease.riskFactors.en.some(rf => rf.toLowerCase().includes('smoking'))) {
-          confidence *= 1.05;
-        }
-        if (userInfo.riskFactors.chronic && disease.riskFactors.en.some(rf => ['diabetes', 'high blood pressure', 'heart disease'].some(c => rf.toLowerCase().includes(c)))) {
+        if (userInfo.smoking === 'current' && disease.riskFactors.en.some(rf => rf.toLowerCase().includes('smoking'))) {
           confidence *= 1.1;
+        }
+        if (userInfo.chronic && disease.riskFactors.en.some(rf => ['diabetes', 'high blood pressure', 'heart disease'].some(c => rf.toLowerCase().includes(c)))) {
+          confidence *= 1.1;
+        }
+
+        // Apply triage rules
+        if (disease.triageRules) {
+          Object.entries(answers).forEach(([questionId, answer]) => {
+            if (disease.triageRules![questionId]?.[answer]) {
+              confidence *= disease.triageRules![questionId][answer];
+            }
+          });
         }
 
         const severityScore = { 'emergency': 90, 'high': 70, 'medium': 50, 'low': 20 };
@@ -249,7 +257,7 @@ export default function Triage() {
 
   const resetTriage = () => {
     setStage('userInfo');
-    setUserInfo({ age: '', gender: 'all', riskFactors: { smoking: false, chronic: false } });
+    setUserInfo({ age: '', gender: 'all', smoking: 'never', chronic: false });
     setSelectedSymptoms([]);
     setResults([]);
     setQuestionsToAsk([]);
@@ -337,7 +345,7 @@ export default function Triage() {
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
                   {getStageTitle()}
                 </h1>
-                <p className="text-lg text-gray-600">{t('pages.triage.aiDescription')}</p>
+                <p className="text-lg text-gray-600">{t('pages.triage.systemDescription')}</p>
               </div>
             </div>
           </div>
