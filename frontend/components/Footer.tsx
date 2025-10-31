@@ -9,8 +9,7 @@ export default function Footer() {
   return (
     <footer className={`bg-white/50 backdrop-blur-md text-center text-sm text-gray-600 py-4 border-t border-gray-200/50 ${!isHomePage ? 'pb-20 md:pb-4' : ''}`}>
       <div className="flex items-center justify-center space-x-1">
-        <span>Created with</span>
-        <Heart className="h-4 w-4 text-red-500" />
+        <span>Created by</span>
         <span>by&nbsp;</span>
         <a href="https://x.com/bugingoflexon" target="_blank" rel="noopener noreferrer" className="font-semibold text-green-600 hover:underline">
           BUGINGO Flexon
