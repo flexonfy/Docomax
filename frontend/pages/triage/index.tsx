@@ -428,27 +428,42 @@ export default function Triage() {
           {stage === 'symptomSelection' && <SymptomSelectionStep selectedSymptoms={selectedSymptoms} onSymptomAdd={handleSymptomAdd} onSymptomRemove={handleSymptomRemove} onClearAll={handleClearAll} />}
           {stage === 'detailedQuestions' && renderCurrentQuestion()}
           {stage === 'results' && (
-            results.length > 0 ? (
-              <TriageResults results={results} onStartQuiz={startQuiz} />
-            ) : (
-              <Card className="text-center shadow-lg bg-white/90 backdrop-blur-sm">
-                <CardHeader>
-                  <div className="mx-auto w-12 h-12 flex items-center justify-center bg-blue-100 rounded-full mb-4">
-                    <HelpCircle className="h-6 w-6 text-blue-600" />
+            <>
+              {results.length > 0 && results.some(r => r.emergencyLevel === 'critical' || r.emergencyLevel === 'emergent') && (
+                <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg shadow-md">
+                  <div className="flex items-start space-x-3">
+                    <AlertCircle className="h-6 w-6 text-red-600 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <h3 className="font-bold text-red-900 mb-1">⚠️ Critical/Emergency Symptoms Detected</h3>
+                      <p className="text-red-800 text-sm">
+                        Based on your symptoms, you may need immediate medical attention. Please seek emergency care right away or call your local emergency number.
+                      </p>
+                    </div>
                   </div>
-                  <CardTitle>{t('pages.triage.noMatchTitle')}</CardTitle>
-                  <CardDescription>{t('pages.triage.noMatchDescription')}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-700 mb-4">{t('pages.triage.noMatchAdvice')}</p>
-                  <ul className="list-disc list-inside text-left max-w-md mx-auto text-gray-600 space-y-2">
-                    <li>{t('pages.triage.noMatchPoint1')}</li>
-                    <li>{t('pages.triage.noMatchPoint2')}</li>
-                    <li>{t('pages.triage.noMatchPoint3')}</li>
-                  </ul>
-                </CardContent>
-              </Card>
-            )
+                </div>
+              )}
+              {results.length > 0 ? (
+                <TriageResults results={results} onStartQuiz={startQuiz} />
+              ) : (
+                <Card className="text-center shadow-lg bg-white/90 backdrop-blur-sm">
+                  <CardHeader>
+                    <div className="mx-auto w-12 h-12 flex items-center justify-center bg-blue-100 rounded-full mb-4">
+                      <HelpCircle className="h-6 w-6 text-blue-600" />
+                    </div>
+                    <CardTitle>{t('pages.triage.noMatchTitle')}</CardTitle>
+                    <CardDescription>{t('pages.triage.noMatchDescription')}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-700 mb-4">{t('pages.triage.noMatchAdvice')}</p>
+                    <ul className="list-disc list-inside text-left max-w-md mx-auto text-gray-600 space-y-2">
+                      <li>{t('pages.triage.noMatchPoint1')}</li>
+                      <li>{t('pages.triage.noMatchPoint2')}</li>
+                      <li>{t('pages.triage.noMatchPoint3')}</li>
+                    </ul>
+                  </CardContent>
+                </Card>
+              )}
+            </>
           )}
 
           <div className="mt-8 flex justify-between">
