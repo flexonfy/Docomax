@@ -458,7 +458,7 @@ export function PatientRecordsProvider({ children }: { children: ReactNode }) {
 
   const importData = (data: string) => {
     const defaultData = { patients: [], appointments: [] };
-    const parsedData = require('../lib/localStorage').safeJsonParse(data, defaultData);
+    const parsedData = safeJsonParse(data, defaultData);
 
     if (parsedData && parsedData.patients && Array.isArray(parsedData.patients) &&
         parsedData.appointments && Array.isArray(parsedData.appointments)) {
