@@ -440,35 +440,35 @@ const SpecialistHome = () => {
         </div>
 
         {/* Trust Indicators */}
-        <div className="bg-gradient-to-r from-green-500 via-blue-500 to-teal-500 rounded-3xl p-6 sm:p-8 text-white text-center shadow-2xl relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-green-600/20 via-blue-600/20 to-teal-600/20 animate-pulse"></div>
+        <div className="bg-gradient-to-r from-teal-600 via-cyan-700 to-slate-800 rounded-3xl p-6 sm:p-8 text-white text-center shadow-2xl relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-teal-700/20 via-cyan-700/20 to-slate-800/20 animate-pulse"></div>
           <div className="relative z-10">
             <div className="flex items-center justify-center space-x-3 mb-4">
-              <div className="p-2 bg-white/20 rounded-xl">
+              <div className="p-2 bg-white/15 rounded-xl">
                 <Heart className="h-6 w-6 sm:h-8 sm:w-8" />
               </div>
               <h3 className="text-xl sm:text-2xl font-bold">
                 {t('pages.home.trustedCompanion')}
               </h3>
             </div>
-            <p className="text-green-100 text-base sm:text-lg max-w-3xl mx-auto mb-6 leading-relaxed">
+            <p className="text-teal-100 text-base sm:text-lg max-w-3xl mx-auto mb-6 leading-relaxed">
               {t('pages.home.companionDescription')}
             </p>
-            
+
             <div className="flex flex-wrap justify-center gap-4 text-sm">
-              <div className="flex items-center space-x-2 bg-white/20 rounded-full px-4 py-2 hover:bg-white/30 transition-colors">
+              <div className="flex items-center space-x-2 bg-white/12 rounded-full px-4 py-2 hover:bg-white/20 transition-colors">
                 <CheckCircle className="h-4 w-4" />
                 <span>{t('pages.home.whoCompliant')}</span>
               </div>
-              <div className="flex items-center space-x-2 bg-white/20 rounded-full px-4 py-2 hover:bg-white/30 transition-colors">
+              <div className="flex items-center space-x-2 bg-white/12 rounded-full px-4 py-2 hover:bg-white/20 transition-colors">
                 <CheckCircle className="h-4 w-4" />
                 <span>{t('pages.home.offlineReady')}</span>
               </div>
-              <div className="flex items-center space-x-2 bg-white/20 rounded-full px-4 py-2 hover:bg-white/30 transition-colors">
+              <div className="flex items-center space-x-2 bg-white/12 rounded-full px-4 py-2 hover:bg-white/20 transition-colors">
                 <CheckCircle className="h-4 w-4" />
                 <span>{t('pages.home.multiLanguage')}</span>
               </div>
-              <div className="flex items-center space-x-2 bg-white/20 rounded-full px-4 py-2 hover:bg-white/30 transition-colors">
+              <div className="flex items-center space-x-2 bg-white/12 rounded-full px-4 py-2 hover:bg-white/20 transition-colors">
                 <CheckCircle className="h-4 w-4" />
                 <span>{t('pages.home.privacyFirst')}</span>
               </div>
