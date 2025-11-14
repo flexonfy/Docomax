@@ -90,7 +90,7 @@ const PersonalHome = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="text-center mb-12">
           <div className="flex justify-center mb-6">
-            <div className="p-4 sm:p-6 bg-gradient-to-br from-green-500 to-blue-500 rounded-3xl shadow-2xl">
+            <div className="p-4 sm:p-6 bg-gradient-to-br from-teal-600 to-cyan-700 rounded-3xl shadow-2xl">
               <User className="h-12 w-12 sm:h-16 sm:w-16 text-white" />
             </div>
           </div>
