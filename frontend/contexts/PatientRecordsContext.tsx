@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { getStorageItem, setStorageItem } from '../lib/localStorage';
+import { getStorageItem, setStorageItem, safeJsonParse } from '../lib/localStorage';
 
 export interface PatientRecord {
   id: string;
