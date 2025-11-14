@@ -219,35 +219,35 @@ export default function Tools() {
   const categories = ['All', ...new Set(allTools.filter(tool => tool.audience.includes(mode)).map(tool => tool.category))];
 
   const stats = [
-    { icon: Calculator, value: allTools.filter(tool => tool.audience.includes(mode)).length.toString(), label: t('common.tools'), color: 'text-blue-500' },
-    { icon: Shield, value: 'WHO', label: t('tools.compliant'), color: 'text-green-500' },
-    { icon: Globe, value: '3', label: t('pages.home.languages'), color: 'text-purple-500' },
-    { icon: Zap, value: '100%', label: t('tools.offline'), color: 'text-orange-500' }
+    { icon: Calculator, value: allTools.filter(tool => tool.audience.includes(mode)).length.toString(), label: t('common.tools'), color: 'text-teal-600' },
+    { icon: Shield, value: 'WHO', label: t('tools.compliant'), color: 'text-teal-600' },
+    { icon: Globe, value: '3', label: t('pages.home.languages'), color: 'text-cyan-600' },
+    { icon: Zap, value: '100%', label: t('tools.offline'), color: 'text-amber-600' }
   ];
 
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
       case 'high':
-        return <Badge className="bg-red-100 text-red-800 text-xs">{t('common.high')}</Badge>;
+        return <Badge className="bg-rose-100 text-rose-800 text-xs">{t('common.high')}</Badge>;
       case 'medium':
-        return <Badge className="bg-yellow-100 text-yellow-800 text-xs">{t('common.medium')}</Badge>;
+        return <Badge className="bg-amber-100 text-amber-800 text-xs">{t('common.medium')}</Badge>;
       case 'low':
-        return <Badge className="bg-green-100 text-green-800 text-xs">{t('common.low')}</Badge>;
+        return <Badge className="bg-teal-100 text-teal-800 text-xs">{t('common.low')}</Badge>;
       default:
         return null;
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="p-3 bg-gradient-to-r from-green-500 to-blue-500 rounded-xl text-white shadow-lg">
+            <div className="p-3 bg-gradient-to-r from-teal-600 to-cyan-700 rounded-xl text-white shadow-lg">
               <Calculator className="h-8 w-8" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-teal-600 to-cyan-700 bg-clip-text text-transparent">
                 {t('common.tools')}
               </h1>
               <p className="text-lg text-gray-600">
