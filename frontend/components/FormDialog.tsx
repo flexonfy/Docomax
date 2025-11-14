@@ -74,11 +74,11 @@ export function FormField({ label, error, isRequired = false, children }: FormFi
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-2">
         {label}
-        {isRequired && <span className="text-red-500 ml-1">*</span>}
+        {isRequired && <span className="text-rose-600 ml-1">*</span>}
       </label>
       {children}
       {error && (
-        <p className="text-red-500 text-sm mt-1">{error}</p>
+        <p className="text-rose-600 text-sm mt-1">{error}</p>
       )}
     </div>
   );
