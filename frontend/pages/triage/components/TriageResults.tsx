@@ -5,8 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
-import { AlertTriangle, CheckCircle, Clock, Info, Shield, Sparkles, Stethoscope, TestTube, Heart, Activity, Zap, Lightbulb } from 'lucide-react';
+import { AlertTriangle, CheckCircle, Clock, Info, Shield, Sparkles, Stethoscope, TestTube, Heart, Activity, Zap, Lightbulb, HelpCircle } from 'lucide-react';
 import type { EnhancedDiseaseResult } from '../../../data/triageAlgorithm';
+import { calculatePresentationCompleteness, getPresentationSummary } from '../../../data/typicalPresentations';
 
 interface TriageResult extends EnhancedDiseaseResult {
   refinedConfidence?: number;
