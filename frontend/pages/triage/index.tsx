@@ -129,10 +129,29 @@ export default function Triage() {
   };
 
   const analyzeSymptoms = () => {
+    // SAFETY CHECK FIRST
+    const safetyCheck = detectCriticalEmergency(selectedSymptoms);
+    if (safetyCheck.requiresImmediateAction) {
+      toast({
+        title: safetyCheck.message,
+        description: safetyCheck.actionRequired,
+        variant: "destructive"
+      });
+    }
+
+    const dangerousCombinations = checkDangerousSymptomCombinations(selectedSymptoms);
+    dangerousCombinations.forEach(alert => {
+      toast({
+        title: '⚠️ Alert',
+        description: alert,
+        variant: "destructive"
+      });
+    });
+
     const triageResults: TriageResult[] = [];
     let filteredDiseases = comprehensiveDiseases;
 
-    // Check for critical red flag symptoms first
+    // Check for critical red flag symptoms
     const hasRedFlags = selectedSymptoms.some(s => isRedFlagSymptom(s));
 
     if (userInfo.age) {
