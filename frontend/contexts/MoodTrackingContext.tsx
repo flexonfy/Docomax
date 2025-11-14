@@ -24,18 +24,15 @@ const MoodTrackingContext = createContext<MoodTrackingContextType | undefined>(u
 
 export function MoodTrackingProvider({ children }: { children: ReactNode }) {
   const [entries, setEntries] = useState<MoodEntry[]>(() => {
-    const saved = localStorage.getItem('docomax-mood');
-    if (saved) {
-      return JSON.parse(saved).map((entry: any) => ({
-        ...entry,
-        date: new Date(entry.date)
-      }));
-    }
-    return [];
+    const saved = getStorageItem<any[]>('docomax-mood', []);
+    return saved.map((entry: any) => ({
+      ...entry,
+      date: new Date(entry.date)
+    }));
   });
 
   useEffect(() => {
-    localStorage.setItem('docomax-mood', JSON.stringify(entries));
+    setStorageItem('docomax-mood', entries);
   }, [entries]);
 
   const addEntry = (entryData: Omit<MoodEntry, 'id'>) => {
