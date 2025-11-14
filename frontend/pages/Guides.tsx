@@ -223,33 +223,33 @@ export default function Guides() {
       </div>
 
       <div className="mt-12">
-        <Card className="bg-green-50 border-green-200">
+        <Card className="bg-teal-50 border-teal-200">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <Heart className="h-5 w-5 text-green-600" />
+              <Heart className="h-5 w-5 text-teal-600" />
               <span>{t('pages.guides.quickHealthTips')}</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
               <div className="flex items-start space-x-2">
-                <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
+                <CheckCircle className="h-4 w-4 text-teal-600 mt-0.5" />
                 <span className="text-sm">{t('pages.guides.tipWashHands')}</span>
               </div>
               <div className="flex items-start space-x-2">
-                <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
+                <CheckCircle className="h-4 w-4 text-teal-600 mt-0.5" />
                 <span className="text-sm">{t('pages.guides.tipDrinkWater')}</span>
               </div>
               <div className="flex items-start space-x-2">
-                <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
+                <CheckCircle className="h-4 w-4 text-teal-600 mt-0.5" />
                 <span className="text-sm">{t('pages.guides.tipBedNets')}</span>
               </div>
               <div className="flex items-start space-x-2">
-                <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
+                <CheckCircle className="h-4 w-4 text-teal-600 mt-0.5" />
                 <span className="text-sm">{t('pages.guides.tipBalancedMeals')}</span>
               </div>
               <div className="flex items-start space-x-2">
-                <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
+                <CheckCircle className="h-4 w-4 text-teal-600 mt-0.5" />
                 <span className="text-sm">{t('pages.guides.tipExercise')}</span>
               </div>
             </div>
