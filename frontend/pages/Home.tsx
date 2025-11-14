@@ -257,10 +257,10 @@ const SpecialistHome = () => {
   ];
 
   const stats = [
-    { icon: Users, value: patients.length, label: t('pages.records.totalPatients'), color: 'text-blue-500' },
-    { icon: Calendar, value: upcomingAppointments.length, label: t('pages.home.upcomingAppointments'), color: 'text-purple-500' },
-    { icon: Stethoscope, value: '500+', label: t('pages.home.diseasesCovered'), color: 'text-red-500' },
-    { icon: Zap, value: '100%', label: t('pages.home.offlineReady'), color: 'text-green-500' }
+    { icon: Users, value: patients.length, label: t('pages.records.totalPatients'), color: 'text-teal-600' },
+    { icon: Calendar, value: upcomingAppointments.length, label: t('pages.home.upcomingAppointments'), color: 'text-purple-600' },
+    { icon: Stethoscope, value: '500+', label: t('pages.home.diseasesCovered'), color: 'text-rose-600' },
+    { icon: Zap, value: '100%', label: t('pages.home.offlineReady'), color: 'text-amber-600' }
   ];
 
   const features = [
