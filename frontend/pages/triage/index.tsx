@@ -131,6 +131,9 @@ export default function Triage() {
     const triageResults: TriageResult[] = [];
     let filteredDiseases = comprehensiveDiseases;
 
+    // Check for critical red flag symptoms first
+    const hasRedFlags = selectedSymptoms.some(s => isRedFlagSymptom(s));
+
     if (userInfo.age) {
       const ageNum = parseInt(userInfo.age);
       if (!isNaN(ageNum)) {
@@ -151,88 +154,138 @@ export default function Triage() {
       const diseaseSymptoms = disease.symptoms?.[language] || disease.symptoms?.en || [];
       const commonSymptoms = disease.commonSymptoms?.[language] || disease.commonSymptoms?.en || [];
       const rareSymptoms = disease.rareSymptoms?.[language] || disease.rareSymptoms?.en || [];
-      
+      const diseaseRiskFactors = disease.riskFactors?.[language] || disease.riskFactors?.en || [];
+
       const matchedSymptoms: string[] = [];
-      let score = 0;
-      
+      const unmatchedCommonSymptoms: string[] = [];
+      let rareSymptomCount = 0;
+      let commonSymptomCount = 0;
+
+      // Find matched symptoms
       selectedSymptoms.forEach(selectedSymptom => {
         const lowerSelected = selectedSymptom.toLowerCase();
-        if (diseaseSymptoms.some(ds => ds.toLowerCase() === lowerSelected)) {
+        const isMatched = diseaseSymptoms.some(ds => ds.toLowerCase() === lowerSelected);
+
+        if (isMatched) {
           matchedSymptoms.push(selectedSymptom);
           if (rareSymptoms.some(rs => rs.toLowerCase() === lowerSelected)) {
-            score += 2.5;
+            rareSymptomCount++;
           } else if (commonSymptoms.some(cs => cs.toLowerCase() === lowerSelected)) {
-            score += 1.0;
-          } else {
-            score += 1.5;
+            commonSymptomCount++;
           }
         }
       });
 
+      // Find unmatched common symptoms (would expect to see)
+      commonSymptoms.forEach(cs => {
+        if (!matchedSymptoms.some(ms => ms.toLowerCase() === cs.toLowerCase())) {
+          unmatchedCommonSymptoms.push(cs);
+        }
+      });
+
       if (matchedSymptoms.length > 0) {
-        const maxPossibleScore = selectedSymptoms.reduce((acc, selectedSymptom) => {
-          const lowerSelected = selectedSymptom.toLowerCase();
-          if (rareSymptoms.some(rs => rs.toLowerCase() === lowerSelected)) return acc + 2.5;
-          if (commonSymptoms.some(cs => cs.toLowerCase() === lowerSelected)) return acc + 1.0;
-          return acc + 1.5;
-        }, 0);
+        // **PHASE 1: Enhanced Bayesian Score Calculation**
+        const baselineConfidence = getBaselineConfidence(disease.id, disease.prevalenceInAfrica);
 
-        let confidence = (score / Math.max(maxPossibleScore, 1)) * 100;
+        const bayesianScore = calculateBayesianScore(
+          matchedSymptoms.length,
+          selectedSymptoms.length,
+          diseaseSymptoms.length,
+          baselineConfidence,
+          commonSymptomCount,
+          rareSymptomCount
+        );
 
-        const commonMatchedRatio = commonSymptoms.length > 0 ? (matchedSymptoms.filter(s => commonSymptoms.includes(s)).length / commonSymptoms.length) : 0;
-        confidence += commonMatchedRatio * 20;
+        // **Detect symptom conflicts**
+        const conflictPenalty = detectSymptomConflicts(
+          selectedSymptoms,
+          commonSymptoms,
+          rareSymptoms
+        );
 
-        const unmatchedPenalty = (selectedSymptoms.length - matchedSymptoms.length) * 5;
-        confidence -= unmatchedPenalty;
+        // **Score symptom combinations**
+        const { combinationBonus, matchedPattern } = scoreSymptomCombinations(
+          selectedSymptoms,
+          disease
+        );
 
-        const prevalenceMultiplier = {
-          'very-high': 1.2, 'high': 1.1, 'medium': 1.0, 'low': 0.9, 'rare': 0.8
-        };
-        confidence *= prevalenceMultiplier[disease.prevalenceInAfrica] || 1.0;
+        // Risk factor boost
+        const ageNum = userInfo.age ? parseInt(userInfo.age) : 30;
+        const riskFactorBoost = calculateRiskFactorBoost(
+          {
+            smoking: userInfo.smoking as 'never' | 'former' | 'current',
+            chronic: userInfo.chronic,
+            age: ageNum,
+          },
+          diseaseRiskFactors,
+          disease.ageGroup
+        );
 
-        if (userInfo.smoking === 'current' && disease.riskFactors.en.some(rf => rf.toLowerCase().includes('smoking'))) {
-          confidence *= 1.1;
-        }
-        if (userInfo.chronic && disease.riskFactors.en.some(rf => ['diabetes', 'high blood pressure', 'heart disease'].some(c => rf.toLowerCase().includes(c)))) {
-          confidence *= 1.1;
-        }
-
-        // Apply triage rules
+        // Apply triage rules if answers exist
+        let triageRuleBoost = 1.0;
         if (disease.triageRules) {
           Object.entries(answers).forEach(([questionId, answer]) => {
             if (disease.triageRules![questionId]?.[answer]) {
-              confidence *= disease.triageRules![questionId][answer];
+              triageRuleBoost *= disease.triageRules![questionId][answer];
             }
           });
         }
 
-        const severityScore = { 'emergency': 90, 'high': 70, 'medium': 50, 'low': 20 };
-        let riskScore = severityScore[disease.severity] || 30;
-        riskScore += matchedSymptoms.length * 2;
-        if (userInfo.age && parseInt(userInfo.age) > 60 && disease.ageGroup === 'elderly') {
-          riskScore += 10;
-        }
+        // Combine all factors
+        let finalConfidence = bayesianScore;
+        finalConfidence = Math.round(finalConfidence * conflictPenalty * combinationBonus * riskFactorBoost * triageRuleBoost);
+        finalConfidence = Math.min(95, Math.max(5, finalConfidence));
+
+        // **Calculate risk score (0-100)**
+        const severityWeights = { 'emergency': 90, 'high': 70, 'medium': 50, 'low': 20 };
+        let riskScore = severityWeights[disease.severity as keyof typeof severityWeights] || 30;
+        riskScore += matchedSymptoms.length * 3;
+        riskScore = Math.min(100, Math.round(riskScore));
+
+        // **Assess emergency level**
+        const emergencyLevel = assessEmergencyLevel(
+          selectedSymptoms,
+          disease,
+          disease.severity,
+          riskScore
+        );
+
+        // **Generate reasoning**
+        const reasoning = generateReasoningExplanation(
+          matchedSymptoms,
+          unmatchedCommonSymptoms,
+          diseaseRiskFactors.slice(0, 2),
+          userInfo.age,
+          userInfo.gender
+        );
 
         triageResults.push({
           disease,
-          confidence: Math.min(95, Math.max(5, Math.round(confidence))),
+          baselineConfidence,
+          bayesianScore,
+          finalConfidence,
           matchedSymptoms,
+          unmatchedCommonSymptoms,
           severity: disease.severity,
-          riskScore: Math.min(100, Math.round(riskScore))
-        });
+          riskScore,
+          emergencyLevel,
+          reasoning,
+          confidence: finalConfidence,
+        } as unknown as TriageResult);
       }
     });
 
-    const severityOrder = { 'emergency': 4, 'high': 3, 'medium': 2, 'low': 1 };
+    // Sort by emergency level first, then confidence
+    const emergencyOrder = { 'critical': 4, 'emergent': 3, 'urgent': 2, 'routine': 1 };
     triageResults.sort((a, b) => {
-      if (a.confidence !== b.confidence) return b.confidence - a.confidence;
-      if (a.riskScore !== b.riskScore) return b.riskScore - a.riskScore;
-      const severityA = severityOrder[a.severity as keyof typeof severityOrder] || 0;
-      const severityB = severityOrder[b.severity as keyof typeof severityOrder] || 0;
-      return severityB - severityA;
+      const emergencyA = emergencyOrder[a.emergencyLevel as keyof typeof emergencyOrder] || 0;
+      const emergencyB = emergencyOrder[b.emergencyLevel as keyof typeof emergencyOrder] || 0;
+      if (emergencyA !== emergencyB) return emergencyB - emergencyA;
+      if (a.finalConfidence !== b.finalConfidence) return b.finalConfidence - a.finalConfidence;
+      return b.riskScore - a.riskScore;
     });
 
-    setResults(triageResults.slice(0, 8));
+    setResults(triageResults.slice(0, 10));
   };
 
   const startQuiz = (result: TriageResult) => {
