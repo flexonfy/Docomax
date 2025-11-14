@@ -421,14 +421,14 @@ const SpecialistHome = () => {
         {/* Feature Highlights */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {features.map((feature, index) => (
-            <Card key={index} className="bg-gradient-to-br from-white to-gray-50/50 border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300 group">
+            <Card key={index} className="bg-gradient-to-br from-white to-slate-50/50 border-slate-200/50 shadow-lg hover:shadow-xl transition-all duration-300 group">
               <CardContent className="p-6">
                 <div className="flex items-start space-x-4">
-                  <div className="p-3 bg-gradient-to-br from-green-100 to-blue-100 rounded-xl group-hover:scale-110 transition-transform">
-                    <feature.icon className="h-6 w-6 text-green-600" />
+                  <div className="p-3 bg-gradient-to-br from-teal-100 to-cyan-100 rounded-xl group-hover:scale-110 transition-transform">
+                    <feature.icon className="h-6 w-6 text-teal-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-green-600 transition-colors">{feature.title}</h3>
+                    <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">{feature.title}</h3>
                     <p className="text-gray-700 text-sm leading-relaxed">
                       {feature.description}
                     </p>
