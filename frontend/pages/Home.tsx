@@ -60,28 +60,28 @@ const PersonalHome = () => {
       description: t('pages.home.viewHealthInfo'),
       icon: FileText,
       path: '/records',
-      color: 'bg-gradient-to-br from-green-500 to-green-600'
+      color: 'bg-gradient-to-br from-teal-600 to-cyan-700'
     },
     {
       title: t('common.triage'),
       description: t('pages.home.checkSymptoms'),
       icon: Stethoscope,
       path: '/triage',
-      color: 'bg-gradient-to-br from-red-500 to-red-600'
+      color: 'bg-gradient-to-br from-rose-600 to-red-700'
     },
     {
       title: t('tools.mentalHealth.title'),
       description: t('pages.home.trackWellbeing'),
       icon: Brain,
       path: '/tools/mental-health',
-      color: 'bg-gradient-to-br from-purple-500 to-purple-600'
+      color: 'bg-gradient-to-br from-purple-600 to-indigo-700'
     },
     {
       title: t('tools.facilities.title'),
       description: t('pages.home.findFacilities'),
       icon: MapPin,
       path: '/tools/facilities',
-      color: 'bg-gradient-to-br from-orange-500 to-orange-600'
+      color: 'bg-gradient-to-br from-amber-600 to-orange-700'
     }
   ];
 
