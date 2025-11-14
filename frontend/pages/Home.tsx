@@ -336,7 +336,7 @@ const SpecialistHome = () => {
               </h2>
               <p className="text-gray-600 mt-1">{t('pages.home.frequentFeatures')}</p>
             </div>
-            <Badge variant="outline" className="text-green-600 border-green-200 bg-green-50 animate-pulse">
+            <Badge variant="outline" className="text-teal-600 border-teal-200 bg-teal-50 animate-pulse">
               {t('pages.home.popular')}
             </Badge>
           </div>
