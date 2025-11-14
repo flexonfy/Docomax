@@ -14,7 +14,7 @@ export default function Layout({ children }: LayoutProps) {
   const isHomePage = location.pathname === '/';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50/50 flex flex-col">
       <Header />
       <OfflineIndicator />
       <main className="flex-1">
