@@ -105,78 +105,125 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
     <>
       <div className="space-y-6">
         <h2 className="text-2xl font-bold text-gray-900">Differential Diagnosis</h2>
-        {results.map((result, index) => (
-          <Card key={result.disease.id} className={`border-l-4 shadow-lg ${getSeverityColor(result.severity).replace('bg-', 'border-l-').replace('-100', '-500').replace(' text-red-800', '')}`}>
-            <CardHeader>
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <CardTitle className="flex items-center space-x-2 text-lg">
-                  {getSeverityIcon(result.severity)}
-                  <span>{result.disease.name?.[language] || result.disease.name?.en}</span>
-                  {index === 0 && <Badge variant="secondary" className="animate-pulse">{t('pages.triage.mostLikely')}</Badge>}
-                </CardTitle>
-                <div className="flex flex-wrap items-center gap-2">
-                  <Badge variant="outline" className="flex items-center">
-                    {result.refinedConfidence && <Sparkles className="h-3 w-3 mr-1 text-yellow-500" />}
-                    {t('pages.triage.confidence')}:
-                    {result.refinedConfidence ? (
-                      <>
-                        <span className="line-through text-gray-500 mr-1">{result.confidence}%</span>
-                        <span className="font-bold">{result.refinedConfidence}%</span>
-                      </>
-                    ) : (
-                      `${result.finalConfidence || result.confidence}%`
-                    )}
-                  </Badge>
-                  <Badge className={getRiskColor(result.riskScore)}>{t('pages.triage.risk')}: {result.riskScore}%</Badge>
-                  {result.emergencyLevel && (
-                    <Badge className={getEmergencyColor(result.emergencyLevel)}>
-                      {getEmergencyIcon(result.emergencyLevel) && <span className="mr-1">{result.emergencyLevel.toUpperCase()}</span>}
-                    </Badge>
-                  )}
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-2 text-sm">{t('pages.triage.matchedSymptoms')}:</h4>
-                <div className="flex flex-wrap gap-1">
-                  {result.matchedSymptoms.map((symptom, idx) => (
-                    <Badge key={idx} variant="secondary" className="bg-orange-50 text-orange-800">{symptom}</Badge>
-                  ))}
-                </div>
-              </div>
+        {results.map((result, index) => {
+          const confidence = result.refinedConfidence || result.finalConfidence || result.confidence;
+          const confidenceLabel = getConfidenceLabel(confidence, index, results.length);
+          const isLowConfidence = shouldWarnLowConfidence(confidence);
+          const presentationStatus = getPresentationStatus(result.disease.id, result.matchedSymptoms);
 
-              {result.reasoning?.symptomCombinations?.length > 0 && (
-                <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                  <div className="flex items-start space-x-2">
-                    <Lightbulb className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <h4 className="font-semibold text-blue-900 text-sm">Pattern Match</h4>
-                      <p className="text-xs text-blue-800">{result.reasoning.symptomCombinations[0]}</p>
-                    </div>
+          return (
+            <Card
+              key={result.disease.id}
+              className={`border-l-4 shadow-lg ${
+                isLowConfidence ? 'border-l-yellow-500 bg-yellow-50' : ''
+              } ${getSeverityColor(result.severity).replace('bg-', 'border-l-').replace('-100', '-500').replace(' text-red-800', '')}`}
+            >
+              <CardHeader>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <CardTitle className="flex items-center space-x-2 text-lg">
+                    {getSeverityIcon(result.severity)}
+                    <span>{result.disease.name?.[language] || result.disease.name?.en}</span>
+                    {confidenceLabel && (
+                      <Badge variant="secondary" className={confidence >= 50 ? 'animate-pulse' : ''}>
+                        {confidenceLabel}
+                      </Badge>
+                    )}
+                  </CardTitle>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge variant="outline" className="flex items-center">
+                      {result.refinedConfidence && <Sparkles className="h-3 w-3 mr-1 text-yellow-500" />}
+                      {t('pages.triage.confidence')}:
+                      {result.refinedConfidence ? (
+                        <>
+                          <span className="line-through text-gray-500 mr-1">{result.confidence}%</span>
+                          <span className="font-bold">{result.refinedConfidence}%</span>
+                        </>
+                      ) : (
+                        `${confidence}%`
+                      )}
+                    </Badge>
+                    <Badge className={getRiskColor(result.riskScore)}>{t('pages.triage.risk')}: {result.riskScore}%</Badge>
+                    {result.emergencyLevel && (
+                      <Badge className={getEmergencyColor(result.emergencyLevel)}>
+                        {getEmergencyIcon(result.emergencyLevel) && <span className="mr-1">{result.emergencyLevel.toUpperCase()}</span>}
+                      </Badge>
+                    )}
                   </div>
                 </div>
-              )}
-
-              <div className={`p-3 rounded-lg border ${getSeverityColor(result.severity)}`}>
-                <h4 className="font-semibold mb-1 text-sm">{t('pages.triage.recommendations')}:</h4>
-                <p className="text-sm">{getRecommendation(result.severity, result.riskScore)}</p>
-              </div>
-              <div className="flex flex-wrap gap-2 mt-4">
-                {result.disease.quizQuestions && result.disease.quizQuestions.length > 0 && (
-                  <Button onClick={() => onStartQuiz(result)} size="sm" variant="outline" className="flex-1">
-                    <Sparkles className="h-4 w-4 mr-2 text-yellow-500" />
-                    Refine with Follow-up Questions
-                  </Button>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Low Confidence Warning */}
+                {isLowConfidence && (
+                  <div className="p-3 bg-yellow-100 rounded-lg border border-yellow-300">
+                    <div className="flex items-start space-x-2">
+                      <HelpCircle className="h-4 w-4 text-yellow-700 mt-0.5 flex-shrink-0" />
+                      <div className="text-sm">
+                        <p className="font-semibold text-yellow-900">Low Confidence Diagnosis</p>
+                        <p className="text-yellow-800 text-xs mt-1">
+                          Based on limited information. Additional symptoms or clarifications would improve accuracy.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 )}
-                <Button onClick={() => setShowDetailsFor(result)} size="sm" variant="outline" className="flex-1">
-                  <Info className="h-4 w-4 mr-2" />
-                  More Info
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+
+                {/* Presentation Status */}
+                <div className="p-2 bg-blue-50 rounded border border-blue-200">
+                  <p className="text-xs text-blue-800">
+                    <strong>Presentation Match:</strong> {presentationStatus}
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-2 text-sm">{t('pages.triage.matchedSymptoms')}:</h4>
+                  <div className="flex flex-wrap gap-1">
+                    {result.matchedSymptoms.map((symptom, idx) => (
+                      <Badge key={idx} variant="secondary" className="bg-orange-50 text-orange-800">
+                        {symptom}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+
+                {result.reasoning?.symptomCombinations?.length > 0 && (
+                  <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                    <div className="flex items-start space-x-2">
+                      <Lightbulb className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-semibold text-blue-900 text-sm">Pattern Match</h4>
+                        <p className="text-xs text-blue-800">{result.reasoning.symptomCombinations[0]}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className={`p-3 rounded-lg border ${getSeverityColor(result.severity)}`}>
+                  <h4 className="font-semibold mb-1 text-sm">{t('pages.triage.recommendations')}:</h4>
+                  <p className="text-sm">{getRecommendation(result.severity, result.riskScore)}</p>
+                </div>
+
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {isLowConfidence && (
+                    <Button size="sm" variant="default" className="flex-1 bg-blue-600 hover:bg-blue-700">
+                      <HelpCircle className="h-4 w-4 mr-2" />
+                      Ask More Questions
+                    </Button>
+                  )}
+                  {result.disease.quizQuestions && result.disease.quizQuestions.length > 0 && (
+                    <Button onClick={() => onStartQuiz(result)} size="sm" variant="outline" className="flex-1">
+                      <Sparkles className="h-4 w-4 mr-2 text-yellow-500" />
+                      Refine Diagnosis
+                    </Button>
+                  )}
+                  <Button onClick={() => setShowDetailsFor(result)} size="sm" variant="outline" className="flex-1">
+                    <Info className="h-4 w-4 mr-2" />
+                    More Info
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
 
       <Dialog open={!!showDetailsFor} onOpenChange={() => setShowDetailsFor(null)}>
