@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { getStorageItem, setStorageItem, removeStorageItem } from '../lib/localStorage';
 
 export type AddictionType = 'smoking' | 'alcohol' | 'drugs' | 'pornography';
 
