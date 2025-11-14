@@ -63,22 +63,12 @@ export default function MentalHealth() {
   const [assessmentResult, setAssessmentResult] = useState<number | null>(null);
   const [journalEntry, setJournalEntry] = useState('');
   const [journalEntries, setJournalEntries] = useState<JournalEntry[]>(() => {
-    const saved = localStorage.getItem('docomax-journal');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          return parsed;
-        }
-      } catch (e) {
-        console.error("Failed to parse journal entries from localStorage", e);
-      }
-    }
-    return [];
+    const saved = getStorageItem<JournalEntry[]>('docomax-journal', []);
+    return Array.isArray(saved) ? saved : [];
   });
 
   useEffect(() => {
-    localStorage.setItem('docomax-journal', JSON.stringify(journalEntries));
+    setStorageItem('docomax-journal', journalEntries);
   }, [journalEntries]);
 
   const handleSaveJournal = () => {
