@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { getStorageItem, setStorageItem } from '../lib/localStorage';
 
 export interface MoodEntry {
   id: string;
