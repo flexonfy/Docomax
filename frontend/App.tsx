@@ -35,48 +35,50 @@ import AntiAddictionToolkit from './pages/tools/AntiAddictionToolkit';
 
 function App() {
   return (
-    <LanguageProvider>
-      <ModeProvider>
-        <PatientRecordsProvider>
-          <MoodTrackingProvider>
-            <PainAssessmentProvider>
-              <AddictionTrackingProvider>
-                <Router>
-                  <Layout>
-                    <Routes>
-                      <Route path="/" element={<Home />} />
-                      <Route path="/triage" element={<Triage />} />
-                      <Route path="/records" element={<Records />} />
-                      <Route path="/encyclopedia" element={<Encyclopedia />} />
-                      <Route path="/tools" element={<Tools />} />
-                      <Route path="/guides" element={<Guides />} />
-                      <Route path="/faq" element={<FAQ />} />
-                      <Route path="/tools/dosage" element={<DosageCalculator />} />
-                      <Route path="/tools/bmi" element={<BMICalculator />} />
-                      <Route path="/tools/pregnancy" element={<PregnancyTracker />} />
-                      <Route path="/tools/ors" element={<ORSGuide />} />
-                      <Route path="/tools/first-aid" element={<FirstAid />} />
-                      <Route path="/tools/vaccination" element={<VaccinationPlanner />} />
-                      <Route path="/tools/facilities" element={<FacilityFinder />} />
-                      <Route path="/tools/mental-health" element={<MentalHealth />} />
-                      <Route path="/tools/sanitation" element={<SanitationGuide />} />
-                      <Route path="/tools/drug-interactions" element={<DrugInteractionChecker />} />
-                      <Route path="/tools/medical-converter" element={<MedicalConverter />} />
-                      <Route path="/tools/iv-calculator" element={<IVCalculator />} />
-                      <Route path="/tools/glasgow-coma-scale" element={<GlasgowComaScale />} />
-                      <Route path="/tools/apgar-score" element={<APGARScore />} />
-                      <Route path="/tools/pain-scale" element={<PainScale />} />
-                      <Route path="/tools/anti-addiction" element={<AntiAddictionToolkit />} />
-                    </Routes>
-                  </Layout>
-                  <Toaster />
-                </Router>
-              </AddictionTrackingProvider>
-            </PainAssessmentProvider>
-          </MoodTrackingProvider>
-        </PatientRecordsProvider>
-      </ModeProvider>
-    </LanguageProvider>
+    <ErrorBoundary>
+      <LanguageProvider>
+        <ModeProvider>
+          <PatientRecordsProvider>
+            <MoodTrackingProvider>
+              <PainAssessmentProvider>
+                <AddictionTrackingProvider>
+                  <Router>
+                    <Layout>
+                      <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/triage" element={<Triage />} />
+                        <Route path="/records" element={<Records />} />
+                        <Route path="/encyclopedia" element={<Encyclopedia />} />
+                        <Route path="/tools" element={<Tools />} />
+                        <Route path="/guides" element={<Guides />} />
+                        <Route path="/faq" element={<FAQ />} />
+                        <Route path="/tools/dosage" element={<DosageCalculator />} />
+                        <Route path="/tools/bmi" element={<BMICalculator />} />
+                        <Route path="/tools/pregnancy" element={<PregnancyTracker />} />
+                        <Route path="/tools/ors" element={<ORSGuide />} />
+                        <Route path="/tools/first-aid" element={<FirstAid />} />
+                        <Route path="/tools/vaccination" element={<VaccinationPlanner />} />
+                        <Route path="/tools/facilities" element={<FacilityFinder />} />
+                        <Route path="/tools/mental-health" element={<MentalHealth />} />
+                        <Route path="/tools/sanitation" element={<SanitationGuide />} />
+                        <Route path="/tools/drug-interactions" element={<DrugInteractionChecker />} />
+                        <Route path="/tools/medical-converter" element={<MedicalConverter />} />
+                        <Route path="/tools/iv-calculator" element={<IVCalculator />} />
+                        <Route path="/tools/glasgow-coma-scale" element={<GlasgowComaScale />} />
+                        <Route path="/tools/apgar-score" element={<APGARScore />} />
+                        <Route path="/tools/pain-scale" element={<PainScale />} />
+                        <Route path="/tools/anti-addiction" element={<AntiAddictionToolkit />} />
+                      </Routes>
+                    </Layout>
+                    <Toaster />
+                  </Router>
+                </AddictionTrackingProvider>
+              </PainAssessmentProvider>
+            </MoodTrackingProvider>
+          </PatientRecordsProvider>
+        </ModeProvider>
+      </LanguageProvider>
+    </ErrorBoundary>
   );
 }
 
