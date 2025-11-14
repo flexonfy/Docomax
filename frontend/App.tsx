@@ -73,6 +73,7 @@ function App() {
                     </Layout>
                     <Toaster />
                   </Router>
+                  <ServiceWorkerUpdateNotification />
                 </AddictionTrackingProvider>
               </PainAssessmentProvider>
             </MoodTrackingProvider>
