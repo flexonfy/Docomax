@@ -327,8 +327,8 @@ export default function Tools() {
           </Card>
         )}
 
-        <div className="mt-12 bg-gradient-to-r from-green-500 to-blue-500 rounded-2xl p-8 text-white text-center shadow-xl relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-green-600/20 via-blue-600/20 to-teal-600/20 animate-pulse"></div>
+        <div className="mt-12 bg-gradient-to-r from-teal-600 to-cyan-700 rounded-2xl p-8 text-white text-center shadow-xl relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-teal-700/20 via-cyan-700/20 to-slate-800/20 animate-pulse"></div>
           <div className="relative z-10">
             <div className="flex items-center justify-center space-x-3 mb-4">
               <Shield className="h-8 w-8" />
@@ -336,7 +336,7 @@ export default function Tools() {
                 Comprehensive Medical Toolkit
               </h3>
             </div>
-            <p className="text-green-100 text-lg max-w-3xl mx-auto mb-6">
+            <p className="text-teal-100 text-lg max-w-3xl mx-auto mb-6">
               {t('tools.toolkitDescription', { count: allTools.filter(tool => tool.audience.includes(mode)).length })}
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm">
