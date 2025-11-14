@@ -147,7 +147,7 @@ describe('Validators', () => {
 
   describe('pattern validator', () => {
     it('should accept matching pattern', () => {
-      const error = validators.pattern(/^[A-Z]/), 'Must start with uppercase')('Hello', 'Name');
+      const error = validators.pattern(/^[A-Z]/, 'Must start with uppercase')('Hello', 'Name');
       expect(error).toBeNull();
     });
 
