@@ -26,13 +26,8 @@ import {
 } from '../../data/triageAlgorithm';
 import { isRedFlagSymptom } from '../../data/symptomMetadata';
 
-interface TriageResult {
-  disease: ComprehensiveDisease;
-  confidence: number;
+interface TriageResult extends EnhancedDiseaseResult {
   refinedConfidence?: number;
-  matchedSymptoms: string[];
-  severity: string;
-  riskScore: number;
 }
 
 export default function Triage() {
