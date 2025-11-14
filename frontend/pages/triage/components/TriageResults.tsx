@@ -21,6 +21,16 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
   const { t, language } = useLanguage();
   const [showDetailsFor, setShowDetailsFor] = useState<TriageResult | null>(null);
 
+  const getEmergencyIcon = (level: string) => {
+    switch (level) {
+      case 'critical': return <Zap className="h-5 w-5 text-red-600" />;
+      case 'emergent': return <AlertTriangle className="h-5 w-5 text-red-500" />;
+      case 'urgent': return <AlertTriangle className="h-5 w-5 text-orange-500" />;
+      case 'routine': return <CheckCircle className="h-5 w-5 text-green-500" />;
+      default: return <Info className="h-5 w-5 text-blue-500" />;
+    }
+  };
+
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
       case 'emergency': return <AlertTriangle className="h-5 w-5 text-red-500" />;
@@ -28,6 +38,16 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
       case 'medium': return <Clock className="h-5 w-5 text-yellow-500" />;
       case 'low': return <CheckCircle className="h-5 w-5 text-green-500" />;
       default: return <Info className="h-5 w-5 text-blue-500" />;
+    }
+  };
+
+  const getEmergencyColor = (level: string) => {
+    switch (level) {
+      case 'critical': return 'bg-red-100 text-red-800 border-red-200';
+      case 'emergent': return 'bg-red-50 text-red-700 border-red-200';
+      case 'urgent': return 'bg-orange-50 text-orange-700 border-orange-200';
+      case 'routine': return 'bg-green-50 text-green-700 border-green-200';
+      default: return 'bg-blue-50 text-blue-700 border-blue-200';
     }
   };
 
