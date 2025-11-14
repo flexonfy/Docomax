@@ -78,17 +78,17 @@ export default function Header() {
   ];
 
   return (
-    <header className="bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 text-white shadow-xl border-b border-green-500/20 sticky top-0 z-40">
+    <header className="bg-gradient-to-r from-teal-600 via-teal-700 to-cyan-700 text-white shadow-2xl border-b border-teal-500/10 sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-3">
-            <Link to="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-              <div className="p-2 bg-white/15 rounded-xl backdrop-blur-sm border border-white/20">
+            <Link to="/" className="flex items-center space-x-3 hover:opacity-90 transition-opacity">
+              <div className="p-2 bg-white/12 rounded-lg backdrop-blur-sm border border-white/15">
                 <Heart className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
               </div>
               <div className="hidden sm:block">
-                <h1 className="text-lg sm:text-xl font-bold">{t('pages.home.title')}</h1>
-                <div className="flex items-center space-x-2 text-xs sm:text-sm text-green-100">
+                <h1 className="text-lg sm:text-xl font-bold tracking-tight">{t('pages.home.title')}</h1>
+                <div className="flex items-center space-x-2 text-xs sm:text-sm text-teal-100">
                   {isOnline ? (
                     <>
                       <Wifi className="h-3 w-3" />
@@ -111,10 +111,10 @@ export default function Header() {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
                   location.pathname === item.path
-                    ? 'bg-white/20 text-white shadow-sm'
-                    : 'text-green-100 hover:text-white hover:bg-white/10'
+                    ? 'bg-white/20 text-white shadow-md'
+                    : 'text-teal-50 hover:text-white hover:bg-white/15'
                 }`}
               >
                 {item.label}
@@ -124,11 +124,10 @@ export default function Header() {
 
           <div className="flex items-center space-x-3">
             <div className="hidden sm:flex items-center space-x-2">
-              <Label htmlFor="mode-switch" className="text-xs text-green-100 cursor-pointer flex items-center space-x-1">
+              <Label htmlFor="mode-switch" className="text-xs text-teal-100 cursor-pointer flex items-center space-x-1">
                 {mode === 'personal' ? <User className="h-3 w-3" /> : <Briefcase className="h-3 w-3" />}
                 <span>{mode === 'personal' ? 'Personal' : 'Specialist'}</span>
               </Label>
-              {/* The mode toggle switch allows users to flip between 'personal' and 'specialist' modes, which dynamically adjusts the available features and UI throughout the application. */}
               <Switch
                 id="mode-switch"
                 checked={mode === 'specialist'}
@@ -137,7 +136,7 @@ export default function Header() {
               />
             </div>
             <LanguageSelector />
-            
+
             {/* Mobile Menu */}
             <Sheet>
               <SheetTrigger asChild>
@@ -148,7 +147,7 @@ export default function Header() {
               <SheetContent side="right" className="w-64">
                 <div className="flex flex-col space-y-4 mt-8">
                   <div className="flex items-center space-x-3 pb-4 border-b">
-                    <Heart className="h-6 w-6 text-green-600" />
+                    <Heart className="h-6 w-6 text-teal-600" />
                     <span className="font-semibold text-gray-900">{t('pages.home.title')}</span>
                   </div>
                   {navigationItems.map((item) => (
@@ -157,7 +156,7 @@ export default function Header() {
                       to={item.path}
                       className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                         location.pathname === item.path
-                          ? 'bg-green-100 text-green-900'
+                          ? 'bg-teal-100 text-teal-900'
                           : 'text-gray-700 hover:bg-gray-100'
                       }`}
                     >
