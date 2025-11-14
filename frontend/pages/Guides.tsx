@@ -194,10 +194,10 @@ export default function Guides() {
       )}
 
       <div className="mt-12">
-        <Card className="bg-yellow-50 border-yellow-200">
+        <Card className="bg-amber-50 border-amber-200">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <Phone className="h-5 w-5 text-yellow-600" />
+              <Phone className="h-5 w-5 text-amber-600" />
               <span>{t('pages.guides.emergencyNumbers')}</span>
             </CardTitle>
           </CardHeader>
