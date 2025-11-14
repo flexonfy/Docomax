@@ -25,6 +25,7 @@ import {
   type EnhancedDiseaseResult
 } from '../../data/triageAlgorithm';
 import { isRedFlagSymptom } from '../../data/symptomMetadata';
+import { detectCriticalEmergency, checkDangerousSymptomCombinations, performComprehensiveSafetyCheck } from '../../data/safetyRules';
 
 interface TriageResult extends EnhancedDiseaseResult {
   refinedConfidence?: number;
