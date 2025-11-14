@@ -223,7 +223,7 @@ const SpecialistHome = () => {
       description: t('pages.home.quickSymptomAssessment'),
       icon: AlertTriangle,
       path: '/triage',
-      color: 'bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700',
+      color: 'bg-gradient-to-br from-rose-600 to-red-700 hover:from-red-700 hover:to-red-800',
       badge: t('common.emergency'),
       priority: 'high'
     },
@@ -232,7 +232,7 @@ const SpecialistHome = () => {
       description: t('pages.home.whoCompliantTools'),
       icon: Calculator,
       path: '/tools',
-      color: 'bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700',
+      color: 'bg-gradient-to-br from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800',
       badge: t('common.tools'),
       priority: 'medium'
     },
@@ -241,7 +241,7 @@ const SpecialistHome = () => {
       description: t('pages.home.secureRecords'),
       icon: FileText,
       path: '/records',
-      color: 'bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700',
+      color: 'bg-gradient-to-br from-teal-600 to-cyan-700 hover:from-cyan-700 hover:to-cyan-800',
       badge: t('common.records'),
       priority: 'medium'
     },
@@ -250,7 +250,7 @@ const SpecialistHome = () => {
       description: t('pages.home.trustedSources'),
       icon: Book,
       path: '/encyclopedia',
-      color: 'bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700',
+      color: 'bg-gradient-to-br from-purple-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800',
       badge: t('common.information'),
       priority: 'low'
     }
