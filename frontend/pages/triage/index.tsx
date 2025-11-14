@@ -6,7 +6,7 @@ import { triageQuestions, TriageQuestion } from '../../data/triageQuestions';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogDescription } from '@/components/ui/dialog';
-import { AlertTriangle, Brain, Stethoscope, User, ListChecks, FileQuestion, Sparkles, ArrowLeft, ArrowRight, RotateCcw, HelpCircle } from 'lucide-react';
+import { AlertTriangle, Brain, Stethoscope, User, ListChecks, FileQuestion, Sparkles, ArrowLeft, ArrowRight, RotateCcw, HelpCircle, AlertCircle, Zap } from 'lucide-react';
 import UserInfoStep from './components/UserInfoStep';
 import SymptomSelectionStep from './components/SymptomSelectionStep';
 import TriageResults from './components/TriageResults';
@@ -14,6 +14,17 @@ import { useToast } from '@/components/ui/use-toast';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  calculateBayesianScore,
+  detectSymptomConflicts,
+  scoreSymptomCombinations,
+  assessEmergencyLevel,
+  generateReasoningExplanation,
+  getBaselineConfidence,
+  calculateRiskFactorBoost,
+  type EnhancedDiseaseResult
+} from '../../data/triageAlgorithm';
+import { isRedFlagSymptom } from '../../data/symptomMetadata';
 
 interface TriageResult {
   disease: ComprehensiveDisease;
