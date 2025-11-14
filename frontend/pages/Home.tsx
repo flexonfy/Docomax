@@ -288,16 +288,16 @@ const SpecialistHome = () => {
         <div className="text-center mb-12 lg:mb-16">
           <div className="flex justify-center mb-6">
             <div className="relative">
-              <div className="p-4 sm:p-6 bg-gradient-to-br from-green-500 to-blue-500 rounded-3xl shadow-2xl animate-pulse">
+              <div className="p-4 sm:p-6 bg-gradient-to-br from-teal-600 to-cyan-700 rounded-3xl shadow-2xl animate-pulse">
                 <Heart className="h-12 w-12 sm:h-16 sm:w-16 text-white" />
               </div>
-              <div className="absolute -top-2 -right-2 bg-yellow-400 rounded-full p-1 animate-bounce">
-                <Star className="h-4 w-4 text-yellow-800" />
+              <div className="absolute -top-2 -right-2 bg-amber-500 rounded-full p-1 animate-bounce">
+                <Star className="h-4 w-4 text-amber-900" />
               </div>
             </div>
           </div>
-          
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-green-600 via-blue-600 to-teal-600 bg-clip-text text-transparent mb-4 leading-tight">
+
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-teal-600 via-cyan-600 to-slate-700 bg-clip-text text-transparent mb-4 leading-tight">
             {t('pages.home.title')}
           </h1>
           <p className="text-lg sm:text-xl text-gray-600 mb-2 font-medium">
@@ -306,7 +306,7 @@ const SpecialistHome = () => {
           <p className="text-base sm:text-lg text-gray-500 max-w-3xl mx-auto mb-8 leading-relaxed">
             {t('pages.home.description')}
           </p>
-          
+
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto mb-8">
             {stats.map((stat, index) => (
@@ -320,7 +320,7 @@ const SpecialistHome = () => {
 
           {/* CTA Button */}
           <Link to="/records">
-            <Button size="lg" className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
+            <Button size="lg" className="bg-gradient-to-r from-teal-600 to-cyan-700 hover:from-teal-700 hover:to-cyan-800 text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
               {t('common.records')}
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
