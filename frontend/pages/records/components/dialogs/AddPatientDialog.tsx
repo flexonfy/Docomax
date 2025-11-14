@@ -19,7 +19,8 @@ interface AddPatientDialogProps {
 export default function AddPatientDialog({ isOpen, onClose, onSave }: AddPatientDialogProps) {
   const { t } = useLanguage();
   const { toast } = useToast();
-  const [newPatient, setNewPatient] = useState({
+
+  const initialValues = {
     name: '',
     age: '',
     gender: 'male' as 'male' | 'female',
@@ -34,44 +35,57 @@ export default function AddPatientDialog({ isOpen, onClose, onSave }: AddPatient
     occupation: '',
     maritalStatus: 'single' as 'single' | 'married' | 'divorced' | 'widowed',
     nextOfKin: ''
+  };
+
+  const validationRules = {
+    name: [
+      (value) => validators.required(value, t('common.name')),
+      (value) => validators.minLength(2)(value, t('common.name'))
+    ],
+    age: [
+      (value) => validators.required(value, t('common.age')),
+      validateAge
+    ],
+    phone: [
+      (value) => value ? validators.phone(value, t('common.phone')) : null
+    ],
+    emergencyContactPhone: [
+      (value) => value ? validators.phone(value, t('pages.records.emergencyContactPhone')) : null
+    ]
+  };
+
+  const { values, errors, isSubmitting, handleChange, handleSubmit, reset, getFieldError } = useFormValidation({
+    initialValues,
+    validationRules,
+    onSubmit: async (formData) => {
+      onSave({
+        name: formData.name,
+        age: parseInt(formData.age),
+        gender: formData.gender,
+        phone: formData.phone || undefined,
+        emergencyContact: formData.emergencyContact || undefined,
+        emergencyContactPhone: formData.emergencyContactPhone || undefined,
+        address: formData.address || undefined,
+        bloodType: formData.bloodType || undefined,
+        allergies: formData.allergies ? formData.allergies.split(',').map((a: string) => a.trim()) : undefined,
+        chronicConditions: formData.chronicConditions ? formData.chronicConditions.split(',').map((c: string) => c.trim()) : undefined,
+        insuranceInfo: formData.insuranceInfo || undefined,
+        occupation: formData.occupation || undefined,
+        maritalStatus: formData.maritalStatus,
+        nextOfKin: formData.nextOfKin || undefined,
+      });
+
+      toast({ title: t('common.success'), description: t('pages.records.patientAdded') });
+      onClose();
+      reset();
+    }
   });
 
   useEffect(() => {
     if (!isOpen) {
-      setNewPatient({
-        name: '', age: '', gender: 'male', phone: '', emergencyContact: '', emergencyContactPhone: '',
-        address: '', bloodType: '', allergies: '', chronicConditions: '', insuranceInfo: '',
-        occupation: '', maritalStatus: 'single', nextOfKin: ''
-      });
+      reset();
     }
-  }, [isOpen]);
-
-  const handleSave = () => {
-    if (!newPatient.name || !newPatient.age) {
-      toast({ title: t('common.error'), description: t('common.pleaseFillFields'), variant: "destructive" });
-      return;
-    }
-
-    onSave({
-      name: newPatient.name,
-      age: parseInt(newPatient.age),
-      gender: newPatient.gender,
-      phone: newPatient.phone || undefined,
-      emergencyContact: newPatient.emergencyContact || undefined,
-      emergencyContactPhone: newPatient.emergencyContactPhone || undefined,
-      address: newPatient.address || undefined,
-      bloodType: newPatient.bloodType || undefined,
-      allergies: newPatient.allergies ? newPatient.allergies.split(',').map(a => a.trim()) : undefined,
-      chronicConditions: newPatient.chronicConditions ? newPatient.chronicConditions.split(',').map(c => c.trim()) : undefined,
-      insuranceInfo: newPatient.insuranceInfo || undefined,
-      occupation: newPatient.occupation || undefined,
-      maritalStatus: newPatient.maritalStatus,
-      nextOfKin: newPatient.nextOfKin || undefined,
-    });
-
-    onClose();
-    toast({ title: t('common.success'), description: t('pages.records.patientAdded') });
-  };
+  }, [isOpen, reset]);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
