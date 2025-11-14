@@ -25,7 +25,7 @@ export default function Guides() {
       title: t('pages.guides.emergencyResponse'),
       description: t('pages.guides.emergencyResponseDesc'),
       icon: AlertTriangle,
-      color: 'bg-red-500',
+      color: 'bg-rose-600',
       content: [
         'Call emergency services immediately',
         'Check for breathing and pulse',
@@ -38,7 +38,7 @@ export default function Guides() {
       title: t('pages.guides.malariaPrevention'),
       description: t('pages.guides.malariaPreventionDesc'),
       icon: Shield,
-      color: 'bg-green-500',
+      color: 'bg-teal-600',
       content: [
         'Use insecticide-treated bed nets every night',
         'Apply mosquito repellent on exposed skin',
@@ -51,7 +51,7 @@ export default function Guides() {
       title: t('pages.guides.handwashing'),
       description: t('pages.guides.handwashingDesc'),
       icon: Droplets,
-      color: 'bg-blue-500',
+      color: 'bg-cyan-600',
       content: [
         'Wet hands with clean running water',
         'Apply soap and lather well',
@@ -68,7 +68,7 @@ export default function Guides() {
       title: t('pages.guides.childNutrition'),
       description: t('pages.guides.childNutritionDesc'),
       icon: Baby,
-      color: 'bg-pink-500',
+      color: 'bg-purple-600',
       content: [
         'Exclusive breastfeeding for first 6 months',
         'Introduce complementary foods at 6 months',
@@ -82,7 +82,7 @@ export default function Guides() {
       title: t('pages.guides.safeWater'),
       description: t('pages.guides.safeWaterDesc'),
       icon: Droplets,
-      color: 'bg-cyan-500',
+      color: 'bg-blue-600',
       content: [
         'Boil water for at least 1 minute',
         'Use water purification tablets',
@@ -96,7 +96,7 @@ export default function Guides() {
       title: t('pages.guides.heatIllness'),
       description: t('pages.guides.heatIllnessDesc'),
       icon: Sun,
-      color: 'bg-orange-500',
+      color: 'bg-amber-600',
       content: [
         'Drink plenty of water throughout the day',
         'Avoid outdoor activities during peak heat',
@@ -110,7 +110,7 @@ export default function Guides() {
       title: t('pages.guides.feverGuide'),
       description: t('pages.guides.feverGuideDesc'),
       icon: Thermometer,
-      color: 'bg-teal-500',
+      color: 'bg-teal-600',
       content: [
         'For fever, give Paracetamol or Ibuprofen as per dosage guide',
         'Encourage frequent sips of water, ORS, or clear fluids',
