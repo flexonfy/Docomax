@@ -1,4 +1,5 @@
 import { ComprehensiveDisease } from './diseases/types';
+import { getDiseaseUrgency, getUrgencyCategory, DISEASE_SEVERITY_REFERENCE } from './diseaseUrgency';
 
 /**
  * Enhanced symptom metadata for better matching
