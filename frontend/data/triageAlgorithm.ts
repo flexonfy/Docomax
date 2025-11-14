@@ -171,7 +171,7 @@ export function scoreSymptomCombinations(
 }
 
 /**
- * Calculate emergency level based on red flag symptoms
+ * Calculate emergency level based on red flag symptoms and disease urgency
  */
 export function assessEmergencyLevel(
   selectedSymptoms: string[],
@@ -191,6 +191,7 @@ export function assessEmergencyLevel(
     'seizures',
     'severe allergic reaction',
     'acute severe abdominal pain',
+    'choking',
   ];
 
   // Emergency red flags
@@ -216,6 +217,15 @@ export function assessEmergencyLevel(
   );
 
   if (hasEmergency) return 'emergent';
+
+  // Check disease urgency score
+  const urgencyProfile = getDiseaseUrgency(disease.id);
+  if (urgencyProfile) {
+    const urgencyLevel = getUrgencyCategory(urgencyProfile.urgencyScore);
+    if (urgencyLevel === 'critical' || urgencyLevel === 'emergent') {
+      return urgencyLevel;
+    }
+  }
 
   // Based on disease severity
   if (severity === 'emergency') return 'emergent';
