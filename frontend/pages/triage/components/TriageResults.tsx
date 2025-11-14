@@ -91,18 +91,22 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge variant="outline" className="flex items-center">
                     {result.refinedConfidence && <Sparkles className="h-3 w-3 mr-1 text-yellow-500" />}
-                    {t('pages.triage.confidence')}: 
+                    {t('pages.triage.confidence')}:
                     {result.refinedConfidence ? (
                       <>
                         <span className="line-through text-gray-500 mr-1">{result.confidence}%</span>
                         <span className="font-bold">{result.refinedConfidence}%</span>
                       </>
                     ) : (
-                      `${result.confidence}%`
+                      `${result.finalConfidence || result.confidence}%`
                     )}
                   </Badge>
                   <Badge className={getRiskColor(result.riskScore)}>{t('pages.triage.risk')}: {result.riskScore}%</Badge>
-                  <Badge className={getSeverityColor(result.severity)}>{result.severity.toUpperCase()}</Badge>
+                  {result.emergencyLevel && (
+                    <Badge className={getEmergencyColor(result.emergencyLevel)}>
+                      {getEmergencyIcon(result.emergencyLevel) && <span className="mr-1">{result.emergencyLevel.toUpperCase()}</span>}
+                    </Badge>
+                  )}
                 </div>
               </div>
             </CardHeader>
@@ -115,6 +119,19 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
                   ))}
                 </div>
               </div>
+
+              {result.reasoning?.symptomCombinations?.length > 0 && (
+                <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="flex items-start space-x-2">
+                    <Lightbulb className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-semibold text-blue-900 text-sm">Pattern Match</h4>
+                      <p className="text-xs text-blue-800">{result.reasoning.symptomCombinations[0]}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <div className={`p-3 rounded-lg border ${getSeverityColor(result.severity)}`}>
                 <h4 className="font-semibold mb-1 text-sm">{t('pages.triage.recommendations')}:</h4>
                 <p className="text-sm">{getRecommendation(result.severity, result.riskScore)}</p>
