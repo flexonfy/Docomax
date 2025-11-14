@@ -188,37 +188,19 @@ const parseDates = (data: any): any => {
 
 export function PatientRecordsProvider({ children }: { children: ReactNode }) {
   const [patients, setPatients] = useState<PatientRecord[]>(() => {
-    const saved = localStorage.getItem('docomax-patients');
-    if (saved) {
-      try {
-        return parseDates(JSON.parse(saved));
-      } catch (e) {
-        console.error("Failed to parse patients from localStorage", e);
-        return [];
-      }
-    }
-    return [];
+    return parseDates(getStorageItem('docomax-patients', []));
   });
 
   const [appointments, setAppointments] = useState<Appointment[]>(() => {
-    const saved = localStorage.getItem('docomax-appointments');
-    if (saved) {
-      try {
-        return parseDates(JSON.parse(saved));
-      } catch (e) {
-        console.error("Failed to parse appointments from localStorage", e);
-        return [];
-      }
-    }
-    return [];
+    return parseDates(getStorageItem('docomax-appointments', []));
   });
 
   useEffect(() => {
-    localStorage.setItem('docomax-patients', JSON.stringify(patients));
+    setStorageItem('docomax-patients', patients);
   }, [patients]);
 
   useEffect(() => {
-    localStorage.setItem('docomax-appointments', JSON.stringify(appointments));
+    setStorageItem('docomax-appointments', appointments);
   }, [appointments]);
 
   const addPatient = (patientData: Omit<PatientRecord, 'id' | 'visits' | 'vaccinations' | 'labResults' | 'attachments' | 'referrals' | 'currentMedications' | 'createdAt' | 'updatedAt'>) => {
