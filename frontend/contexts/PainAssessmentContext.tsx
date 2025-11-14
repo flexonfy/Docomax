@@ -23,20 +23,12 @@ const PainAssessmentContext = createContext<PainAssessmentContextType | undefine
 
 export function PainAssessmentProvider({ children }: { children: ReactNode }) {
   const [assessments, setAssessments] = useState<PainAssessment[]>(() => {
-    const saved = localStorage.getItem('docomax-pain-assessments');
-    if (saved) {
-      try {
-        return JSON.parse(saved).map((a: any) => ({ ...a, date: new Date(a.date) }));
-      } catch (e) {
-        console.error("Failed to parse pain assessments from localStorage", e);
-        return [];
-      }
-    }
-    return [];
+    const saved = getStorageItem<any[]>('docomax-pain-assessments', []);
+    return saved.map((a: any) => ({ ...a, date: new Date(a.date) }));
   });
 
   useEffect(() => {
-    localStorage.setItem('docomax-pain-assessments', JSON.stringify(assessments));
+    setStorageItem('docomax-pain-assessments', assessments);
   }, [assessments]);
 
   const addAssessment = (assessmentData: Omit<PainAssessment, 'id' | 'date'>) => {
