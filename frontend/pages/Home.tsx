@@ -183,10 +183,10 @@ const PersonalHome = () => {
             </Card>
           )}
 
-          <Card className="lg:col-span-1 bg-gradient-to-r from-blue-50 to-green-50">
+          <Card className="lg:col-span-1 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-100/50">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
-                <Lightbulb className="h-5 w-5 text-yellow-500" />
+                <Lightbulb className="h-5 w-5 text-amber-600" />
                 <span>{t('pages.home.healthTip')}</span>
               </CardTitle>
             </CardHeader>
