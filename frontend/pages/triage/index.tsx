@@ -295,13 +295,26 @@ export default function Triage() {
       }
     });
 
-    // Sort by emergency level first, then confidence
-    const emergencyOrder = { 'critical': 4, 'emergent': 3, 'urgent': 2, 'routine': 1 };
+    // IMPROVED SORTING: Balance confidence + emergency weight
+    // Don't just rank by emergency - need actual diagnostic confidence
+    const emergencyWeights = { 'critical': 3.0, 'emergent': 2.0, 'urgent': 1.0, 'routine': 0.3 };
+
     triageResults.sort((a, b) => {
-      const emergencyA = emergencyOrder[a.emergencyLevel as keyof typeof emergencyOrder] || 0;
-      const emergencyB = emergencyOrder[b.emergencyLevel as keyof typeof emergencyOrder] || 0;
-      if (emergencyA !== emergencyB) return emergencyB - emergencyA;
+      // Calculate composite score: (confidence * weight) + emergency_boost
+      const emergencyWeightA = emergencyWeights[a.emergencyLevel as keyof typeof emergencyWeights] || 0;
+      const emergencyWeightB = emergencyWeights[b.emergencyLevel as keyof typeof emergencyWeights] || 0;
+
+      const compositeA = (a.finalConfidence / 100) * emergencyWeightA;
+      const compositeB = (b.finalConfidence / 100) * emergencyWeightB;
+
+      if (Math.abs(compositeA - compositeB) > 0.1) {
+        return compositeB - compositeA;
+      }
+
+      // If composite scores are similar, sort by confidence
       if (a.finalConfidence !== b.finalConfidence) return b.finalConfidence - a.finalConfidence;
+
+      // Then by risk score
       return b.riskScore - a.riskScore;
     });
 
