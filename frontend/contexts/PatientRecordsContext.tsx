@@ -457,17 +457,16 @@ export function PatientRecordsProvider({ children }: { children: ReactNode }) {
   };
 
   const importData = (data: string) => {
-    try {
-      const parsedData = JSON.parse(data);
-      if (parsedData.patients && Array.isArray(parsedData.patients) && parsedData.appointments && Array.isArray(parsedData.appointments)) {
-        setPatients(parseDates(parsedData.patients));
-        setAppointments(parseDates(parsedData.appointments));
-        return true;
-      }
-      return false;
-    } catch {
-      return false;
+    const defaultData = { patients: [], appointments: [] };
+    const parsedData = require('../lib/localStorage').safeJsonParse(data, defaultData);
+
+    if (parsedData && parsedData.patients && Array.isArray(parsedData.patients) &&
+        parsedData.appointments && Array.isArray(parsedData.appointments)) {
+      setPatients(parseDates(parsedData.patients));
+      setAppointments(parseDates(parsedData.appointments));
+      return true;
     }
+    return false;
   };
 
   const addAppointment = (appointmentData: Omit<Appointment, 'id' | 'completed' | 'patientName'>) => {
