@@ -69,6 +69,31 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
     return 'bg-green-100 text-green-800 border-green-200';
   };
 
+  const getConfidenceLabel = (confidence: number, index: number, totalResults: number): string => {
+    // Only "Most Likely" if confident AND top ranked AND >50% confidence
+    if (index === 0 && confidence >= 50) return '✓ Most Likely';
+    if (index === 1 && confidence >= 45) return '◇ Consider';
+    if (confidence >= 40) return '? Possible';
+    if (confidence < 30) return '⚠️ Low Confidence';
+    return '△ Less Likely';
+  };
+
+  const shouldWarnLowConfidence = (confidence: number): boolean => confidence < 40;
+
+  const getPresentationStatus = (diseaseId: string, matchedSymptoms: string[]): string => {
+    const analysis = calculatePresentationCompleteness(matchedSymptoms, diseaseId);
+    if (analysis.hasRequiredSymptoms && analysis.completeness >= 70) {
+      return '✓ Classic presentation';
+    }
+    if (analysis.hasRequiredSymptoms && analysis.completeness < 70) {
+      return `⚠️ Atypical: Missing ${analysis.missingCommon.length} common symptoms`;
+    }
+    if (!analysis.hasRequiredSymptoms && analysis.missingRequired.length <= 1) {
+      return `⚠️ Incomplete: Missing key symptom`;
+    }
+    return `❌ Doesn't match typical presentation`;
+  };
+
   const getRecommendation = (severity: string, riskScore: number) => {
     if (severity === 'emergency' || riskScore >= 80) return t('pages.triage.seekImmediate');
     if (severity === 'high' || riskScore >= 60) return t('pages.triage.consultDoctor');
