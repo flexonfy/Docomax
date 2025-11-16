@@ -3,6 +3,7 @@ import { useLanguage } from '../../../contexts/LanguageContext';
 import { PatientRecord, Visit, Appointment } from '../../../contexts/PatientRecordsContext';
 import { useMedicationAdherence } from '../../../contexts/MedicationAdherenceContext';
 import { useVitalsTracking } from '../../../contexts/VitalsTrackingContext';
+import { useMedicationReminders } from '../../../contexts/MedicationRemindersContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogTrigger } from '@/components/ui/dialog';
