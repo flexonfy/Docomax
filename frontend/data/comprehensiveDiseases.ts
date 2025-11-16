@@ -33,6 +33,7 @@ import { diverseConditions } from './diseases/diverse-conditions';
 import { cancerOncologyDiseases } from './diseases/cancer-oncology';
 import { emergencyAcuteDiseases } from './diseases/emergency-acute';
 import { comprehensiveConditions } from './diseases/comprehensive-conditions';
+import { cardiologyExpanded } from './diseases/cardiology-expanded';
 
 export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...infectiousDiseases,
