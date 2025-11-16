@@ -28,8 +28,8 @@ export default function BottomNavigation() {
               to={path}
               className={`flex flex-col items-center space-y-1 px-2 py-2 rounded-xl transition-all duration-300 min-w-0 flex-1 ${
                 isActive
-                  ? 'text-teal-600 bg-teal-50 shadow-md scale-105 border border-teal-200'
-                  : 'text-gray-600 hover:text-teal-600 hover:bg-gray-50 active:scale-95'
+                  ? 'text-blue-600 bg-blue-50 shadow-md scale-105 border border-blue-200'
+                  : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50 active:scale-95'
               }`}
             >
               <Icon className={`h-5 w-5 ${isActive ? 'animate-pulse' : ''}`} />

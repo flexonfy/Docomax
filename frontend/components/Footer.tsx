@@ -11,7 +11,7 @@ export default function Footer() {
       <div className="flex items-center justify-center space-x-1">
         <span>Created by</span>
         <span>by&nbsp;</span>
-        <a href="https://x.com/bugingoflexon" target="_blank" rel="noopener noreferrer" className="font-semibold text-teal-600 hover:text-teal-700 hover:underline">
+        <a href="https://x.com/bugingoflexon" target="_blank" rel="noopener noreferrer" className="font-semibold text-blue-600 hover:text-blue-700 hover:underline">
           BUGINGO Flexon
         </a>
       </div>
