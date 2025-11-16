@@ -51,7 +51,18 @@ export default function PatientDetailView({
   const { t } = useLanguage();
   const { toast } = useToast();
   const { addAdherenceEntry, getAdherenceForMedication } = useMedicationAdherence();
+  const { addVitalEntry, getPatientVitals, deleteVitalEntry, getLatestVitals } = useVitalsTracking();
   const [activeTab, setActiveTab] = useState('overview');
+  const [showVitalForm, setShowVitalForm] = useState(false);
+  const [vitalForm, setVitalForm] = useState({
+    temperature: '',
+    heartRate: '',
+    bloodPressure: '',
+    respiratoryRate: '',
+    oxygenSaturation: '',
+    weight: '',
+    notes: ''
+  });
 
   const {
     deleteVisit, deleteVaccination, deleteLabResult, deleteAttachment, deleteMedication, deleteReferral
