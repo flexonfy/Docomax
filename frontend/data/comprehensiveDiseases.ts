@@ -20,6 +20,13 @@ import { ophthalmologicalDiseases } from './diseases/ophthalmological';
 import { musculoskeletalDiseases } from './diseases/musculoskeletal';
 import { urologicalDiseases } from './diseases/urological';
 import { metabolicDiseases } from './diseases/metabolic';
+import { tropicalDiseases } from './diseases/tropical';
+import { rareGeneticDiseases } from './diseases/rare-genetic';
+import { sleepDisorders } from './diseases/sleep-disorders';
+import { painSyndromes } from './diseases/pain-syndromes';
+import { occupationalDiseases } from './diseases/occupational';
+import { inflammatoryDiseases } from './diseases/inflammatory';
+import { expandedInfectiousDiseases } from './diseases/expanded-infectious';
 
 export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...infectiousDiseases,
