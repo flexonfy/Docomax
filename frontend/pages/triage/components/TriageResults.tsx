@@ -90,7 +90,7 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
       return '✓ Classic presentation';
     }
     if (analysis.hasRequiredSymptoms && analysis.completeness < 70) {
-      return `⚠�� Atypical: Missing ${analysis.missingCommon.length} common symptoms`;
+      return `⚠️ Atypical: Missing ${analysis.missingCommon.length} common symptoms`;
     }
     if (!analysis.hasRequiredSymptoms && analysis.missingRequired.length <= 1) {
       return `⚠️ Incomplete: Missing key symptom`;
@@ -108,8 +108,26 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
   return (
     <>
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold text-gray-900">Differential Diagnosis</h2>
-        {results.map((result, index) => {
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold text-gray-900">Most Likely Diagnosis</h2>
+          {results.length > 2 && !showAllResults && (
+            <button
+              onClick={() => setShowAllResults(true)}
+              className="text-sm font-medium text-blue-600 hover:text-blue-700 underline"
+            >
+              View {results.length - 2} other possibilities
+            </button>
+          )}
+          {showAllResults && (
+            <button
+              onClick={() => setShowAllResults(false)}
+              className="text-sm font-medium text-gray-600 hover:text-gray-700 underline"
+            >
+              Show top 2 only
+            </button>
+          )}
+        </div>
+        {visibleResults.map((result, index) => {
           const confidence = result.refinedConfidence || result.finalConfidence || result.confidence;
           const confidenceLabel = getConfidenceLabel(confidence, index, results.length);
           const isLowConfidence = shouldWarnLowConfidence(confidence);
