@@ -55,6 +55,7 @@ export default function PatientDetailView({
   const { addAdherenceEntry, getAdherenceForMedication } = useMedicationAdherence();
   const { addVitalEntry, getPatientVitals, deleteVitalEntry, getLatestVitals } = useVitalsTracking();
   const { addReminder, updateReminder, deleteReminder, getRemindersForPatient, requestNotificationPermission } = useMedicationReminders();
+  const { addReminder: addAppointmentReminder, updateReminder: updateAppointmentReminder, deleteReminder: deleteAppointmentReminder, getRemindersForAppointment, downloadICS } = useAppointmentReminders();
   const [activeTab, setActiveTab] = useState('overview');
   const [showVitalForm, setShowVitalForm] = useState(false);
   const [vitalForm, setVitalForm] = useState({
