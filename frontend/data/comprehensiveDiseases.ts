@@ -65,6 +65,13 @@ import { surgicalAcuteConditions } from './diseases/surgical-acute-conditions';
 import { comprehensiveClinicalConditions } from './diseases/comprehensive-clinical-conditions';
 import { oncologyHematologyCombined } from './diseases/oncology-hematology-combined';
 import { finalDiseasesBatch } from './diseases/final-diseases-batch';
+import { toxicologyPoisoningDiseases } from './diseases/toxicology-poisoning';
+import { ophthalmologyAdvancedDiseases } from './diseases/ophthalmology-advanced';
+import { otolaryngologyAdvancedDiseases } from './diseases/otolaryngology-advanced';
+import { psychiatryAdditionalDiseases } from './diseases/psychiatry-additional';
+import { gynecologyObstetricsAdvancedDiseases } from './diseases/gynecology-obstetrics-advanced';
+import { immunologyAllergyAdvancedDiseases } from './diseases/immunology-allergy-advanced';
+import { nephrologyRenalAdvancedDiseases } from './diseases/nephrology-renal-advanced';
 
 export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...infectiousDiseases,
