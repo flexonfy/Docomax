@@ -280,10 +280,23 @@ export default function AllergyMedicationReconciliation() {
           <div className="lg:col-span-1">
             <Card className="shadow-lg">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5" />
-                  Known Allergies
-                </CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center gap-2">
+                    <AlertTriangle className="h-5 w-5" />
+                    Known Allergies
+                  </CardTitle>
+                  {hasAllergies && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={loadFromPatientRecord}
+                      className="ml-2"
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      Load
+                    </Button>
+                  )}
+                </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
