@@ -176,7 +176,15 @@ const PersonalHome = () => {
                   </div>
                 </div>
               ) : (
-                <p className="text-center text-gray-500 py-4">{t('pages.home.noMood')}</p>
+                <EmptyState
+                  icon="generic"
+                  title={t('pages.home.noMood')}
+                  description="Track your mood and mental well-being"
+                  action={{
+                    label: 'Start Tracking',
+                    onClick: () => {}
+                  }}
+                />
               )}
             </CardContent>
           </Card>
