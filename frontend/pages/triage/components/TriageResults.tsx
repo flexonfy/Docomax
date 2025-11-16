@@ -25,48 +25,48 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
   const getEmergencyIcon = (level: string) => {
     switch (level) {
       case 'critical': return <Zap className="h-5 w-5 text-red-600" />;
-      case 'emergent': return <AlertTriangle className="h-5 w-5 text-red-500" />;
-      case 'urgent': return <AlertTriangle className="h-5 w-5 text-orange-500" />;
-      case 'routine': return <CheckCircle className="h-5 w-5 text-green-500" />;
-      default: return <Info className="h-5 w-5 text-blue-500" />;
+      case 'emergent': return <AlertTriangle className="h-5 w-5 text-red-600" />;
+      case 'urgent': return <AlertTriangle className="h-5 w-5 text-orange-600" />;
+      case 'routine': return <CheckCircle className="h-5 w-5 text-green-600" />;
+      default: return <Info className="h-5 w-5 text-blue-600" />;
     }
   };
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
-      case 'emergency': return <AlertTriangle className="h-5 w-5 text-red-500" />;
-      case 'high': return <AlertTriangle className="h-5 w-5 text-orange-500" />;
-      case 'medium': return <Clock className="h-5 w-5 text-yellow-500" />;
-      case 'low': return <CheckCircle className="h-5 w-5 text-green-500" />;
-      default: return <Info className="h-5 w-5 text-blue-500" />;
+      case 'emergency': return <AlertTriangle className="h-5 w-5 text-red-600" />;
+      case 'high': return <AlertTriangle className="h-5 w-5 text-orange-600" />;
+      case 'medium': return <Clock className="h-5 w-5 text-amber-600" />;
+      case 'low': return <CheckCircle className="h-5 w-5 text-green-600" />;
+      default: return <Info className="h-5 w-5 text-blue-600" />;
     }
   };
 
   const getEmergencyColor = (level: string) => {
     switch (level) {
-      case 'critical': return 'bg-red-100 text-red-800 border-red-200';
-      case 'emergent': return 'bg-red-50 text-red-700 border-red-200';
-      case 'urgent': return 'bg-orange-50 text-orange-700 border-orange-200';
-      case 'routine': return 'bg-green-50 text-green-700 border-green-200';
-      default: return 'bg-blue-50 text-blue-700 border-blue-200';
+      case 'critical': return 'bg-red-100 text-red-900 border-red-300';
+      case 'emergent': return 'bg-red-50 text-red-800 border-red-200';
+      case 'urgent': return 'bg-orange-50 text-orange-800 border-orange-200';
+      case 'routine': return 'bg-green-50 text-green-800 border-green-200';
+      default: return 'bg-blue-50 text-blue-800 border-blue-200';
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'emergency': return 'bg-red-100 text-red-800 border-red-200';
-      case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low': return 'bg-green-100 text-green-800 border-green-200';
-      default: return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'emergency': return 'bg-red-100 text-red-900 border-red-300';
+      case 'high': return 'bg-orange-100 text-orange-900 border-orange-300';
+      case 'medium': return 'bg-amber-100 text-amber-900 border-amber-300';
+      case 'low': return 'bg-green-100 text-green-900 border-green-300';
+      default: return 'bg-blue-100 text-blue-900 border-blue-300';
     }
   };
 
   const getRiskColor = (riskScore: number) => {
-    if (riskScore >= 80) return 'bg-red-100 text-red-800 border-red-200';
-    if (riskScore >= 60) return 'bg-orange-100 text-orange-800 border-orange-200';
-    if (riskScore >= 40) return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-    return 'bg-green-100 text-green-800 border-green-200';
+    if (riskScore >= 80) return 'bg-red-100 text-red-900 border-red-300';
+    if (riskScore >= 60) return 'bg-orange-100 text-orange-900 border-orange-300';
+    if (riskScore >= 40) return 'bg-amber-100 text-amber-900 border-amber-300';
+    return 'bg-green-100 text-green-900 border-green-300';
   };
 
   const getConfidenceLabel = (confidence: number, index: number, totalResults: number): string => {
