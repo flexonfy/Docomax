@@ -430,6 +430,214 @@ export default function PatientDetailView({
           </TabsContent>
         )}
 
+        {isPersonalView && patient.currentMedications && patient.currentMedications.length > 0 && (
+          <TabsContent value="reminders" className="mt-4">
+            <div className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Bell className="h-5 w-5 text-blue-600" />
+                      <CardTitle>Medication Reminders</CardTitle>
+                    </div>
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        requestNotificationPermission();
+                        setShowReminderForm(!showReminderForm);
+                      }}
+                    >
+                      <Plus className="h-4 w-4 mr-2" /> New Reminder
+                    </Button>
+                  </div>
+                </CardHeader>
+                {showReminderForm && (
+                  <CardContent>
+                    <div className="space-y-4 mb-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Medication</label>
+                        <select
+                          value={selectedMedicationForReminder}
+                          onChange={(e) => setSelectedMedicationForReminder(e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                        >
+                          <option value="">Select a medication</option>
+                          {patient.currentMedications?.map(med => (
+                            <option key={med.id} value={med.id}>
+                              {med.name} ({med.dosage})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium mb-1">Time</label>
+                          <input
+                            type="time"
+                            value={reminderForm.time}
+                            onChange={(e) => setReminderForm({...reminderForm, time: e.target.value})}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium mb-1">Frequency</label>
+                          <select
+                            value={reminderForm.frequency}
+                            onChange={(e) => setReminderForm({...reminderForm, frequency: e.target.value as any})}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                          >
+                            <option value="once">Once</option>
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      {reminderForm.frequency === 'weekly' && (
+                        <div>
+                          <label className="block text-sm font-medium mb-2">Days of Week</label>
+                          <div className="flex flex-wrap gap-2">
+                            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
+                              <button
+                                key={index}
+                                onClick={() => {
+                                  const newDays = reminderForm.daysOfWeek.includes(index)
+                                    ? reminderForm.daysOfWeek.filter(d => d !== index)
+                                    : [...reminderForm.daysOfWeek, index];
+                                  setReminderForm({...reminderForm, daysOfWeek: newDays});
+                                }}
+                                className={`px-3 py-2 rounded text-sm font-medium transition ${
+                                  reminderForm.daysOfWeek.includes(index)
+                                    ? 'bg-blue-600 text-white'
+                                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                }`}
+                              >
+                                {day}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Notes</label>
+                        <textarea
+                          placeholder="Any additional notes..."
+                          value={reminderForm.notes}
+                          onChange={(e) => setReminderForm({...reminderForm, notes: e.target.value})}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                          rows={2}
+                        />
+                      </div>
+
+                      <div className="flex gap-2">
+                        <Button
+                          onClick={() => {
+                            if (!selectedMedicationForReminder) {
+                              toast({title: 'Error', description: 'Please select a medication'});
+                              return;
+                            }
+
+                            const selectedMed = patient.currentMedications?.find(m => m.id === selectedMedicationForReminder);
+                            if (selectedMed) {
+                              addReminder({
+                                medicationId: selectedMedicationForReminder,
+                                medicationName: selectedMed.name,
+                                patientId: patient.id,
+                                time: reminderForm.time,
+                                frequency: reminderForm.frequency,
+                                daysOfWeek: reminderForm.frequency === 'weekly' ? reminderForm.daysOfWeek : undefined,
+                                enabled: true,
+                                notes: reminderForm.notes
+                              });
+                              setReminderForm({time: '09:00', frequency: 'daily', daysOfWeek: [0,1,2,3,4,5,6], notes: ''});
+                              setSelectedMedicationForReminder('');
+                              setShowReminderForm(false);
+                              toast({title: 'Reminder created', description: 'Medication reminder has been set up.'});
+                            }
+                          }}
+                          size="sm"
+                        >
+                          <Check className="h-4 w-4 mr-2" /> Create Reminder
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() => setShowReminderForm(false)}
+                          size="sm"
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                )}
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Clock className="h-5 w-5" />
+                    Active Reminders
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {getRemindersForPatient(patient.id).length > 0 ? (
+                    <div className="space-y-3">
+                      {getRemindersForPatient(patient.id).map(reminder => (
+                        <div key={reminder.id} className="border rounded-lg p-3 bg-gray-50">
+                          <div className="flex justify-between items-start mb-2">
+                            <div>
+                              <p className="font-medium">{reminder.medicationName}</p>
+                              <p className="text-sm text-gray-600">{reminder.time} • {reminder.frequency}</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => updateReminder(reminder.id, {enabled: !reminder.enabled})}
+                                className={`px-3 py-1 rounded text-sm font-medium transition ${
+                                  reminder.enabled
+                                    ? 'bg-green-100 text-green-700'
+                                    : 'bg-gray-200 text-gray-700'
+                                }`}
+                              >
+                                {reminder.enabled ? 'On' : 'Off'}
+                              </button>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => {
+                                  deleteReminder(reminder.id);
+                                  toast({title: 'Reminder deleted'});
+                                }}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                          {reminder.frequency === 'weekly' && reminder.daysOfWeek && (
+                            <div className="text-xs text-gray-600 mb-1">
+                              Days: {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+                                .filter((_, i) => reminder.daysOfWeek?.includes(i))
+                                .join(', ')}
+                            </div>
+                          )}
+                          {reminder.notes && (
+                            <p className="text-xs text-gray-600 italic">{reminder.notes}</p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-center text-gray-500 py-4">No reminders set up yet. Click "New Reminder" to get started.</p>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+        )}
+
         {!isPersonalView && (
           <TabsContent value="referrals" className="mt-4">
             <div className="flex justify-end mb-4">
