@@ -415,7 +415,18 @@ export default function Triage() {
 
   const resetTriage = () => {
     setStage('userInfo');
-    setUserInfo({ age: '', gender: 'all', smoking: 'never', chronic: false });
+    setUserInfo({
+      age: '',
+      gender: 'all',
+      smoking: 'never',
+      diabetes: false,
+      hypertension: false,
+      hiv: false,
+      asthma: false,
+      recentContact: false,
+      recentTravel: false,
+      malariaArea: false,
+    });
     setSelectedSymptoms([]);
     setResults([]);
     setQuestionsToAsk([]);
