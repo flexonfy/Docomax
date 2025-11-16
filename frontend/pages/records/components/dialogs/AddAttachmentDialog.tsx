@@ -16,6 +16,9 @@ interface AddAttachmentDialogProps {
   addAttachment: (patientId: string, attachment: Omit<Attachment, 'id'>) => void;
 }
 
+const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
 export default function AddAttachmentDialog({ isOpen, onClose, patientId, addAttachment }: AddAttachmentDialogProps) {
   const { t } = useLanguage();
   const { toast } = useToast();
@@ -25,12 +28,45 @@ export default function AddAttachmentDialog({ isOpen, onClose, patientId, addAtt
     description: '',
     file: null as File | null,
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [fileErrors, setFileErrors] = useState<string[]>([]);
 
   useEffect(() => {
     if (!isOpen) {
       setNewAttachment({ name: '', type: 'document', description: '', file: null });
+      setFileErrors([]);
+      setIsLoading(false);
     }
   }, [isOpen]);
+
+  const validateFile = (file: File): string[] => {
+    const errors: string[] = [];
+
+    if (file.size > MAX_FILE_SIZE) {
+      errors.push(`File size must be less than 10MB (current: ${(file.size / 1024 / 1024).toFixed(2)}MB)`);
+    }
+
+    if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+      errors.push('File type not allowed. Please upload an image, PDF, text, or Word document.');
+    }
+
+    return errors;
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+
+    if (file) {
+      const errors = validateFile(file);
+      setFileErrors(errors);
+
+      if (errors.length === 0) {
+        setNewAttachment(p => ({ ...p, file }));
+      } else {
+        setNewAttachment(p => ({ ...p, file: null }));
+      }
+    }
+  };
 
   const handleSave = () => {
     if (!patientId || !newAttachment.name || !newAttachment.file) {
@@ -38,6 +74,12 @@ export default function AddAttachmentDialog({ isOpen, onClose, patientId, addAtt
       return;
     }
 
+    if (fileErrors.length > 0) {
+      toast({ title: t('common.error'), description: 'Please fix file errors', variant: "destructive" });
+      return;
+    }
+
+    setIsLoading(true);
     const reader = new FileReader();
     reader.readAsDataURL(newAttachment.file);
     reader.onload = () => {
@@ -50,10 +92,11 @@ export default function AddAttachmentDialog({ isOpen, onClose, patientId, addAtt
       });
       onClose();
       toast({ title: t('common.success'), description: 'Attachment added successfully' });
+      setIsLoading(false);
     };
-    reader.onerror = (error) => {
+    reader.onerror = () => {
       toast({ title: t('common.error'), description: 'Failed to read file', variant: "destructive" });
-      console.error("File reading error: ", error);
+      setIsLoading(false);
     };
   };
 
