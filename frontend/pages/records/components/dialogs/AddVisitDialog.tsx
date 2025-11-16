@@ -236,11 +236,13 @@ export default function AddVisitDialog({ isOpen, onClose, patientId, addVisit, u
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="followUpDate">Follow-up Date</Label>
-              <Input id="followUpDate" type="date" value={newVisit.followUpDate} onChange={(e) => setNewVisit(p => ({...p, followUpDate: e.target.value}))} />
+              <Input id="followUpDate" type="date" value={newVisit.followUpDate} onChange={(e) => setNewVisit(p => ({...p, followUpDate: e.target.value}))} aria-invalid={!!validationErrors.followUpDate} />
+              {validationErrors.followUpDate && <p className="text-sm text-red-600 error-message mt-1">{validationErrors.followUpDate}</p>}
             </div>
             <div>
               <Label htmlFor="cost">Cost</Label>
-              <Input id="cost" type="number" value={newVisit.cost} onChange={(e) => setNewVisit(p => ({...p, cost: e.target.value}))} />
+              <Input id="cost" type="number" value={newVisit.cost} onChange={(e) => setNewVisit(p => ({...p, cost: e.target.value}))} aria-invalid={!!validationErrors.cost} />
+              {validationErrors.cost && <p className="text-sm text-red-600 error-message mt-1">{validationErrors.cost}</p>}
             </div>
           </div>
           <div>
