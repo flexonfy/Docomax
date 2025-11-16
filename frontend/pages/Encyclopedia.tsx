@@ -257,7 +257,7 @@ export default function Encyclopedia() {
     setShowFavoritesOnly(false);
   };
 
-  const hasActiveFilters = searchTerm.trim() || selectedCategory !== 'all' || selectedSource !== 'all' || selectedSeverity !== 'all' || selectedPrevalence !== 'all' || selectedAgeGroup !== 'all' || showFavoritesOnly;
+  const hasActiveFilters = searchTerm.trim() || selectedCategory !== 'all' || selectedSource !== 'all' || selectedSeverity !== 'all' || selectedGlobalPrevalence !== 'all' || selectedAgeGroup !== 'all' || showFavoritesOnly;
 
   const totalDiseases = comprehensiveDiseases.length;
   const categoryStats = categories.map(cat => ({
