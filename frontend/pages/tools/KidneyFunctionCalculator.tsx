@@ -360,7 +360,7 @@ export default function KidneyFunctionCalculator() {
                 <li>Consider muscle mass, age, diet, and comorbidities</li>
                 <li>Acute changes in creatinine may not reflect true kidney function</li>
                 <li>Always confirm with laboratory values and clinical judgment</li>
-                <li>Refer to nephrology if eGFR &lt; 30 mL/min/1.73m²</li>
+                <li>Refer to nephrology if eGFR {'<'} 30 mL/min/1.73m²</li>
               </ul>
             </div>
             <div>
