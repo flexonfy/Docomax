@@ -166,6 +166,82 @@ export default function PatientDetailView({
         </div>
 
         <TabsContent value="overview" className="mt-4">
+          {isPersonalView && (
+            <Card className="mb-6 border-2 border-red-500 bg-red-50">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="bg-red-600 text-white p-2 rounded-full">
+                      <Activity className="h-5 w-5" />
+                    </div>
+                    <CardTitle className="text-red-700">Emergency Profile</CardTitle>
+                  </div>
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      const emergencyInfo = `EMERGENCY CONTACT INFO\n\nName: ${patient.name}\nAge: ${patient.age}\nBlood Type: ${patient.bloodType || 'Unknown'}\nGender: ${patient.gender}\n\nALLERGIES:\n${patient.allergies?.join(', ') || 'None known'}\n\nCHRONIC CONDITIONS:\n${patient.chronicConditions?.join(', ') || 'None'}\n\nCURRENT MEDICATIONS:\n${patient.currentMedications?.map(m => `${m.name} ${m.dosage}`).join(', ') || 'None'}\n\nEMERGENCY CONTACT:\n${patient.emergencyContact || 'Not provided'}\nPhone: ${patient.emergencyContactPhone || 'Not provided'}\n\nPhone: ${patient.phone || 'Not provided'}\nAddress: ${patient.address || 'Not provided'}`;
+
+                      const element = document.createElement('a');
+                      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(emergencyInfo));
+                      element.setAttribute('download', `emergency_profile_${patient.name.replace(/\s+/g, '_')}.txt`);
+                      element.style.display = 'none';
+                      document.body.appendChild(element);
+                      element.click();
+                      document.body.removeChild(element);
+
+                      toast({title: 'Emergency profile downloaded'});
+                    }}
+                  >
+                    <Download className="h-4 w-4 mr-2" /> Share
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 text-sm">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-gray-600 text-xs">BLOOD TYPE</p>
+                      <p className="font-bold text-lg">{patient.bloodType || 'Unknown'}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 text-xs">AGE</p>
+                      <p className="font-bold text-lg">{patient.age}</p>
+                    </div>
+                  </div>
+
+                  <div className="border-t pt-3">
+                    <p className="text-gray-600 text-xs font-semibold mb-1">ALLERGIES</p>
+                    <p className="text-red-700 font-medium">
+                      {patient.allergies?.length ? patient.allergies.join(', ') : 'None known'}
+                    </p>
+                  </div>
+
+                  <div className="border-t pt-3">
+                    <p className="text-gray-600 text-xs font-semibold mb-1">EMERGENCY CONTACT</p>
+                    <p>{patient.emergencyContact || 'Not provided'}</p>
+                    {patient.emergencyContactPhone && (
+                      <p className="font-mono text-sm">{patient.emergencyContactPhone}</p>
+                    )}
+                  </div>
+
+                  {patient.currentMedications && patient.currentMedications.length > 0 && (
+                    <div className="border-t pt-3">
+                      <p className="text-gray-600 text-xs font-semibold mb-1">KEY MEDICATIONS</p>
+                      <ul className="space-y-1 text-xs">
+                        {patient.currentMedications.slice(0, 3).map(med => (
+                          <li key={med.id}>{med.name} - {med.dosage}</li>
+                        ))}
+                        {patient.currentMedications.length > 3 && (
+                          <li className="text-gray-600">+{patient.currentMedications.length - 3} more</li>
+                        )}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
