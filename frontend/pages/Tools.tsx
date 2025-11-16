@@ -197,6 +197,36 @@ export default function Tools() {
       category: 'Assessment',
       priority: 'high',
       audience: ['personal', 'specialist']
+    },
+    {
+      title: 'Kidney Function (eGFR)',
+      description: 'CKD-EPI equation calculator for estimating kidney function and disease staging',
+      icon: Droplets,
+      path: '/tools/kidney-function',
+      color: 'bg-gradient-to-br from-cyan-500 to-teal-600 hover:from-cyan-600 hover:to-teal-700',
+      category: 'Medical',
+      priority: 'high',
+      audience: ['personal', 'specialist']
+    },
+    {
+      title: 'NEWS2 Score',
+      description: 'National Early Warning Score 2 - Patient deterioration alert system for acute care',
+      icon: Activity,
+      path: '/tools/news2',
+      color: 'bg-gradient-to-br from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700',
+      category: 'Emergency',
+      priority: 'high',
+      audience: ['personal', 'specialist']
+    },
+    {
+      title: 'Allergy & Medication Reconciliation',
+      description: 'Comprehensive medication and allergy management with drug-allergy conflict checking',
+      icon: Shield,
+      path: '/tools/allergy-medication',
+      color: 'bg-gradient-to-br from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700',
+      category: 'Medical',
+      priority: 'high',
+      audience: ['personal', 'specialist']
     }
   ], [t]);
 
