@@ -46,7 +46,8 @@ function App() {
       <ErrorBoundary>
         <LanguageProvider>
           <ModeProvider>
-            <PatientRecordsProvider>
+            <PatientAccessProvider>
+              <PatientRecordsProvider>
               <MoodTrackingProvider>
                 <PainAssessmentProvider>
                   <AddictionTrackingProvider>
@@ -89,7 +90,8 @@ function App() {
                   </AddictionTrackingProvider>
                 </PainAssessmentProvider>
               </MoodTrackingProvider>
-            </PatientRecordsProvider>
+              </PatientRecordsProvider>
+            </PatientAccessProvider>
           </ModeProvider>
         </LanguageProvider>
       </ErrorBoundary>
