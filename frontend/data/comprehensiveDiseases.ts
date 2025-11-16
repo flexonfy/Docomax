@@ -30,6 +30,7 @@ import { expandedInfectiousDiseases } from './diseases/expanded-infectious';
 import { nutritionalMetabolicDiseases } from './diseases/nutritional-metabolic';
 import { mentalHealthExpanded } from './diseases/mental-expanded';
 import { diverseConditions } from './diseases/diverse-conditions';
+import { cancerOncologyDiseases } from './diseases/cancer-oncology';
 
 export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...infectiousDiseases,
