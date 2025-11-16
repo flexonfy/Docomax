@@ -59,7 +59,8 @@ function App() {
                       <MedicationAdherenceProvider>
                         <VitalsTrackingProvider>
                           <MedicationRemindersProvider>
-                            <Router>
+                            <AppointmentRemindersProvider>
+                              <Router>
                         <Layout>
                           <Routes>
                             <Route path="/" element={<Home />} />
@@ -92,7 +93,8 @@ function App() {
                         </Layout>
                         <Toaster />
                         <ServiceWorkerUpdateNotification />
-                            </Router>
+                              </Router>
+                            </AppointmentRemindersProvider>
                           </MedicationRemindersProvider>
                         </VitalsTrackingProvider>
                       </MedicationAdherenceProvider>
