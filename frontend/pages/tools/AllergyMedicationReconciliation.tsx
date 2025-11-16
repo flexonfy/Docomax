@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useMode } from '../../contexts/ModeContext';
+import { usePatientRecords } from '../../contexts/PatientRecordsContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
-import { AlertTriangle, Plus, X, Shield, Pill, CheckCircle } from 'lucide-react';
+import { AlertTriangle, Plus, X, Shield, Pill, CheckCircle, Download } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface Allergy {
@@ -79,9 +81,43 @@ const drugAllergyInteractions: Record<string, string[]> = {
 
 export default function AllergyMedicationReconciliation() {
   const { t } = useLanguage();
+  const { mode } = useMode();
+  const { patients } = usePatientRecords();
   const [allergies, setAllergies] = useState<Allergy[]>([]);
   const [medications, setMedications] = useState<Medication[]>([]);
   const [checkResults, setCheckResults] = useState<CheckResult | null>(null);
+
+  const currentPatient = mode === 'personal' ? patients[0] : null;
+  const hasAllergies = currentPatient?.allergies && currentPatient.allergies.length > 0;
+  const hasMedications = currentPatient?.currentMedications && currentPatient.currentMedications.length > 0;
+
+  const loadFromPatientRecord = () => {
+    // Load allergies
+    if (currentPatient?.allergies && currentPatient.allergies.length > 0) {
+      const newAllergies: Allergy[] = currentPatient.allergies.map((allergyName, index) => ({
+        id: `allergy-${index}`,
+        name: allergyName,
+        severity: 'moderate',
+        reaction: 'Unknown reaction',
+        notes: 'Loaded from patient record'
+      }));
+      setAllergies(newAllergies);
+    }
+
+    // Load medications
+    if (currentPatient?.currentMedications && currentPatient.currentMedications.length > 0) {
+      const newMedications: Medication[] = currentPatient.currentMedications.map((med) => ({
+        id: med.id,
+        name: med.name,
+        dose: med.dosage,
+        frequency: med.frequency,
+        indication: 'Loaded from record',
+        prescriber: med.prescribedBy,
+        notes: med.notes || 'Loaded from patient record'
+      }));
+      setMedications(newMedications);
+    }
+  };
 
   // Allergy Form
   const [allergyForm, setAllergyForm] = useState({
