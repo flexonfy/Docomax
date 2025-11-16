@@ -9,7 +9,6 @@ let registration: ServiceWorkerRegistration | null = null;
  */
 export async function registerServiceWorker(): Promise<void> {
   if (!('serviceWorker' in navigator)) {
-    console.log('Service Workers are not supported in this browser');
     return;
   }
 
@@ -18,8 +17,6 @@ export async function registerServiceWorker(): Promise<void> {
       scope: '/'
     });
 
-    console.log('Service Worker registered successfully:', registration);
-
     // Handle updates
     registration.addEventListener('updatefound', () => {
       const newWorker = registration?.installing;
@@ -27,7 +24,6 @@ export async function registerServiceWorker(): Promise<void> {
         newWorker.addEventListener('statechange', () => {
           if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
             // New service worker available
-            console.log('New Service Worker update available');
             notifyUpdateAvailable();
           }
         });
@@ -39,7 +35,9 @@ export async function registerServiceWorker(): Promise<void> {
       registration?.update();
     }, 60000); // Check every minute
   } catch (error) {
-    console.error('Service Worker registration failed:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Service Worker registration failed:', error);
+    }
   }
 }
 
@@ -50,9 +48,10 @@ export async function unregisterServiceWorker(): Promise<void> {
   if (registration) {
     try {
       await registration.unregister();
-      console.log('Service Worker unregistered');
     } catch (error) {
-      console.error('Failed to unregister Service Worker:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Failed to unregister Service Worker:', error);
+      }
     }
   }
 }
@@ -66,7 +65,9 @@ export async function clearServiceWorkerCache(): Promise<void> {
       const messageChannel = new MessageChannel();
       messageChannel.port1.onmessage = (event) => {
         if (event.data.success) {
-          console.log('Service Worker cache cleared');
+          if (process.env.NODE_ENV === 'development') {
+            console.log('Service Worker cache cleared');
+          }
           resolve();
         } else {
           reject(new Error('Failed to clear cache'));
