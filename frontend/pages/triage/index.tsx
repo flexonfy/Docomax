@@ -601,13 +601,19 @@ export default function Triage() {
           )}
 
           <div className="mt-8 flex justify-between">
-            <Button onClick={handleBack} disabled={stage === 'userInfo'}>
+            <Button onClick={handleBack} disabled={stage === 'userInfo'} variant="outline">
               <ArrowLeft className="h-4 w-4 mr-2" /> {t('common.back')}
             </Button>
             {stage !== 'results' ? (
-              <Button onClick={handleNext} disabled={stage === 'symptomSelection' && selectedSymptoms.length === 0}>
+              <Button
+                onClick={handleNext}
+                disabled={
+                  (stage === 'symptomSelection' && selectedSymptoms.length === 0) ||
+                  (stage === 'detailedQuestions' && !answers[questionsToAsk[currentQuestionIndex]?.id])
+                }
+              >
                 {stage === 'detailedQuestions' && currentQuestionIndex === questionsToAsk.length - 1
-                  ? (refinementPhase === 'initial' ? 'Analyze Symptoms' : 'Refine Results')
+                  ? 'Show Analysis Results'
                   : t('common.next')} <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
             ) : (
