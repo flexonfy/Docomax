@@ -110,11 +110,11 @@ export default function AddAttachmentDialog({ isOpen, onClose, patientId, addAtt
         <div className="space-y-4 py-4">
           <div>
             <Label htmlFor="attachmentName">File Name</Label>
-            <Input id="attachmentName" value={newAttachment.name} onChange={(e) => setNewAttachment(p => ({...p, name: e.target.value}))} />
+            <Input id="attachmentName" value={newAttachment.name} onChange={(e) => setNewAttachment(p => ({...p, name: e.target.value}))} disabled={isLoading} />
           </div>
           <div>
             <Label htmlFor="attachmentType">File Type</Label>
-            <Select value={newAttachment.type} onValueChange={(v: any) => setNewAttachment(p => ({...p, type: v}))}>
+            <Select value={newAttachment.type} onValueChange={(v: any) => setNewAttachment(p => ({...p, type: v}))} disabled={isLoading}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="document">Document</SelectItem>
@@ -126,16 +126,28 @@ export default function AddAttachmentDialog({ isOpen, onClose, patientId, addAtt
           </div>
           <div>
             <Label htmlFor="attachmentFile">Upload File</Label>
-            <Input id="attachmentFile" type="file" onChange={(e) => setNewAttachment(p => ({...p, file: e.target.files ? e.target.files[0] : null}))} />
+            <Input id="attachmentFile" type="file" onChange={handleFileChange} disabled={isLoading} />
+            {fileErrors.length > 0 && (
+              <div className="mt-2 text-sm text-red-600 space-y-1">
+                {fileErrors.map((error, idx) => (
+                  <p key={idx} className="error-message">{error}</p>
+                ))}
+              </div>
+            )}
+            {newAttachment.file && fileErrors.length === 0 && (
+              <p className="mt-2 text-sm text-green-600 success-message">File selected: {newAttachment.file.name}</p>
+            )}
           </div>
           <div>
             <Label htmlFor="attachmentDesc">Description</Label>
-            <Textarea id="attachmentDesc" value={newAttachment.description} onChange={(e) => setNewAttachment(p => ({...p, description: e.target.value}))} />
+            <Textarea id="attachmentDesc" value={newAttachment.description} onChange={(e) => setNewAttachment(p => ({...p, description: e.target.value}))} disabled={isLoading} />
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>{t('common.cancel')}</Button>
-          <Button onClick={handleSave}>{t('common.save')}</Button>
+          <Button variant="outline" onClick={onClose} disabled={isLoading}>{t('common.cancel')}</Button>
+          <Button onClick={handleSave} disabled={isLoading || !newAttachment.file || fileErrors.length > 0}>
+            {isLoading ? 'Processing...' : t('common.save')}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
