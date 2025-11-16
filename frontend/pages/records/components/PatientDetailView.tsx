@@ -323,6 +323,87 @@ export default function PatientDetailView({
           )}
         </TabsContent>
 
+        {patient.currentMedications && patient.currentMedications.length > 0 && (
+          <TabsContent value="adherence" className="mt-4">
+            <div className="space-y-4">
+              {patient.currentMedications.map(med => {
+                const adherencePercentage = getAdherenceForMedication(med.id);
+                const adherenceColor = adherencePercentage >= 80 ? 'text-green-600' : adherencePercentage >= 50 ? 'text-yellow-600' : 'text-red-600';
+
+                return (
+                  <Card key={med.id} className="overflow-hidden">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <CardTitle className="text-lg">{med.name}</CardTitle>
+                          <CardDescription>{med.dosage} - {med.frequency}</CardDescription>
+                        </div>
+                        <div className="text-right">
+                          <div className={`text-3xl font-bold ${adherenceColor}`}>{adherencePercentage}%</div>
+                          <p className="text-xs text-gray-500">30-day adherence</p>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            className={`h-2 rounded-full transition-all ${
+                              adherencePercentage >= 80 ? 'bg-green-600' :
+                              adherencePercentage >= 50 ? 'bg-yellow-600' :
+                              'bg-red-600'
+                            }`}
+                            style={{ width: `${adherencePercentage}%` }}
+                          />
+                        </div>
+
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="flex-1 bg-green-50 border-green-300 hover:bg-green-100"
+                            onClick={() => {
+                              addAdherenceEntry(med.id, true);
+                              toast({
+                                title: 'Marked as taken',
+                                description: `${med.name} marked as taken today.`
+                              });
+                            }}
+                          >
+                            <Check className="h-4 w-4 mr-2" /> Taken Today
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="flex-1 bg-red-50 border-red-300 hover:bg-red-100"
+                            onClick={() => {
+                              addAdherenceEntry(med.id, false);
+                              toast({
+                                title: 'Marked as missed',
+                                description: `${med.name} marked as missed today.`
+                              });
+                            }}
+                          >
+                            <X className="h-4 w-4 mr-2" /> Missed Today
+                          </Button>
+                        </div>
+
+                        <div className="text-xs text-gray-600 bg-blue-50 p-2 rounded">
+                          <div className="flex items-center gap-1 mb-1">
+                            <TrendingUp className="h-3 w-3" />
+                            <span className="font-semibold">Adherence Trend</span>
+                          </div>
+                          <p>Click "Taken Today" or "Missed Today" to log today's adherence. Adherence is calculated based on the last 30 days of tracking.</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </TabsContent>
+        )}
+
         {!isPersonalView && (
           <TabsContent value="referrals" className="mt-4">
             <div className="flex justify-end mb-4">
