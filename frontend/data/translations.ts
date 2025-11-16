@@ -933,6 +933,7 @@ export const translations = {
       completed: 'Imekamilika',
       weeks: 'Wiki',
       diseases: 'Magonjwa',
+      services: 'Huduma',
     },
     pages: {
       home: {
@@ -1770,6 +1771,7 @@ export const translations = {
       completed: 'Complété',
       weeks: 'Semaines',
       diseases: 'Maladies',
+      services: 'Services',
     },
     pages: {
       home: {
@@ -2466,7 +2468,7 @@ export const translations = {
       },
       painScale: {
         title: 'Échelles d\'Évaluation de la Douleur',
-        description: 'Outils complets d\'évaluation de la douleur pour différentes populations de patients',
+        description: 'Outils complets d\'évaluation de la douleur pour diff��rentes populations de patients',
         numeric: 'Échelle Numérique',
         numericDesc: 'Adultes et enfants >8 ans',
         faces: 'Échelle des Visages',
