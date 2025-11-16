@@ -225,22 +225,33 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
                   <p className="text-sm">{getRecommendation(result.severity, result.riskScore)}</p>
                 </div>
 
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {isLowConfidence && (
-                    <Button size="sm" variant="default" className="flex-1 bg-blue-600 hover:bg-blue-700">
-                      <HelpCircle className="h-4 w-4 mr-2" />
-                      Ask More Questions
+                <div className="flex flex-col gap-2 mt-4">
+                  <div className="flex flex-wrap gap-2">
+                    {isLowConfidence && (
+                      <Button size="sm" variant="default" className="flex-1 bg-blue-600 hover:bg-blue-700">
+                        <HelpCircle className="h-4 w-4 mr-2" />
+                        Ask More
+                      </Button>
+                    )}
+                    {result.disease.quizQuestions && result.disease.quizQuestions.length > 0 && (
+                      <Button onClick={() => onStartQuiz(result)} size="sm" variant="outline" className="flex-1">
+                        <Sparkles className="h-4 w-4 mr-2 text-yellow-500" />
+                        Refine
+                      </Button>
+                    )}
+                    <Button onClick={() => setShowDetailsFor(result)} size="sm" variant="outline" className="flex-1">
+                      <Info className="h-4 w-4 mr-2" />
+                      Details
                     </Button>
-                  )}
-                  {result.disease.quizQuestions && result.disease.quizQuestions.length > 0 && (
-                    <Button onClick={() => onStartQuiz(result)} size="sm" variant="outline" className="flex-1">
-                      <Sparkles className="h-4 w-4 mr-2 text-yellow-500" />
-                      Refine Diagnosis
-                    </Button>
-                  )}
-                  <Button onClick={() => setShowDetailsFor(result)} size="sm" variant="outline" className="flex-1">
-                    <Info className="h-4 w-4 mr-2" />
-                    More Info
+                  </div>
+                  <Button
+                    onClick={() => setShowConfirmingIndicators(result)}
+                    size="sm"
+                    variant="outline"
+                    className="w-full bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
+                  >
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    What would confirm this?
                   </Button>
                 </div>
               </CardContent>
