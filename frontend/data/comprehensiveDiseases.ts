@@ -27,6 +27,7 @@ import { painSyndromes } from './diseases/pain-syndromes';
 import { occupationalDiseases } from './diseases/occupational';
 import { inflammatoryDiseases } from './diseases/inflammatory';
 import { expandedInfectiousDiseases } from './diseases/expanded-infectious';
+import { nutritionalMetabolicDiseases } from './diseases/nutritional-metabolic';
 
 export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...infectiousDiseases,
