@@ -8,6 +8,7 @@ import { AddictionTrackingProvider } from './contexts/AddictionTrackingContext';
 import { MedicationTrackingProvider } from './contexts/MedicationTrackingContext';
 import { MedicationAdherenceProvider } from './contexts/MedicationAdherenceContext';
 import { VitalsTrackingProvider } from './contexts/VitalsTrackingContext';
+import { MedicationRemindersProvider } from './contexts/MedicationRemindersContext';
 import { ModeProvider } from './contexts/ModeContext';
 import { PatientAccessProvider } from './contexts/PatientAccessContext';
 import { Toaster } from '@/components/ui/toaster';
