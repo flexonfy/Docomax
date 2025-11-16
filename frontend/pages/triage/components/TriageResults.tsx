@@ -339,6 +339,85 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
           )}
         </DialogContent>
       </Dialog>
+
+      <Dialog open={!!showConfirmingIndicators} onOpenChange={() => setShowConfirmingIndicators(null)}>
+        <DialogContent className="max-w-2xl">
+          {showConfirmingIndicators && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-2xl">What would confirm {showConfirmingIndicators.disease.name[language]}?</DialogTitle>
+                <DialogDescription>
+                  These are additional signs or symptoms that would make us more confident about this diagnosis.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="max-h-[70vh] overflow-y-auto pr-4 space-y-6">
+                <div className="space-y-3">
+                  <h3 className="font-semibold flex items-center"><Zap className="h-4 w-4 mr-2 text-orange-500" />Additional Symptoms to Look For</h3>
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-700">
+                      If you develop any of these symptoms, it would strengthen the possibility of {showConfirmingIndicators.disease.name[language]}:
+                    </p>
+                    <ul className="space-y-2">
+                      {showConfirmingIndicators.disease.rareSymptoms?.[language]?.slice(0, 5).map((symptom, idx) => (
+                        <li key={idx} className="flex items-start space-x-2">
+                          <span className="text-green-600 font-bold">+</span>
+                          <span className="text-sm text-gray-700">{symptom}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="space-y-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <h3 className="font-semibold flex items-center"><TestTube className="h-4 w-4 mr-2 text-blue-600" />Tests That Would Help Confirm</h3>
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-700 mb-2">
+                      These tests, if performed by a doctor, would help confirm this diagnosis:
+                    </p>
+                    <ul className="space-y-1">
+                      {(showConfirmingIndicators.disease.possibleTests?.[language] || showConfirmingIndicators.disease.possibleTests?.en || []).slice(0, 4).map((test, idx) => (
+                        <li key={idx} className="text-sm text-blue-700 flex items-start space-x-2">
+                          <span>•</span>
+                          <span>{test}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="space-y-3 p-3 bg-amber-50 rounded-lg border border-amber-200">
+                  <h3 className="font-semibold flex items-center"><AlertTriangle className="h-4 w-4 mr-2 text-amber-600" />Risk Factors That Match</h3>
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-700 mb-2">
+                      These factors increase the likelihood of {showConfirmingIndicators.disease.name[language]}:
+                    </p>
+                    <ul className="space-y-1">
+                      {showConfirmingIndicators.disease.riskFactors?.[language]?.slice(0, 4).map((factor, idx) => (
+                        <li key={idx} className="text-sm text-amber-700 flex items-start space-x-2">
+                          <span>•</span>
+                          <span>{factor}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <h3 className="font-semibold flex items-center text-red-800"><AlertTriangle className="h-4 w-4 mr-2" />When to Seek Immediate Help</h3>
+                  <p className="text-sm text-red-700 mt-2">{showConfirmingIndicators.disease.whenToSeekHelp[language]}</p>
+                </div>
+              </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button type="button" variant="secondary">
+                    Close
+                  </Button>
+                </DialogClose>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
