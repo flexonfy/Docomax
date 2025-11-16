@@ -141,13 +141,18 @@ export default function Header() {
             {/* Mobile Menu */}
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="sm" className="lg:hidden text-white hover:bg-white/10">
-                  <Menu className="h-5 w-5" />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="lg:hidden text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-700"
+                  aria-label="Open navigation menu"
+                >
+                  <Menu className="h-5 w-5" aria-hidden="true" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-64">
-                <div className="flex flex-col space-y-4 mt-8">
-                  <div className="flex items-center space-x-3 pb-4 border-b">
+                <nav className="flex flex-col space-y-4 mt-8" aria-label="Mobile navigation">
+                  <div className="flex items-center space-x-3 pb-4 border-b" aria-hidden="true">
                     <Heart className="h-6 w-6 text-blue-600" />
                     <span className="font-semibold text-gray-900">{t('pages.home.title')}</span>
                   </div>
@@ -155,11 +160,12 @@ export default function Header() {
                     <Link
                       key={item.path}
                       to={item.path}
-                      className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                         location.pathname === item.path
                           ? 'bg-blue-100 text-blue-900'
                           : 'text-gray-700 hover:bg-gray-100'
                       }`}
+                      aria-current={location.pathname === item.path ? 'page' : undefined}
                     >
                       {item.label}
                     </Link>
@@ -179,7 +185,7 @@ export default function Header() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </nav>
               </SheetContent>
             </Sheet>
           </div>
