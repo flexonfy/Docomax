@@ -44,7 +44,8 @@ function App() {
             <MoodTrackingProvider>
               <PainAssessmentProvider>
                 <AddictionTrackingProvider>
-                  <Router>
+                  <MedicationTrackingProvider>
+                    <Router>
                     <Layout>
                       <Routes>
                         <Route path="/" element={<Home />} />
@@ -74,7 +75,8 @@ function App() {
                     </Layout>
                     <Toaster />
                   </Router>
-                  <ServiceWorkerUpdateNotification />
+                    <ServiceWorkerUpdateNotification />
+                  </MedicationTrackingProvider>
                 </AddictionTrackingProvider>
               </PainAssessmentProvider>
             </MoodTrackingProvider>
