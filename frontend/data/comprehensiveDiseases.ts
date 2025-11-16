@@ -12,6 +12,9 @@ import { pediatricDiseases } from './diseases/pediatric';
 import { respiratoryDiseases } from './diseases/respiratory';
 import { skinDiseases } from './diseases/skin';
 import { autoimmuneDiseases } from './diseases/autoimmune';
+import { oncologicalDiseases } from './diseases/oncological';
+import { hematologicDiseases } from './diseases/hematologic';
+import { genitourinaryDiseases } from './diseases/genitourinary';
 
 export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...infectiousDiseases,
@@ -27,6 +30,9 @@ export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...pediatricDiseases,
   ...endocrineDiseases,
   ...autoimmuneDiseases,
+  ...oncologicalDiseases,
+  ...hematologicDiseases,
+  ...genitourinaryDiseases,
 ];
 
 const enSymptoms = new Set<string>();
