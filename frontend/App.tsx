@@ -7,6 +7,7 @@ import { PainAssessmentProvider } from './contexts/PainAssessmentContext';
 import { AddictionTrackingProvider } from './contexts/AddictionTrackingContext';
 import { MedicationTrackingProvider } from './contexts/MedicationTrackingContext';
 import { ModeProvider } from './contexts/ModeContext';
+import { PatientAccessProvider } from './contexts/PatientAccessContext';
 import { Toaster } from '@/components/ui/toaster';
 import ErrorBoundary from './components/ErrorBoundary';
 import ServiceWorkerUpdateNotification from './components/ServiceWorkerUpdateNotification';
