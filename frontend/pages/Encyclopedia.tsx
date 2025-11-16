@@ -428,19 +428,18 @@ export default function Encyclopedia() {
 
                     <div>
                       <label className="text-sm font-medium text-gray-700 mb-2 block">
-                        {t('common.prevalence')} in Africa
+                        Global {t('common.prevalence')}
                       </label>
-                      <Select value={selectedPrevalence} onValueChange={setSelectedPrevalence}>
+                      <Select value={selectedGlobalPrevalence} onValueChange={setSelectedGlobalPrevalence}>
                         <SelectTrigger className="text-sm">
                           <SelectValue placeholder={t('pages.encyclopedia.allPrevalences')} />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="all">{t('pages.encyclopedia.allPrevalences')}</SelectItem>
-                          <SelectItem value="very-high">{t('pages.encyclopedia.veryHigh')}</SelectItem>
-                          <SelectItem value="high">{t('pages.encyclopedia.high')}</SelectItem>
-                          <SelectItem value="medium">{t('pages.encyclopedia.medium')}</SelectItem>
-                          <SelectItem value="low">{t('pages.encyclopedia.low')}</SelectItem>
-                          <SelectItem value="rare">{t('pages.encyclopedia.rare')}</SelectItem>
+                          <SelectItem value="very-high">Very High (Common worldwide)</SelectItem>
+                          <SelectItem value="high">High (Common in many regions)</SelectItem>
+                          <SelectItem value="medium">Medium (Moderate prevalence)</SelectItem>
+                          <SelectItem value="low">Low (Rare in most regions)</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
