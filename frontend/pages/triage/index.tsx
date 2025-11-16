@@ -448,45 +448,75 @@ export default function Triage() {
       return null;
     }
     const q = questionsToAsk[currentQuestionIndex];
+    const progressPercentage = Math.round(((currentQuestionIndex + 1) / questionsToAsk.length) * 100);
+
     return (
-      <Card className="max-w-2xl mx-auto">
-        <CardHeader>
-          <CardTitle>Question {currentQuestionIndex + 1} of {questionsToAsk.length}</CardTitle>
-          <CardDescription>Please provide more details to help refine the assessment.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Label className="text-lg">{q.question[language]}</Label>
-          {q.type === 'number' && (
-            <Input
-              type="number"
-              value={answers[q.id] || ''}
-              onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-              placeholder={q.unit}
-            />
-          )}
-          {q.type === 'select' && q.options && (
-            <Select
-              value={answers[q.id] || ''}
-              onValueChange={(value) => handleAnswerChange(q.id, value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select an option" />
-              </SelectTrigger>
-              <SelectContent>
-                {q.options.map((opt, optIndex) => (
-                  <SelectItem key={optIndex} value={opt.value}>{opt.label[language]}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
-          {q.type === 'boolean' && (
-            <div className="flex items-center space-x-4 pt-2">
-              <Button variant={answers[q.id] === true ? 'default' : 'outline'} onClick={() => handleAnswerChange(q.id, true)} className="flex-1">{t('common.yes')}</Button>
-              <Button variant={answers[q.id] === false ? 'default' : 'outline'} onClick={() => handleAnswerChange(q.id, false)} className="flex-1">{t('common.no')}</Button>
+      <div className="max-w-2xl mx-auto space-y-4">
+        <Card className="border-blue-200 shadow-lg">
+          <CardHeader>
+            <div className="flex items-center justify-between mb-4">
+              <CardTitle>Question {currentQuestionIndex + 1} of {questionsToAsk.length}</CardTitle>
+              <div className="text-sm font-medium text-gray-600">{progressPercentage}% complete</div>
             </div>
-          )}
-        </CardContent>
-      </Card>
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div
+                className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                style={{ width: `${progressPercentage}%` }}
+              />
+            </div>
+            <CardDescription className="pt-2">
+              {refinementPhase === 'initial'
+                ? 'These questions help us understand your symptoms better and build diagnostic confidence.'
+                : 'Answering these follow-up questions will help refine the diagnosis.'}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Label className="text-lg font-medium text-gray-900">{q.question[language]}</Label>
+            {q.type === 'number' && (
+              <Input
+                type="number"
+                value={answers[q.id] || ''}
+                onChange={(e) => handleAnswerChange(q.id, e.target.value)}
+                placeholder={q.unit}
+                className="text-base"
+              />
+            )}
+            {q.type === 'select' && q.options && (
+              <Select
+                value={answers[q.id] || ''}
+                onValueChange={(value) => handleAnswerChange(q.id, value)}
+              >
+                <SelectTrigger className="text-base">
+                  <SelectValue placeholder="Select an option" />
+                </SelectTrigger>
+                <SelectContent>
+                  {q.options.map((opt, optIndex) => (
+                    <SelectItem key={optIndex} value={opt.value}>{opt.label[language]}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+            {q.type === 'boolean' && (
+              <div className="flex items-center space-x-4 pt-2">
+                <Button
+                  variant={answers[q.id] === true ? 'default' : 'outline'}
+                  onClick={() => handleAnswerChange(q.id, true)}
+                  className="flex-1 text-base"
+                >
+                  {t('common.yes')}
+                </Button>
+                <Button
+                  variant={answers[q.id] === false ? 'default' : 'outline'}
+                  onClick={() => handleAnswerChange(q.id, false)}
+                  className="flex-1 text-base"
+                >
+                  {t('common.no')}
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
     );
   };
 
