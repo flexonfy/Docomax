@@ -74,6 +74,9 @@ function App() {
                         <Route path="/tools/apgar-score" element={<APGARScore />} />
                         <Route path="/tools/pain-scale" element={<PainScale />} />
                         <Route path="/tools/anti-addiction" element={<AntiAddictionToolkit />} />
+                        <Route path="/tools/kidney-function" element={<KidneyFunctionCalculator />} />
+                        <Route path="/tools/news2" element={<NEWS2Calculator />} />
+                        <Route path="/tools/allergy-medication" element={<AllergyMedicationReconciliation />} />
                       </Routes>
                     </Layout>
                     <Toaster />
