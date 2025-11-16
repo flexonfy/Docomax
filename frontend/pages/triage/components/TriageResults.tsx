@@ -344,14 +344,16 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
 
       <Dialog open={!!showConfirmingIndicators} onOpenChange={() => setShowConfirmingIndicators(null)}>
         <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">
+              {showConfirmingIndicators ? `What would confirm ${showConfirmingIndicators.disease.name[language]}?` : 'Confirming Indicators'}
+            </DialogTitle>
+            <DialogDescription>
+              {showConfirmingIndicators ? 'These are additional signs or symptoms that would make us more confident about this diagnosis.' : 'Loading confirming indicators...'}
+            </DialogDescription>
+          </DialogHeader>
           {showConfirmingIndicators && (
             <>
-              <DialogHeader>
-                <DialogTitle className="text-2xl">What would confirm {showConfirmingIndicators.disease.name[language]}?</DialogTitle>
-                <DialogDescription>
-                  These are additional signs or symptoms that would make us more confident about this diagnosis.
-                </DialogDescription>
-              </DialogHeader>
               <div className="max-h-[70vh] overflow-y-auto pr-4 space-y-6">
                 <div className="space-y-3">
                   <h3 className="font-semibold flex items-center"><Zap className="h-4 w-4 mr-2 text-orange-500" />Additional Symptoms to Look For</h3>
