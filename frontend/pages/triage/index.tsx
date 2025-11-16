@@ -483,15 +483,15 @@ export default function Triage() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="mb-8">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="p-3 bg-gradient-to-br from-blue-500 to-green-500 rounded-xl text-white shadow-lg">
+              <div className="p-3 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl text-white shadow-lg">
                 {getStageIcon()}
               </div>
               <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
                   {getStageTitle()}
                 </h1>
                 <p className="text-lg text-gray-600">{t('pages.triage.systemDescription')}</p>
