@@ -82,7 +82,7 @@ export const sleepDisorders: ComprehensiveDisease[] = [
     symptoms: {
       en: ['loud snoring', 'gasping for air', 'breathing pauses', 'daytime sleepiness', 'morning headaches', 'difficulty concentrating', 'irritability', 'nocturia'],
       fr: ['ronflement bruyant', 'halètement', 'pauses respiratoires', 'somnolence diurne', 'maux de tête matinaux'],
-      sw: ['kufanya kelele kwa utumiaji', 'kupumua kwa haraka', 'pumzi zilizokoma', 'uchovu wa mchana', 'maumivu ya kichwa asubuhi', 'shida ya kufikiri', 'kugombana', 'kuzunguka kumimina')]
+      sw: ['kufanya kelele kwa utumiaji', 'kupumua kwa haraka', 'pumzi zilizokoma', 'uchovu wa mchana', 'maumivu ya kichwa asubuhi', 'shida ya kufikiri', 'kugombana', 'kuzunguka kumimina']
     },
     commonSymptoms: {
       en: ['snoring', 'daytime sleepiness', 'morning headaches'],
