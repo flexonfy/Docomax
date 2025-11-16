@@ -11,6 +11,7 @@ import { Search, Book, AlertTriangle, CheckCircle, Clock, Info, Globe, Shield, F
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
 import FavoritesManager from '../lib/favorites';
+import EmptyState from '../components/EmptyState';
 
 // Renders a comprehensive disease encyclopedia from a static JSON data source. Features client-side search and filtering by various attributes like category, prevalence, and severity.
 export default function Encyclopedia() {
