@@ -7,19 +7,15 @@ import { prefetchCriticalData } from "./lib/dataLoader";
 
 // Register service worker for offline support
 if (process.env.NODE_ENV === 'production') {
-  registerServiceWorker().catch(error => {
-    if (process.env.NODE_ENV === 'development') {
-      console.warn('Service Worker registration failed:', error);
-    }
+  registerServiceWorker().catch(() => {
+    // Service worker registration failure is silently handled
   });
 }
 
 // Prefetch critical data after app loads for better performance
 window.addEventListener('load', () => {
-  prefetchCriticalData().catch(error => {
-    if (process.env.NODE_ENV === 'development') {
-      console.warn('Data prefetch failed:', error);
-    }
+  prefetchCriticalData().catch(() => {
+    // Data prefetch failure is silently handled
   });
 });
 
