@@ -85,7 +85,7 @@ export default function Encyclopedia() {
     }
 
     return diseases;
-  }, [searchTerm, selectedCategory, selectedSource, selectedSeverity, selectedPrevalence, selectedAgeGroup, showFavoritesOnly, favoriteIds]);
+  }, [searchTerm, selectedCategory, selectedSource, selectedSeverity, selectedGlobalPrevalence, selectedAgeGroup, showFavoritesOnly, favoriteIds]);
 
   const getRelatedDiseases = (disease: ComprehensiveDisease): ComprehensiveDisease[] => {
     if (!disease) return [];
