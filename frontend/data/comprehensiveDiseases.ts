@@ -49,6 +49,11 @@ import { oncologyExpandedDiseases } from './diseases/oncology-expanded';
 import { neurologyAdvancedDiseases } from './diseases/neurology-advanced';
 import { cardiologyComplexDiseases } from './diseases/cardiology-complex';
 import { gastroenterologyAdvancedDiseases } from './diseases/gastroenterology-advanced';
+import { hematologyCompleteDiseases } from './diseases/hematology-complete';
+import { immunologyCompleteDiseases } from './diseases/immunology-complete';
+import { urologyCompleteDiseases } from './diseases/urology-complete';
+import { pulmonaryCompleteDiseases } from './diseases/pulmonary-complete';
+import { musculoskeletalCompleteDiseases } from './diseases/musculoskeletal-complete';
 
 export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...infectiousDiseases,
@@ -101,6 +106,11 @@ export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...neurologyAdvancedDiseases,
   ...cardiologyComplexDiseases,
   ...gastroenterologyAdvancedDiseases,
+  ...hematologyCompleteDiseases,
+  ...immunologyCompleteDiseases,
+  ...urologyCompleteDiseases,
+  ...pulmonaryCompleteDiseases,
+  ...musculoskeletalCompleteDiseases,
 ];
 
 const enSymptoms = new Set<string>();
