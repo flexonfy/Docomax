@@ -41,56 +41,58 @@ import AllergyMedicationReconciliation from './pages/tools/AllergyMedicationReco
 
 function App() {
   return (
-    <ErrorBoundary>
-      <LanguageProvider>
-        <ModeProvider>
-          <PatientRecordsProvider>
-            <MoodTrackingProvider>
-              <PainAssessmentProvider>
-                <AddictionTrackingProvider>
-                  <MedicationTrackingProvider>
-                    <Router>
-                    <Layout>
-                      <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/triage" element={<Triage />} />
-                        <Route path="/records" element={<Records />} />
-                        <Route path="/encyclopedia" element={<Encyclopedia />} />
-                        <Route path="/tools" element={<Tools />} />
-                        <Route path="/guides" element={<Guides />} />
-                        <Route path="/faq" element={<FAQ />} />
-                        <Route path="/tools/dosage" element={<DosageCalculator />} />
-                        <Route path="/tools/bmi" element={<BMICalculator />} />
-                        <Route path="/tools/pregnancy" element={<PregnancyTracker />} />
-                        <Route path="/tools/ors" element={<ORSGuide />} />
-                        <Route path="/tools/first-aid" element={<FirstAid />} />
-                        <Route path="/tools/vaccination" element={<VaccinationPlanner />} />
-                        <Route path="/tools/facilities" element={<FacilityFinder />} />
-                        <Route path="/tools/mental-health" element={<MentalHealth />} />
-                        <Route path="/tools/sanitation" element={<SanitationGuide />} />
-                        <Route path="/tools/drug-interactions" element={<DrugInteractionChecker />} />
-                        <Route path="/tools/medical-converter" element={<MedicalConverter />} />
-                        <Route path="/tools/iv-calculator" element={<IVCalculator />} />
-                        <Route path="/tools/glasgow-coma-scale" element={<GlasgowComaScale />} />
-                        <Route path="/tools/apgar-score" element={<APGARScore />} />
-                        <Route path="/tools/pain-scale" element={<PainScale />} />
-                        <Route path="/tools/anti-addiction" element={<AntiAddictionToolkit />} />
-                        <Route path="/tools/kidney-function" element={<KidneyFunctionCalculator />} />
-                        <Route path="/tools/news2" element={<NEWS2Calculator />} />
-                        <Route path="/tools/allergy-medication" element={<AllergyMedicationReconciliation />} />
-                      </Routes>
-                    </Layout>
-                    <Toaster />
-                  </Router>
-                    <ServiceWorkerUpdateNotification />
-                  </MedicationTrackingProvider>
-                </AddictionTrackingProvider>
-              </PainAssessmentProvider>
-            </MoodTrackingProvider>
-          </PatientRecordsProvider>
-        </ModeProvider>
-      </LanguageProvider>
-    </ErrorBoundary>
+    <AccessibilityEnhancements>
+      <ErrorBoundary>
+        <LanguageProvider>
+          <ModeProvider>
+            <PatientRecordsProvider>
+              <MoodTrackingProvider>
+                <PainAssessmentProvider>
+                  <AddictionTrackingProvider>
+                    <MedicationTrackingProvider>
+                      <Router>
+                        <Layout>
+                          <Routes>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/triage" element={<Triage />} />
+                            <Route path="/records" element={<Records />} />
+                            <Route path="/encyclopedia" element={<Encyclopedia />} />
+                            <Route path="/tools" element={<Tools />} />
+                            <Route path="/guides" element={<Guides />} />
+                            <Route path="/faq" element={<FAQ />} />
+                            <Route path="/tools/dosage" element={<DosageCalculator />} />
+                            <Route path="/tools/bmi" element={<BMICalculator />} />
+                            <Route path="/tools/pregnancy" element={<PregnancyTracker />} />
+                            <Route path="/tools/ors" element={<ORSGuide />} />
+                            <Route path="/tools/first-aid" element={<FirstAid />} />
+                            <Route path="/tools/vaccination" element={<VaccinationPlanner />} />
+                            <Route path="/tools/facilities" element={<FacilityFinder />} />
+                            <Route path="/tools/mental-health" element={<MentalHealth />} />
+                            <Route path="/tools/sanitation" element={<SanitationGuide />} />
+                            <Route path="/tools/drug-interactions" element={<DrugInteractionChecker />} />
+                            <Route path="/tools/medical-converter" element={<MedicalConverter />} />
+                            <Route path="/tools/iv-calculator" element={<IVCalculator />} />
+                            <Route path="/tools/glasgow-coma-scale" element={<GlasgowComaScale />} />
+                            <Route path="/tools/apgar-score" element={<APGARScore />} />
+                            <Route path="/tools/pain-scale" element={<PainScale />} />
+                            <Route path="/tools/anti-addiction" element={<AntiAddictionToolkit />} />
+                            <Route path="/tools/kidney-function" element={<KidneyFunctionCalculator />} />
+                            <Route path="/tools/news2" element={<NEWS2Calculator />} />
+                            <Route path="/tools/allergy-medication" element={<AllergyMedicationReconciliation />} />
+                          </Routes>
+                        </Layout>
+                        <Toaster />
+                        <ServiceWorkerUpdateNotification />
+                      </Router>
+                    </MedicationTrackingProvider>
+                  </AddictionTrackingProvider>
+                </PainAssessmentProvider>
+              </MoodTrackingProvider>
+            </PatientRecordsProvider>
+          </ModeProvider>
+        </LanguageProvider>
+      </ErrorBoundary>
+    </AccessibilityEnhancements>
   );
 }
 
