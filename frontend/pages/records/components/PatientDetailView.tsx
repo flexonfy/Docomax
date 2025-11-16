@@ -49,6 +49,7 @@ export default function PatientDetailView({
 }: PatientDetailViewProps) {
   const { t } = useLanguage();
   const { toast } = useToast();
+  const { addAdherenceEntry, getAdherenceForMedication } = useMedicationAdherence();
   const [activeTab, setActiveTab] = useState('overview');
 
   const {
