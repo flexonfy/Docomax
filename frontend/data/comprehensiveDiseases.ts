@@ -18,6 +18,7 @@ import { genitourinaryDiseases } from './diseases/genitourinary';
 import { entDiseases } from './diseases/ent';
 import { ophthalmologicalDiseases } from './diseases/ophthalmological';
 import { musculoskeletalDiseases } from './diseases/musculoskeletal';
+import { urologicalDiseases } from './diseases/urological';
 
 export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...infectiousDiseases,
