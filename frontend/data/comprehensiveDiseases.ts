@@ -57,6 +57,10 @@ import { musculoskeletalCompleteDiseases } from './diseases/musculoskeletal-comp
 import { infectiousExpandedDiseases } from './diseases/infectious-expanded';
 import { mixedConditionsMegaDiseases } from './diseases/mixed-conditions-mega';
 import { endocrinologyMegaDiseases } from './diseases/endocrinology-mega';
+import { geneticRareDiseases } from './diseases/genetic-rare-diseases';
+import { metabolicNutritionalDiseases } from './diseases/metabolic-nutritional-disorders';
+import { infectiousTropicalDiseases } from './diseases/infectious-tropical-diseases';
+import { dermatologicalAdvancedDiseases } from './diseases/dermatological-advanced';
 
 export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...infectiousDiseases,
@@ -117,6 +121,10 @@ export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...infectiousExpandedDiseases,
   ...mixedConditionsMegaDiseases,
   ...endocrinologyMegaDiseases,
+  ...geneticRareDiseases,
+  ...metabolicNutritionalDiseases,
+  ...infectiousTropicalDiseases,
+  ...dermatologicalAdvancedDiseases,
 ];
 
 const enSymptoms = new Set<string>();
