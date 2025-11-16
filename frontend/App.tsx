@@ -5,6 +5,7 @@ import { PatientRecordsProvider } from './contexts/PatientRecordsContext';
 import { MoodTrackingProvider } from './contexts/MoodTrackingContext';
 import { PainAssessmentProvider } from './contexts/PainAssessmentContext';
 import { AddictionTrackingProvider } from './contexts/AddictionTrackingContext';
+import { MedicationTrackingProvider } from './contexts/MedicationTrackingContext';
 import { ModeProvider } from './contexts/ModeContext';
 import { Toaster } from '@/components/ui/toaster';
 import ErrorBoundary from './components/ErrorBoundary';
