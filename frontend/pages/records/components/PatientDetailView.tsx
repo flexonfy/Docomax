@@ -129,6 +129,9 @@ export default function PatientDetailView({
             <TabsTrigger value="vaccinations">{t('pages.records.vaccines')}</TabsTrigger>
             <TabsTrigger value="labs">{t('pages.records.labResults')}</TabsTrigger>
             <TabsTrigger value="medications">{t('pages.records.medications')}</TabsTrigger>
+            {patient.currentMedications && patient.currentMedications.length > 0 && (
+              <TabsTrigger value="adherence">Medication Adherence</TabsTrigger>
+            )}
             {!isPersonalView && <TabsTrigger value="referrals">{t('pages.records.referrals')}</TabsTrigger>}
             <TabsTrigger value="attachments">{t('pages.records.files')}</TabsTrigger>
           </TabsList>
