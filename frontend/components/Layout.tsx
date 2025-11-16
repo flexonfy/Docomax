@@ -15,9 +15,16 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50/50 flex flex-col">
+      {/* Skip to main content link for accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:z-50 focus:fixed focus:top-0 focus:left-0 focus:bg-blue-600 focus:text-white focus:p-2 focus:rounded-b"
+      >
+        Skip to main content
+      </a>
       <Header />
       <OfflineIndicator />
-      <main className="flex-1">
+      <main id="main-content" className="flex-1" role="main">
         <div className="w-full">
           {children}
         </div>
