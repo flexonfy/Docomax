@@ -262,14 +262,16 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
 
       <Dialog open={!!showDetailsFor} onOpenChange={() => setShowDetailsFor(null)}>
         <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">
+              {showDetailsFor?.disease.name[language] || 'Disease Details'}
+            </DialogTitle>
+            <DialogDescription>
+              {showDetailsFor ? `Detailed information about ${showDetailsFor.disease.name[language]}.` : 'Loading disease details...'}
+            </DialogDescription>
+          </DialogHeader>
           {showDetailsFor && (
             <>
-              <DialogHeader>
-                <DialogTitle className="text-2xl">{showDetailsFor.disease.name[language]}</DialogTitle>
-                <DialogDescription>
-                  Detailed information about {showDetailsFor.disease.name[language]}.
-                </DialogDescription>
-              </DialogHeader>
               <div className="max-h-[70vh] overflow-y-auto pr-4 space-y-6">
                 <div className="space-y-2">
                   <h3 className="font-semibold flex items-center"><Stethoscope className="h-4 w-4 mr-2" />All Symptoms</h3>
