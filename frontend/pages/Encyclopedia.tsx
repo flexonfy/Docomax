@@ -20,7 +20,7 @@ export default function Encyclopedia() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedSource, setSelectedSource] = useState('all');
   const [selectedSeverity, setSelectedSeverity] = useState('all');
-  const [selectedPrevalence, setSelectedPrevalence] = useState('all');
+  const [selectedGlobalPrevalence, setSelectedGlobalPrevalence] = useState('all');
   const [selectedAgeGroup, setSelectedAgeGroup] = useState('all');
   const [selectedDisease, setSelectedDisease] = useState<ComprehensiveDisease | null>(null);
   const [showFilters, setShowFilters] = useState(window.innerWidth >= 1024);
@@ -67,8 +67,17 @@ export default function Encyclopedia() {
       diseases = diseases.filter(d => d.severity === selectedSeverity);
     }
 
-    if (selectedPrevalence !== 'all') {
-      diseases = diseases.filter(d => d.prevalenceInAfrica === selectedPrevalence);
+    if (selectedGlobalPrevalence !== 'all') {
+      // Map Africa-specific prevalence to global understanding
+      const prevalenceMapping: { [key: string]: string[] } = {
+        'very-high': ['very-high'],
+        'high': ['high', 'very-high'],
+        'medium': ['medium', 'high', 'very-high'],
+        'low': ['low', 'medium', 'high', 'very-high']
+      };
+
+      const matchingLevels = prevalenceMapping[selectedGlobalPrevalence] || [];
+      diseases = diseases.filter(d => matchingLevels.includes(d.prevalenceInAfrica));
     }
 
     if (selectedAgeGroup !== 'all') {
