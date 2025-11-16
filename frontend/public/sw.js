@@ -4,7 +4,9 @@ const CACHE_NAME = 'docomax-v1';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/manifest.json'
+  '/manifest.json',
+  '/icon-192.svg',
+  '/icon-512.svg'
 ];
 
 // Install event - cache static assets
