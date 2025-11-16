@@ -40,6 +40,7 @@ export default function AddVisitDialog({ isOpen, onClose, patientId, addVisit, u
     referrals: '',
     prescriptions: []
   });
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (editingVisit) {
