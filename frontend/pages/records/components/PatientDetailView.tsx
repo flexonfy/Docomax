@@ -249,15 +249,73 @@ export default function PatientDetailView({
                 <h3 className="font-semibold mb-2">{t('pages.home.upcomingAppointments')}</h3>
                 {upcomingAppointments.length > 0 ? upcomingAppointments.map(app => (
                   <Card key={app.id} className="mb-2">
-                    <CardContent className="p-3 flex justify-between items-center">
-                      <div>
-                        <p className="font-medium">{app.title}</p>
-                        <p className="text-sm text-gray-500">{new Date(app.date).toLocaleString()}</p>
+                    <CardContent className="p-3">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <p className="font-medium">{app.title}</p>
+                          <p className="text-sm text-gray-500">{new Date(app.date).toLocaleString()}</p>
+                        </div>
+                        <div className="flex space-x-1">
+                          {isPersonalView && (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => downloadICS(app, `${app.title.replace(/\s+/g, '_')}.ics`)}
+                              title="Download as calendar file"
+                            >
+                              <Calendar className="h-4 w-4" />
+                            </Button>
+                          )}
+                          <Button size="sm" variant="outline" onClick={() => onUpdateAppointment(app.id, { completed: true })}><Check className="h-4 w-4 mr-1" /> {t('pages.records.markComplete')}</Button>
+                          <Button size="sm" variant="destructive" onClick={() => onDeleteAppointment(app.id)}><Trash2 className="h-4 w-4" /></Button>
+                        </div>
                       </div>
-                      <div className="flex space-x-2">
-                        <Button size="sm" variant="outline" onClick={() => onUpdateAppointment(app.id, { completed: true })}><Check className="h-4 w-4 mr-1" /> {t('pages.records.markComplete')}</Button>
-                        <Button size="sm" variant="destructive" onClick={() => onDeleteAppointment(app.id)}><Trash2 className="h-4 w-4" /></Button>
-                      </div>
+                      {isPersonalView && (
+                        <div className="mt-2 pt-2 border-t text-xs space-y-1">
+                          {getRemindersForAppointment(app.id).length > 0 ? (
+                            <>
+                              <p className="text-gray-600 font-medium">Reminders:</p>
+                              <div className="flex flex-wrap gap-1">
+                                {getRemindersForAppointment(app.id).map(reminder => (
+                                  <div
+                                    key={reminder.id}
+                                    className={`px-2 py-1 rounded text-xs ${
+                                      reminder.enabled
+                                        ? 'bg-blue-100 text-blue-700'
+                                        : 'bg-gray-100 text-gray-600'
+                                    }`}
+                                  >
+                                    {reminder.minutesBefore < 60
+                                      ? `${reminder.minutesBefore}m before`
+                                      : `${Math.floor(reminder.minutesBefore / 60)}h before`
+                                    }
+                                    <button
+                                      onClick={() => deleteAppointmentReminder(reminder.id)}
+                                      className="ml-1 font-bold hover:opacity-70"
+                                    >
+                                      ×
+                                    </button>
+                                  </div>
+                                ))}
+                              </div>
+                            </>
+                          ) : (
+                            <button
+                              onClick={() => {
+                                addAppointmentReminder({
+                                  appointmentId: app.id,
+                                  minutesBefore: 15,
+                                  enabled: true
+                                });
+                                toast({title: 'Reminder added', description: '15 minutes before appointment'});
+                              }}
+                              className="text-blue-600 hover:underline"
+                            >
+                              + Add reminder
+                            </button>
+                          )}
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 )) : <p className="text-sm text-gray-500">{t('pages.home.noAppointments')}</p>}
