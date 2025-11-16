@@ -22,6 +22,7 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
   const { t, language } = useLanguage();
   const [showDetailsFor, setShowDetailsFor] = useState<TriageResult | null>(null);
   const [showAllResults, setShowAllResults] = useState(false);
+  const [showConfirmingIndicators, setShowConfirmingIndicators] = useState<TriageResult | null>(null);
 
   // Show only top 1-2 by default, unless user clicks "View Other Possibilities"
   const visibleResults = showAllResults ? results : results.slice(0, 2);
