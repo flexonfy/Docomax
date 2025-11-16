@@ -64,6 +64,7 @@ import { dermatologicalAdvancedDiseases } from './diseases/dermatological-advanc
 import { surgicalAcuteConditions } from './diseases/surgical-acute-conditions';
 import { comprehensiveClinicalConditions } from './diseases/comprehensive-clinical-conditions';
 import { oncologyHematologyCombined } from './diseases/oncology-hematology-combined';
+import { finalDiseasesBatch } from './diseases/final-diseases-batch';
 
 export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...infectiousDiseases,
@@ -131,6 +132,7 @@ export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...surgicalAcuteConditions,
   ...comprehensiveClinicalConditions,
   ...oncologyHematologyCombined,
+  ...finalDiseasesBatch,
 ];
 
 const enSymptoms = new Set<string>();
