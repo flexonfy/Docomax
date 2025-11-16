@@ -17,6 +17,7 @@ import EmptyState from '../components/EmptyState';
 export default function Encyclopedia() {
   const { t, language } = useLanguage();
   const { toast } = useToast();
+  const [searchInput, setSearchInput] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedSource, setSelectedSource] = useState('all');
