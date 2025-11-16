@@ -61,6 +61,7 @@ import { geneticRareDiseases } from './diseases/genetic-rare-diseases';
 import { metabolicNutritionalDiseases } from './diseases/metabolic-nutritional-disorders';
 import { infectiousTropicalDiseases } from './diseases/infectious-tropical-diseases';
 import { dermatologicalAdvancedDiseases } from './diseases/dermatological-advanced';
+import { surgicalAcuteConditions } from './diseases/surgical-acute-conditions';
 
 export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...infectiousDiseases,
@@ -125,6 +126,7 @@ export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...metabolicNutritionalDiseases,
   ...infectiousTropicalDiseases,
   ...dermatologicalAdvancedDiseases,
+  ...surgicalAcuteConditions,
 ];
 
 const enSymptoms = new Set<string>();
