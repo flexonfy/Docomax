@@ -35,7 +35,18 @@ export default function Triage() {
   const { t, language } = useLanguage();
   const { toast } = useToast();
   const [stage, setStage] = useState<'userInfo' | 'symptomSelection' | 'detailedQuestions' | 'results'>('userInfo');
-  const [userInfo, setUserInfo] = useState({ age: '', gender: 'all', smoking: 'never', chronic: false });
+  const [userInfo, setUserInfo] = useState({
+    age: '',
+    gender: 'all',
+    smoking: 'never',
+    diabetes: false,
+    hypertension: false,
+    hiv: false,
+    asthma: false,
+    recentContact: false,
+    recentTravel: false,
+    malariaArea: false,
+  });
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
   const [results, setResults] = useState<TriageResult[]>([]);
   const [quizForDisease, setQuizForDisease] = useState<TriageResult | null>(null);
