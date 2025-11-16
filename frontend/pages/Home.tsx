@@ -144,7 +144,19 @@ const PersonalHome = () => {
                   ))}
                 </div>
               ) : (
-                <p className="text-center text-gray-500 py-4">{t('pages.home.noAppointments')}</p>
+                <EmptyState
+                  icon="appointments"
+                  title={t('pages.home.noAppointments')}
+                  description="Schedule your next health appointment"
+                  action={{
+                    label: t('common.addAppointment'),
+                    onClick: () => setShowAddAppointment(true)
+                  }}
+                  secondaryAction={{
+                    label: 'View Calendar',
+                    onClick: () => {}
+                  }}
+                />
               )}
             </CardContent>
           </Card>
