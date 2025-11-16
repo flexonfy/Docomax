@@ -138,8 +138,13 @@ export default function AddVisitDialog({ isOpen, onClose, patientId, addVisit, u
   };
 
   const handleSave = () => {
-    if (!patientId || !newVisit.chiefComplaint) {
+    if (!patientId) {
       toast({ title: t('common.error'), description: t('common.pleaseFillFields'), variant: "destructive" });
+      return;
+    }
+
+    if (!validateVisitForm()) {
+      toast({ title: t('common.error'), description: 'Please fix validation errors', variant: "destructive" });
       return;
     }
 
