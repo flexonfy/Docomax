@@ -10,6 +10,7 @@ import { MedicationAdherenceProvider } from './contexts/MedicationAdherenceConte
 import { VitalsTrackingProvider } from './contexts/VitalsTrackingContext';
 import { MedicationRemindersProvider } from './contexts/MedicationRemindersContext';
 import { AppointmentRemindersProvider } from './contexts/AppointmentRemindersContext';
+import { AuditLoggingProvider } from './contexts/AuditLoggingContext';
 import { ModeProvider } from './contexts/ModeContext';
 import { PatientAccessProvider } from './contexts/PatientAccessContext';
 import { Toaster } from '@/components/ui/toaster';
