@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, User, Edit, Trash2, Download, Check, X, TrendingUp } from 'lucide-react';
+import { Plus, User, Edit, Trash2, Download, Check, X, TrendingUp, Activity, Heart } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 interface PatientDetailViewProps {
