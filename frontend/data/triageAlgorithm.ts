@@ -272,40 +272,93 @@ export function getBaselineConfidence(diseaseId: string, prevalence: string): nu
 }
 
 /**
- * Calculate risk factors boost
+ * Calculate risk factors boost - with significant impact on diagnosis confidence
  */
 export function calculateRiskFactorBoost(
-  userRiskFactors: { smoking: 'never' | 'former' | 'current'; chronic: boolean; age: number },
+  userRiskFactors: {
+    smoking: 'never' | 'former' | 'current';
+    diabetes?: boolean;
+    hypertension?: boolean;
+    hiv?: boolean;
+    asthma?: boolean;
+    recentContact?: boolean;
+    recentTravel?: boolean;
+    malariaArea?: boolean;
+    age: number;
+  },
   diseaseRiskFactors: string[],
   diseaseAgeGroup: string
 ): number {
   let boost = 1.0;
+  const diseaseRisksLower = diseaseRiskFactors.map(rf => rf.toLowerCase());
 
-  // Smoking risk
-  if (userRiskFactors.smoking === 'current') {
-    if (diseaseRiskFactors.some(rf =>
-      rf.toLowerCase().includes('smoking') || rf.toLowerCase().includes('tobacco')
-    )) {
-      boost *= 1.15;
+  // SPECIFIC MEDICAL CONDITIONS - Higher impact (1.4x - 1.8x each)
+  if (userRiskFactors.diabetes) {
+    if (diseaseRisksLower.some(rf => rf.includes('diabetes'))) {
+      boost *= 1.6;
     }
   }
 
-  // Chronic condition risk
-  if (userRiskFactors.chronic) {
-    if (diseaseRiskFactors.some(rf =>
-      ['diabetes', 'hypertension', 'heart disease', 'asthma'].some(c =>
-        rf.toLowerCase().includes(c)
+  if (userRiskFactors.hypertension) {
+    if (diseaseRisksLower.some(rf => rf.includes('hypertension') || rf.includes('high blood pressure'))) {
+      boost *= 1.5;
+    }
+  }
+
+  if (userRiskFactors.hiv) {
+    if (diseaseRisksLower.some(rf => rf.includes('hiv') || rf.includes('aids') || rf.includes('immunosuppressed'))) {
+      boost *= 1.8;  // HIV dramatically increases risk for many infections
+    }
+  }
+
+  if (userRiskFactors.asthma) {
+    if (diseaseRisksLower.some(rf => rf.includes('asthma') || rf.includes('lung') || rf.includes('respiratory'))) {
+      boost *= 1.6;
+    }
+  }
+
+  // SMOKING RISK - Moderate impact (1.3x)
+  if (userRiskFactors.smoking === 'current') {
+    if (diseaseRisksLower.some(rf => rf.includes('smoking') || rf.includes('tobacco') || rf.includes('respiratory'))) {
+      boost *= 1.3;
+    }
+  }
+
+  // EXPOSURE FACTORS - Significant impact for infectious diseases
+  if (userRiskFactors.recentContact) {
+    // Any infectious disease gets boost if there was recent contact with sick person
+    if (diseaseRisksLower.some(rf =>
+      ['infection', 'infectious', 'contagious', 'virus', 'bacteria', 'flu', 'covid'].some(term =>
+        rf.includes(term)
       )
     )) {
-      boost *= 1.15;
+      boost *= 1.5;
     }
   }
 
-  // Age-specific risk
+  if (userRiskFactors.recentTravel) {
+    // Diseases from other areas more likely after travel
+    if (diseaseRisksLower.some(rf =>
+      ['endemic', 'tropical', 'malaria', 'dengue', 'typhoid', 'yellow fever'].some(term =>
+        rf.includes(term)
+      )
+    )) {
+      boost *= 1.6;
+    }
+  }
+
+  if (userRiskFactors.malariaArea) {
+    // Strong boost for malaria and related diseases
+    if (diseaseRisksLower.some(rf => rf.includes('malaria') || rf.includes('endemic'))) {
+      boost *= 2.0;  // Very strong indicator
+    }
+  }
+
+  // AGE-SPECIFIC RISK
   if (userRiskFactors.age > 60 && diseaseAgeGroup === 'elderly') {
-    boost *= 1.1;
+    boost *= 1.15;
   } else if (userRiskFactors.age < 18 && diseaseAgeGroup === 'pediatric') {
-    boost *= 1.1;
+    boost *= 1.15;
   }
 
   return boost;
