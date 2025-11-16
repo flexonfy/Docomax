@@ -154,6 +154,9 @@ export default function PatientDetailView({
             {patient.currentMedications && patient.currentMedications.length > 0 && (
               <TabsTrigger value="adherence">Medication Adherence</TabsTrigger>
             )}
+            {isPersonalView && patient.currentMedications && patient.currentMedications.length > 0 && (
+              <TabsTrigger value="reminders">Reminders</TabsTrigger>
+            )}
             <TabsTrigger value="vitals">Vital Signs</TabsTrigger>
             {!isPersonalView && <TabsTrigger value="referrals">{t('pages.records.referrals')}</TabsTrigger>}
             <TabsTrigger value="attachments">{t('pages.records.files')}</TabsTrigger>
