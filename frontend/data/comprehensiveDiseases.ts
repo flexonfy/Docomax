@@ -35,6 +35,9 @@ import { emergencyAcuteDiseases } from './diseases/emergency-acute';
 import { comprehensiveConditions } from './diseases/comprehensive-conditions';
 import { cardiologyExpanded } from './diseases/cardiology-expanded';
 import { megaConditions } from './diseases/mega-conditions';
+import { neurologyFull } from './diseases/neurology-full';
+import { gastroenterologyFull } from './diseases/gastroenterology-full';
+import { respiratoryBulk } from './diseases/respiratory-bulk';
 
 export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...infectiousDiseases,
