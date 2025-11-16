@@ -247,11 +247,12 @@ export default function Encyclopedia() {
   };
 
   const clearFilters = () => {
+    setSearchInput('');
     setSearchTerm('');
     setSelectedCategory('all');
     setSelectedSource('all');
     setSelectedSeverity('all');
-    setSelectedPrevalence('all');
+    setSelectedGlobalPrevalence('all');
     setSelectedAgeGroup('all');
     setShowFavoritesOnly(false);
   };
