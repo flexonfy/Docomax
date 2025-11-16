@@ -47,6 +47,27 @@ export default function Triage() {
   const [answers, setAnswers] = useState<Record<string, any>>({});
   const [refinementPhase, setRefinementPhase] = useState<'initial' | 'refining' | 'exploring'>('initial');
 
+  const selectInitialQuestions = (symptoms: string[]): TriageQuestion[] => {
+    // Get questions directly relevant to selected symptoms
+    const relevantQuestions = triageQuestions.filter(q =>
+      q.relevantSymptoms.some(symptomKeyword =>
+        symptoms.some(selected => selected.toLowerCase().includes(symptomKeyword))
+      )
+    );
+
+    // Always ask at least 3-5 questions to build diagnostic confidence
+    // If fewer than 3 relevant questions, add general diagnostic questions
+    if (relevantQuestions.length < 3) {
+      // Add duration and severity-related questions
+      const additionalQuestions = triageQuestions.filter(q =>
+        q.id.includes('duration') || q.id.includes('fever') || q.id.includes('pain')
+      );
+      return [...relevantQuestions, ...additionalQuestions].slice(0, 5);
+    }
+
+    return relevantQuestions.slice(0, 5);
+  };
+
   const handleNext = () => {
     if (stage === 'userInfo') {
       const ageNum = parseInt(userInfo.age);
@@ -60,25 +81,18 @@ export default function Triage() {
         toast({ title: "Symptoms Required", description: "Please select at least one symptom to continue.", variant: "destructive" });
         return;
       }
-      // Determine which detailed questions to ask
-      const relevantQuestions = triageQuestions.filter(q =>
-        q.relevantSymptoms.some(symptomKeyword =>
-          selectedSymptoms.some(selected => selected.toLowerCase().includes(symptomKeyword))
-        )
-      );
-      if (relevantQuestions.length > 0) {
-        setQuestionsToAsk(relevantQuestions);
-        setCurrentQuestionIndex(0);
-        setRefinementPhase('initial');
-        setStage('detailedQuestions');
-      } else {
-        analyzeSymptoms();
-        setStage('results');
-      }
+      // Always transition to asking questions first, before showing results
+      const questionsToAsk = selectInitialQuestions(selectedSymptoms);
+      setQuestionsToAsk(questionsToAsk);
+      setCurrentQuestionIndex(0);
+      setAnswers({});
+      setRefinementPhase('initial');
+      setStage('detailedQuestions');
     } else if (stage === 'detailedQuestions') {
       const q = questionsToAsk[currentQuestionIndex];
       const answer = answers[q.id];
 
+      // Validation for numeric inputs
       if (q.type === 'number' && answer) {
         const numAnswer = parseFloat(answer);
         if (q.id === 'fever_temp' && (numAnswer < 35 || numAnswer > 43)) {
@@ -91,9 +105,11 @@ export default function Triage() {
         }
       }
 
+      // Move to next question or finalize
       if (currentQuestionIndex < questionsToAsk.length - 1) {
         setCurrentQuestionIndex(prev => prev + 1);
       } else {
+        // After all questions are answered, analyze and show results
         analyzeSymptoms();
         setStage('results');
       }
