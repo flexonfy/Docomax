@@ -533,12 +533,22 @@ export default function Encyclopedia() {
                 </div>
 
                 {filteredDiseases.length === 0 && (
-                  <div className="text-center py-8">
-                    <Search className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                    <p className="text-gray-500 text-sm">
-                      {t('pages.encyclopedia.noDiseasesFound')}
-                    </p>
-                  </div>
+                  <EmptyState
+                    icon="search"
+                    title={t('pages.encyclopedia.noDiseasesFound')}
+                    description="Try adjusting your filters or search terms"
+                    secondaryAction={{
+                      label: 'Clear Filters',
+                      onClick: () => {
+                        setSearchTerm('');
+                        setSelectedCategory('all');
+                        setSelectedSource('all');
+                        setSelectedSeverity('all');
+                        setSelectedGlobalPrevalence('all');
+                        setSelectedAgeGroup('all');
+                      }
+                    }}
+                  />
                 )}
               </CardContent>
             </Card>
