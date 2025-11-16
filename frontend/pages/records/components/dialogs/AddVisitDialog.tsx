@@ -77,8 +77,65 @@ export default function AddVisitDialog({ isOpen, onClose, patientId, addVisit, u
         respiratoryRate: '', oxygenSaturation: '', weight: '', height: '', painScale: '' },
         physicalExam: '', referrals: '', prescriptions: []
       });
+      setValidationErrors({});
     }
   }, [editingVisit, isOpen]);
+
+  const validateVisitForm = (): boolean => {
+    const errors: Record<string, string> = {};
+
+    // Required field
+    if (!newVisit.chiefComplaint.trim()) {
+      errors.chiefComplaint = 'Chief complaint is required';
+    }
+
+    // Date validation
+    if (!newVisit.date) {
+      errors.date = 'Visit date is required';
+    }
+
+    // Follow-up date validation
+    if (newVisit.followUpDate) {
+      const visitDate = new Date(newVisit.date);
+      const followUpDate = new Date(newVisit.followUpDate);
+      if (followUpDate <= visitDate) {
+        errors.followUpDate = 'Follow-up date must be after visit date';
+      }
+    }
+
+    // Cost validation
+    if (newVisit.cost) {
+      const cost = parseFloat(newVisit.cost);
+      if (isNaN(cost) || cost < 0) {
+        errors.cost = 'Cost must be a valid positive number';
+      }
+    }
+
+    // Vitals validation
+    if (newVisit.vitals.temperature) {
+      const temp = parseFloat(newVisit.vitals.temperature);
+      if (isNaN(temp) || temp < 35 || temp > 42) {
+        errors.temperature = 'Temperature must be between 35°C and 42°C';
+      }
+    }
+
+    if (newVisit.vitals.heartRate) {
+      const hr = parseInt(newVisit.vitals.heartRate, 10);
+      if (isNaN(hr) || hr < 30 || hr > 200) {
+        errors.heartRate = 'Heart rate must be between 30 and 200 bpm';
+      }
+    }
+
+    if (newVisit.vitals.respiratoryRate) {
+      const rr = parseInt(newVisit.vitals.respiratoryRate, 10);
+      if (isNaN(rr) || rr < 8 || rr > 60) {
+        errors.respiratoryRate = 'Respiratory rate must be between 8 and 60';
+      }
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleSave = () => {
     if (!patientId || !newVisit.chiefComplaint) {
