@@ -510,7 +510,37 @@ export default function Triage() {
                 </div>
               )}
               {results.length > 0 ? (
-                <TriageResults results={results} onStartQuiz={startQuiz} />
+                <>
+                  <TriageResults results={results} onStartQuiz={startQuiz} />
+                  <div className="mt-8 space-y-4">
+                    {results[0]?.finalConfidence && results[0].finalConfidence < 70 && (
+                      <Card className="bg-blue-50 border border-blue-200 shadow-md">
+                        <CardContent className="pt-6">
+                          <p className="text-blue-900 mb-4">
+                            We're {results[0].finalConfidence}% confident in our assessment. Let's ask a few more questions to refine the diagnosis.
+                          </p>
+                          <Button onClick={askMoreQuestions} className="w-full bg-blue-600 hover:bg-blue-700">
+                            <FileQuestion className="h-4 w-4 mr-2" />
+                            Ask More Questions
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    )}
+                    {results[0]?.finalConfidence && results[0].finalConfidence >= 70 && results.length > 1 && (
+                      <Card className="bg-green-50 border border-green-200 shadow-md">
+                        <CardContent className="pt-6">
+                          <p className="text-green-900 mb-4">
+                            We're quite confident ({results[0].finalConfidence}%) in our assessment. Would you like to explore other possibilities?
+                          </p>
+                          <Button onClick={exploreOtherPossibilities} variant="outline" className="w-full border-green-300 text-green-700 hover:bg-green-50">
+                            <Sparkles className="h-4 w-4 mr-2" />
+                            Want to Explore Other Possibilities?
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
+                </>
               ) : (
                 <Card className="text-center shadow-lg bg-white/90 backdrop-blur-sm">
                   <CardHeader>
