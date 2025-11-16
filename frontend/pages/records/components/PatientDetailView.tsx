@@ -53,6 +53,7 @@ export default function PatientDetailView({
   const { toast } = useToast();
   const { addAdherenceEntry, getAdherenceForMedication } = useMedicationAdherence();
   const { addVitalEntry, getPatientVitals, deleteVitalEntry, getLatestVitals } = useVitalsTracking();
+  const { addReminder, updateReminder, deleteReminder, getRemindersForPatient, requestNotificationPermission } = useMedicationReminders();
   const [activeTab, setActiveTab] = useState('overview');
   const [showVitalForm, setShowVitalForm] = useState(false);
   const [vitalForm, setVitalForm] = useState({
@@ -62,6 +63,14 @@ export default function PatientDetailView({
     respiratoryRate: '',
     oxygenSaturation: '',
     weight: '',
+    notes: ''
+  });
+  const [showReminderForm, setShowReminderForm] = useState(false);
+  const [selectedMedicationForReminder, setSelectedMedicationForReminder] = useState<string>('');
+  const [reminderForm, setReminderForm] = useState({
+    time: '09:00',
+    frequency: 'daily' as const,
+    daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
     notes: ''
   });
 
