@@ -101,12 +101,20 @@ export default function Triage() {
   };
 
   const handleBack = () => {
-    if (stage === 'results') setStage('detailedQuestions');
+    if (stage === 'results') {
+      if (refinementPhase === 'refining' || refinementPhase === 'exploring') {
+        setStage('results');
+        setRefinementPhase('initial');
+      }
+    }
     else if (stage === 'detailedQuestions') {
       if (currentQuestionIndex > 0) {
         setCurrentQuestionIndex(prev => prev - 1);
-      } else {
+      } else if (refinementPhase === 'initial') {
         setStage('symptomSelection');
+      } else {
+        setStage('results');
+        setRefinementPhase('initial');
       }
     }
     else if (stage === 'symptomSelection') setStage('userInfo');
