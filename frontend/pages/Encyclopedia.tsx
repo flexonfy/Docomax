@@ -37,6 +37,14 @@ export default function Encyclopedia() {
   }, []);
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchTerm(searchInput);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchInput]);
+
+  useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
         setShowFilters(true);
