@@ -45,6 +45,7 @@ export default function Triage() {
   const [questionsToAsk, setQuestionsToAsk] = useState<TriageQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, any>>({});
+  const [refinementPhase, setRefinementPhase] = useState<'initial' | 'refining' | 'exploring'>('initial');
 
   const handleNext = () => {
     if (stage === 'userInfo') {
@@ -60,14 +61,15 @@ export default function Triage() {
         return;
       }
       // Determine which detailed questions to ask
-      const relevantQuestions = triageQuestions.filter(q => 
-        q.relevantSymptoms.some(symptomKeyword => 
+      const relevantQuestions = triageQuestions.filter(q =>
+        q.relevantSymptoms.some(symptomKeyword =>
           selectedSymptoms.some(selected => selected.toLowerCase().includes(symptomKeyword))
         )
       );
       if (relevantQuestions.length > 0) {
         setQuestionsToAsk(relevantQuestions);
         setCurrentQuestionIndex(0);
+        setRefinementPhase('initial');
         setStage('detailedQuestions');
       } else {
         analyzeSymptoms();
@@ -370,6 +372,38 @@ export default function Triage() {
     setQuestionsToAsk([]);
     setCurrentQuestionIndex(0);
     setAnswers({});
+    setRefinementPhase('initial');
+  };
+
+  const askMoreQuestions = () => {
+    // Generate follow-up questions based on top results
+    if (results.length === 0) return;
+
+    const topResult = results[0];
+    const followUpQuestions = triageQuestions.filter(q =>
+      q.relevantSymptoms.some(symptomKeyword =>
+        topResult.disease.symptoms?.[language]?.some(s => s.toLowerCase().includes(symptomKeyword)) ||
+        topResult.disease.commonSymptoms?.[language]?.some(s => s.toLowerCase().includes(symptomKeyword))
+      ) && !answers[q.id]
+    ).slice(0, 4); // Ask up to 4 follow-up questions
+
+    if (followUpQuestions.length > 0) {
+      setQuestionsToAsk(followUpQuestions);
+      setCurrentQuestionIndex(0);
+      setRefinementPhase('refining');
+      setStage('detailedQuestions');
+    } else {
+      toast({ title: "No More Questions", description: "We've already asked all relevant follow-up questions.", variant: "default" });
+    }
+  };
+
+  const exploreOtherPossibilities = () => {
+    // Reset to explore other diagnoses
+    setQuestionsToAsk([]);
+    setCurrentQuestionIndex(0);
+    setRefinementPhase('exploring');
+    setStage('detailedQuestions');
+    toast({ title: "Exploring Other Possibilities", description: "Let's refine the diagnosis further.", variant: "default" });
   };
 
   const renderCurrentQuestion = () => {
