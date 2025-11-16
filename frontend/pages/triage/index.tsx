@@ -284,7 +284,13 @@ export default function Triage() {
         const riskFactorBoost = calculateRiskFactorBoost(
           {
             smoking: userInfo.smoking as 'never' | 'former' | 'current',
-            chronic: userInfo.chronic,
+            diabetes: userInfo.diabetes,
+            hypertension: userInfo.hypertension,
+            hiv: userInfo.hiv,
+            asthma: userInfo.asthma,
+            recentContact: userInfo.recentContact,
+            recentTravel: userInfo.recentTravel,
+            malariaArea: userInfo.malariaArea,
             age: ageNum,
           },
           diseaseRiskFactors,
