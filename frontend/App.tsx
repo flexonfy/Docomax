@@ -52,7 +52,8 @@ function App() {
         <LanguageProvider>
           <ModeProvider>
             <PatientAccessProvider>
-              <PatientRecordsProvider>
+              <AuditLoggingProvider>
+                <PatientRecordsProvider>
               <MoodTrackingProvider>
                 <PainAssessmentProvider>
                   <AddictionTrackingProvider>
@@ -103,7 +104,8 @@ function App() {
                   </AddictionTrackingProvider>
                 </PainAssessmentProvider>
               </MoodTrackingProvider>
-              </PatientRecordsProvider>
+                </PatientRecordsProvider>
+              </AuditLoggingProvider>
             </PatientAccessProvider>
           </ModeProvider>
         </LanguageProvider>
