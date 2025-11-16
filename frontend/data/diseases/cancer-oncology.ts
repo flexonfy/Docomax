@@ -112,7 +112,7 @@ export const cancerOncologyDiseases: ComprehensiveDisease[] = [
     prevention: {
       en: 'Regular screening, limit alcohol, maintain healthy weight, regular exercise, breastfeeding.',
       fr: 'Dépistage régulier, limiter l\'alcool, maintenir un poids sain.',
-      sw: ['Kupima kawaida, zuia pombe, tengeneza uzani mzuri, tengeneza mwendo, kunyonyeza']
+      sw: 'Kupima kawaida, zuia pombe, tengeneza uzani mzuri, tengeneza mwendo, kunyonyeza.'
     },
     whenToSeekHelp: {
       en: 'Seek help immediately for breast lump or skin changes.',
@@ -194,9 +194,9 @@ export const cancerOncologyDiseases: ComprehensiveDisease[] = [
       sw: ['kusomeka kwa matumbo', 'kumubuka', 'kuenea kwa saratani', 'anemia']
     },
     diagnosis: {
-      en: 'Colonoscopy, biopsy, CT scan, carcinoembryonic antigen (CEA) test.',
+      en: 'Colonoscopy, biopsy, CT scan, carcinoembryonic antigen test.',
       fr: 'Colonoscopie, biopsie, tomodensitométrie.',
-      sw: ['Colonoscopy, biopsy, CT scan, carcinoembryonic antigen (CEA) test']
+      sw: ['Colonoscopy, biopsy, CT scan, carcinoembryonic antigen test']
     },
     prognosis: {
       en: 'Early stage has better prognosis. Regular screening significantly improves outcomes.',
@@ -243,14 +243,14 @@ export const cancerOncologyDiseases: ComprehensiveDisease[] = [
       sw: ['umri zaidi ya 65', 'historia ya familia', 'ukabila wa Afrika', 'uzani zaidi', 'sigara']
     },
     treatment: {
-      en: 'Active surveillance, surgery (prostatectomy), radiation therapy, hormone therapy, chemotherapy.',
-      fr: 'Surveillance active, chirurgie (prostatectomie), radiothérapie.',
-      sw: ['Active surveillance, operesheni (prostatectomy), radiation therapy, hormone therapy, chemotherapy']
+      en: 'Active surveillance, surgery, radiation therapy, hormone therapy, chemotherapy.',
+      fr: 'Surveillance active, chirurgie, radiothérapie.',
+      sw: ['Active surveillance, operesheni, radiation therapy, hormone therapy, chemotherapy']
     },
     prevention: {
-      en: 'Regular screening (after age 50), healthy diet, exercise, maintain healthy weight.',
-      fr: 'Dépistage régulier (après 50 ans), régime sain, exercice.',
-      sw: ['Kupima kawaida (baada ya umri 50), chakula kizuri, tengeneza mwendo, tengeneza uzani']
+      en: 'Regular screening after age 50, healthy diet, exercise, maintain healthy weight.',
+      fr: 'Dépistage régulier après 50 ans, régime sain, exercice.',
+      sw: ['Kupima kawaida baada ya umri 50, chakula kizuri, tengeneza mwendo, tengeneza uzani']
     },
     whenToSeekHelp: {
       en: 'Seek help for difficulty urinating or blood in urine. Get PSA test if over 50.',
@@ -314,11 +314,12 @@ export const cancerOncologyDiseases: ComprehensiveDisease[] = [
     treatment: {
       en: 'Surgery, radiation therapy, chemotherapy, laser therapy, immunotherapy.',
       fr: 'Chirurgie, radiothérapie, chimiothérapie.',
-      sw: ['Operesheni, radiation therapy, chemotherapy, laser therapy, immunotherapy']
+      sw: 'Operesheni, radiation therapy, chemotherapy, laser therapy, immunotherapy.'
     },
     prevention: {
-      en: 'HPV vaccination, regular cervical screening (Pap smear), avoid smoking, safe sex.',
-      fr: 'Vaccination par VPH, dépistage régulier du col (Pap)', 'sw: [\'Chanjo ya HPV, kupima col kawaida (Pap smear), zuia sigara, jinsia salama\']
+      en: 'HPV vaccination, regular cervical screening, avoid smoking, safe sex.',
+      fr: 'Vaccination par VPH, dépistage régulier du col.',
+      sw: 'Chanjo ya HPV, kupima col kawaida, zuia sigara, jinsia salama.'
     },
     whenToSeekHelp: {
       en: 'Seek help for abnormal vaginal bleeding or unusual discharge.',
