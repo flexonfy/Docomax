@@ -259,10 +259,19 @@ export default function AddVisitDialog({ isOpen, onClose, patientId, addVisit, u
           </div>
           <h3 className="font-semibold">Vitals</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Input placeholder="Temp (°C)" value={newVisit.vitals.temperature} onChange={(e) => setNewVisit(p => ({...p, vitals: {...p.vitals, temperature: e.target.value}}))} />
+            <div>
+              <Input placeholder="Temp (°C)" value={newVisit.vitals.temperature} onChange={(e) => setNewVisit(p => ({...p, vitals: {...p.vitals, temperature: e.target.value}}))} aria-invalid={!!validationErrors.temperature} />
+              {validationErrors.temperature && <p className="text-xs text-red-600 error-message mt-1">{validationErrors.temperature}</p>}
+            </div>
             <Input placeholder="BP" value={newVisit.vitals.bloodPressure} onChange={(e) => setNewVisit(p => ({...p, vitals: {...p.vitals, bloodPressure: e.target.value}}))} />
-            <Input placeholder="HR (bpm)" value={newVisit.vitals.heartRate} onChange={(e) => setNewVisit(p => ({...p, vitals: {...p.vitals, heartRate: e.target.value}}))} />
-            <Input placeholder="RR" value={newVisit.vitals.respiratoryRate} onChange={(e) => setNewVisit(p => ({...p, vitals: {...p.vitals, respiratoryRate: e.target.value}}))} />
+            <div>
+              <Input placeholder="HR (bpm)" value={newVisit.vitals.heartRate} onChange={(e) => setNewVisit(p => ({...p, vitals: {...p.vitals, heartRate: e.target.value}}))} aria-invalid={!!validationErrors.heartRate} />
+              {validationErrors.heartRate && <p className="text-xs text-red-600 error-message mt-1">{validationErrors.heartRate}</p>}
+            </div>
+            <div>
+              <Input placeholder="RR" value={newVisit.vitals.respiratoryRate} onChange={(e) => setNewVisit(p => ({...p, vitals: {...p.vitals, respiratoryRate: e.target.value}}))} aria-invalid={!!validationErrors.respiratoryRate} />
+              {validationErrors.respiratoryRate && <p className="text-xs text-red-600 error-message mt-1">{validationErrors.respiratoryRate}</p>}
+            </div>
           </div>
         </div>
         <DialogFooter>
