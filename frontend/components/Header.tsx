@@ -78,25 +78,25 @@ export default function Header() {
   ];
 
   return (
-    <header className="bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 text-white shadow-2xl border-b border-blue-500/10 sticky top-0 z-40">
+    <header className="bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 text-white shadow-2xl border-b border-blue-500/10 sticky top-0 z-40" role="banner">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-3">
-            <Link to="/" className="flex items-center space-x-3 hover:opacity-90 transition-opacity">
-              <div className="p-2 bg-white/12 rounded-lg backdrop-blur-sm border border-white/15">
+            <Link to="/" className="flex items-center space-x-3 hover:opacity-90 transition-opacity" aria-label="Docomax - Healthcare Advisor Home">
+              <div className="p-2 bg-white/12 rounded-lg backdrop-blur-sm border border-white/15" aria-hidden="true">
                 <Heart className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
               </div>
               <div className="hidden sm:block">
                 <h1 className="text-lg sm:text-xl font-bold tracking-tight">{t('pages.home.title')}</h1>
-                <div className="flex items-center space-x-2 text-xs sm:text-sm text-blue-100">
+                <div className="flex items-center space-x-2 text-xs sm:text-sm text-blue-100" aria-live="polite">
                   {isOnline ? (
                     <>
-                      <Wifi className="h-3 w-3" />
+                      <Wifi className="h-3 w-3" aria-hidden="true" />
                       <span>Online</span>
                     </>
                   ) : (
                     <>
-                      <WifiOff className="h-3 w-3" />
+                      <WifiOff className="h-3 w-3" aria-hidden="true" />
                       <span>Offline Mode</span>
                     </>
                   )}
@@ -106,16 +106,17 @@ export default function Header() {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-1">
+          <nav className="hidden lg:flex items-center space-x-1" aria-label="Main navigation">
             {navigationItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-700 ${
                   location.pathname === item.path
                     ? 'bg-white/20 text-white shadow-md'
                     : 'text-blue-50 hover:text-white hover:bg-white/15'
                 }`}
+                aria-current={location.pathname === item.path ? 'page' : undefined}
               >
                 {item.label}
               </Link>
