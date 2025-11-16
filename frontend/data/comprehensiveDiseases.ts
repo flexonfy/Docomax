@@ -66,6 +66,7 @@ export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...mentalHealthExpanded,
   ...diverseConditions,
   ...cancerOncologyDiseases,
+  ...emergencyAcuteDiseases,
 ];
 
 const enSymptoms = new Set<string>();
