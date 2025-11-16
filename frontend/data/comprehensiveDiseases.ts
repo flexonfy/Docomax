@@ -38,6 +38,13 @@ import { megaConditions } from './diseases/mega-conditions';
 import { neurologyFull } from './diseases/neurology-full';
 import { gastroenterologyFull } from './diseases/gastroenterology-full';
 import { respiratoryBulk } from './diseases/respiratory-bulk';
+import { rheumatologyDiseases } from './diseases/rheumatology';
+import { endocrinologyDiseases } from './diseases/endocrinology';
+import { infectiousFullDiseases } from './diseases/infectious-full';
+import { pediatricsFullDiseases } from './diseases/pediatrics-full';
+import { dermatologyFullDiseases } from './diseases/dermatology-full';
+import { ophthalmologyFullDiseases } from './diseases/ophthalmology-full';
+import { psychiatryFullDiseases } from './diseases/psychiatry-full';
 
 export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...infectiousDiseases,
@@ -79,6 +86,13 @@ export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...neurologyFull,
   ...gastroenterologyFull,
   ...respiratoryBulk,
+  ...rheumatologyDiseases,
+  ...endocrinologyDiseases,
+  ...infectiousFullDiseases,
+  ...pediatricsFullDiseases,
+  ...dermatologyFullDiseases,
+  ...ophthalmologyFullDiseases,
+  ...psychiatryFullDiseases,
 ];
 
 const enSymptoms = new Set<string>();
