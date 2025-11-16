@@ -246,18 +246,10 @@ export const srOnlyCSS = `
  * Test for keyboard navigation - run in console
  */
 export function testKeyboardNavigation() {
-  console.log('Testing keyboard navigation...');
-  console.log('1. Press Tab to navigate forward');
-  console.log('2. Press Shift+Tab to navigate backward');
-  console.log('3. Press Enter to activate buttons');
-  console.log('4. Press Space to toggle checkboxes');
-  console.log('5. Press Arrow keys in lists/menus');
-  
   let tabIndex = 0;
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Tab') {
       tabIndex++;
-      console.log(`Tab pressed ${tabIndex} times, current focus:`, document.activeElement);
     }
   });
 }
