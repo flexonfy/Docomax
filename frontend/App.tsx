@@ -34,6 +34,9 @@ import GlasgowComaScale from './pages/tools/GlasgowComaScale';
 import APGARScore from './pages/tools/APGARScore';
 import PainScale from './pages/tools/PainScale';
 import AntiAddictionToolkit from './pages/tools/AntiAddictionToolkit';
+import KidneyFunctionCalculator from './pages/tools/KidneyFunctionCalculator';
+import NEWS2Calculator from './pages/tools/NEWS2Calculator';
+import AllergyMedicationReconciliation from './pages/tools/AllergyMedicationReconciliation';
 
 function App() {
   return (
