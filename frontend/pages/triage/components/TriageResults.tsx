@@ -21,6 +21,10 @@ interface TriageResultsProps {
 export default function TriageResults({ results, onStartQuiz }: TriageResultsProps) {
   const { t, language } = useLanguage();
   const [showDetailsFor, setShowDetailsFor] = useState<TriageResult | null>(null);
+  const [showAllResults, setShowAllResults] = useState(false);
+
+  // Show only top 1-2 by default, unless user clicks "View Other Possibilities"
+  const visibleResults = showAllResults ? results : results.slice(0, 2);
 
   const getEmergencyIcon = (level: string) => {
     switch (level) {
@@ -86,7 +90,7 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
       return '✓ Classic presentation';
     }
     if (analysis.hasRequiredSymptoms && analysis.completeness < 70) {
-      return `⚠️ Atypical: Missing ${analysis.missingCommon.length} common symptoms`;
+      return `⚠�� Atypical: Missing ${analysis.missingCommon.length} common symptoms`;
     }
     if (!analysis.hasRequiredSymptoms && analysis.missingRequired.length <= 1) {
       return `⚠️ Incomplete: Missing key symptom`;
