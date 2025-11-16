@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import AddAppointmentDialog from './records/components/dialogs/AddAppointmentDialog';
+import EmptyState from '../components/EmptyState';
 import { 
   Stethoscope, 
   FileText, 
