@@ -504,7 +504,15 @@ export default function Triage() {
     switch(stage) {
       case 'userInfo': return "Let's start with some basics";
       case 'symptomSelection': return "What symptoms are you experiencing?";
-      case 'detailedQuestions': return "A few more questions...";
+      case 'detailedQuestions': {
+        if (refinementPhase === 'initial') {
+          return `Building diagnosis confidence (${currentQuestionIndex + 1}/${questionsToAsk.length})`;
+        } else if (refinementPhase === 'refining') {
+          return `Refining the diagnosis (${currentQuestionIndex + 1}/${questionsToAsk.length})`;
+        } else {
+          return `Exploring other possibilities (${currentQuestionIndex + 1}/${questionsToAsk.length})`;
+        }
+      }
       case 'results': return "Analysis Results";
       default: return t('pages.triage.title');
     }
