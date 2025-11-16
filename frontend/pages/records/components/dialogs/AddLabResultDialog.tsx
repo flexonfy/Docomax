@@ -24,16 +24,52 @@ export default function AddLabResultDialog({ isOpen, onClose, patientId, addLabR
     notes: '',
     results: [{ parameter: '', value: '' }]
   });
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (!isOpen) {
       setNewLabResult({ testName: '', date: new Date().toISOString().split('T')[0], notes: '', results: [{ parameter: '', value: '' }] });
+      setValidationErrors({});
     }
   }, [isOpen]);
 
+  const validateLabResult = (): boolean => {
+    const errors: Record<string, string> = {};
+
+    if (!newLabResult.testName.trim()) {
+      errors.testName = 'Test name is required';
+    }
+
+    if (!newLabResult.date) {
+      errors.date = 'Test date is required';
+    }
+
+    const filledResults = newLabResult.results.filter(r => r.parameter && r.value);
+    if (filledResults.length === 0) {
+      errors.results = 'At least one result parameter and value must be provided';
+    }
+
+    // Check for invalid values (non-numeric)
+    filledResults.forEach((result, index) => {
+      if (result.value && isNaN(parseFloat(result.value))) {
+        if (!errors.results) {
+          errors.results = 'All result values must be numbers';
+        }
+      }
+    });
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSave = () => {
-    if (!patientId || !newLabResult.testName) {
+    if (!patientId) {
       toast({ title: t('common.error'), description: t('common.pleaseFillFields'), variant: "destructive" });
+      return;
+    }
+
+    if (!validateLabResult()) {
+      toast({ title: t('common.error'), description: 'Please fix validation errors', variant: "destructive" });
       return;
     }
 
