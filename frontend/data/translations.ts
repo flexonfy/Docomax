@@ -553,11 +553,11 @@ export const translations = {
       },
       facilities: {
         title: 'Healthcare Facilities',
-        description: 'Find healthcare facilities across Africa',
+        description: 'Find healthcare facilities worldwide',
         searchPlaceholder: 'Search facilities, cities, or services...',
         noFacilitiesFound: 'No healthcare facilities found matching your search criteria',
         info: 'Facility Information',
-        infoText: 'This database contains healthcare facilities across Africa. Information is provided for reference only. Always verify facility details, services, and availability before visiting. In emergencies, contact local emergency services immediately.',
+        infoText: 'This database contains healthcare facilities worldwide. Information is provided for reference only. Always verify facility details, services, and availability before visiting. In emergencies, contact local emergency services immediately.',
       },
       mentalHealth: {
         title: 'Mental Health Tools',
@@ -2351,7 +2351,7 @@ export const translations = {
         enterValuePlaceholder: 'Entrez la valeur à convertir',
         from: 'De',
         to: 'À',
-        selectUnit: 'Sélectionner l\'unité',
+        selectUnit: 'S��lectionner l\'unité',
         result: 'Résultat de la Conversion',
         resultDesc: 'Valeur convertie et formule de calcul',
         formula: 'Formule:',
