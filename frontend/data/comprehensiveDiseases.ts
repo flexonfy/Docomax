@@ -54,6 +54,8 @@ import { immunologyCompleteDiseases } from './diseases/immunology-complete';
 import { urologyCompleteDiseases } from './diseases/urology-complete';
 import { pulmonaryCompleteDiseases } from './diseases/pulmonary-complete';
 import { musculoskeletalCompleteDiseases } from './diseases/musculoskeletal-complete';
+import { infectiousExpandedDiseases } from './diseases/infectious-expanded';
+import { mixedConditionsMegaDiseases } from './diseases/mixed-conditions-mega';
 
 export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...infectiousDiseases,
@@ -111,6 +113,8 @@ export const comprehensiveDiseases: ComprehensiveDisease[] = [
   ...urologyCompleteDiseases,
   ...pulmonaryCompleteDiseases,
   ...musculoskeletalCompleteDiseases,
+  ...infectiousExpandedDiseases,
+  ...mixedConditionsMegaDiseases,
 ];
 
 const enSymptoms = new Set<string>();
