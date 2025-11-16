@@ -444,6 +444,213 @@ export default function PatientDetailView({
           </TabsContent>
         )}
 
+        <TabsContent value="vitals" className="mt-4">
+          <div className="space-y-4">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Heart className="h-5 w-5 text-red-600" />
+                    <CardTitle>Record Vital Signs</CardTitle>
+                  </div>
+                  <Button
+                    size="sm"
+                    onClick={() => setShowVitalForm(!showVitalForm)}
+                  >
+                    <Plus className="h-4 w-4 mr-2" /> New Entry
+                  </Button>
+                </div>
+              </CardHeader>
+              {showVitalForm && (
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Temperature (°C)</label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        placeholder="36.5"
+                        value={vitalForm.temperature}
+                        onChange={(e) => setVitalForm({...vitalForm, temperature: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Heart Rate (bpm)</label>
+                      <input
+                        type="number"
+                        placeholder="70"
+                        value={vitalForm.heartRate}
+                        onChange={(e) => setVitalForm({...vitalForm, heartRate: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Blood Pressure (mmHg)</label>
+                      <input
+                        type="text"
+                        placeholder="120/80"
+                        value={vitalForm.bloodPressure}
+                        onChange={(e) => setVitalForm({...vitalForm, bloodPressure: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Respiratory Rate (breaths/min)</label>
+                      <input
+                        type="number"
+                        placeholder="16"
+                        value={vitalForm.respiratoryRate}
+                        onChange={(e) => setVitalForm({...vitalForm, respiratoryRate: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Oxygen Saturation (%)</label>
+                      <input
+                        type="number"
+                        placeholder="98"
+                        min="0"
+                        max="100"
+                        value={vitalForm.oxygenSaturation}
+                        onChange={(e) => setVitalForm({...vitalForm, oxygenSaturation: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Weight (kg)</label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        placeholder="70"
+                        value={vitalForm.weight}
+                        onChange={(e) => setVitalForm({...vitalForm, weight: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium mb-1">Notes</label>
+                      <textarea
+                        placeholder="Any additional notes..."
+                        value={vitalForm.notes}
+                        onChange={(e) => setVitalForm({...vitalForm, notes: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                        rows={3}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={() => {
+                        const entry: any = {};
+                        if (vitalForm.temperature) entry.temperature = parseFloat(vitalForm.temperature);
+                        if (vitalForm.heartRate) entry.heartRate = parseInt(vitalForm.heartRate);
+                        if (vitalForm.bloodPressure) entry.bloodPressure = vitalForm.bloodPressure;
+                        if (vitalForm.respiratoryRate) entry.respiratoryRate = parseInt(vitalForm.respiratoryRate);
+                        if (vitalForm.oxygenSaturation) entry.oxygenSaturation = parseInt(vitalForm.oxygenSaturation);
+                        if (vitalForm.weight) entry.weight = parseFloat(vitalForm.weight);
+                        if (vitalForm.notes) entry.notes = vitalForm.notes;
+
+                        addVitalEntry(patient.id, entry);
+                        setVitalForm({temperature: '', heartRate: '', bloodPressure: '', respiratoryRate: '', oxygenSaturation: '', weight: '', notes: ''});
+                        setShowVitalForm(false);
+                        toast({title: 'Vital signs recorded', description: 'New vital signs entry has been saved.'});
+                      }}
+                      size="sm"
+                    >
+                      <Check className="h-4 w-4 mr-2" /> Save Entry
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowVitalForm(false)}
+                      size="sm"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </CardContent>
+              )}
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Activity className="h-5 w-5" />
+                  Vital Signs History (Last 30 Days)
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {getPatientVitals(patient.id).length > 0 ? (
+                  <div className="space-y-3">
+                    {getPatientVitals(patient.id).reverse().map(vital => (
+                      <div key={vital.id} className="border rounded-lg p-3 bg-gray-50">
+                        <div className="flex justify-between items-start mb-2">
+                          <div className="text-sm text-gray-600">
+                            {new Date(vital.date).toLocaleString()}
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => {
+                              deleteVitalEntry(vital.id);
+                              toast({title: 'Entry deleted'});
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+                          {vital.temperature && (
+                            <div>
+                              <span className="text-gray-600">Temp:</span>
+                              <span className="font-medium ml-1">{vital.temperature}°C</span>
+                            </div>
+                          )}
+                          {vital.heartRate && (
+                            <div>
+                              <span className="text-gray-600">HR:</span>
+                              <span className="font-medium ml-1">{vital.heartRate} bpm</span>
+                            </div>
+                          )}
+                          {vital.bloodPressure && (
+                            <div>
+                              <span className="text-gray-600">BP:</span>
+                              <span className="font-medium ml-1">{vital.bloodPressure}</span>
+                            </div>
+                          )}
+                          {vital.respiratoryRate && (
+                            <div>
+                              <span className="text-gray-600">RR:</span>
+                              <span className="font-medium ml-1">{vital.respiratoryRate} br/min</span>
+                            </div>
+                          )}
+                          {vital.oxygenSaturation && (
+                            <div>
+                              <span className="text-gray-600">O₂:</span>
+                              <span className="font-medium ml-1">{vital.oxygenSaturation}%</span>
+                            </div>
+                          )}
+                          {vital.weight && (
+                            <div>
+                              <span className="text-gray-600">Weight:</span>
+                              <span className="font-medium ml-1">{vital.weight} kg</span>
+                            </div>
+                          )}
+                        </div>
+                        {vital.notes && (
+                          <p className="text-xs text-gray-600 mt-2 italic">{vital.notes}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-center text-gray-500 py-4">No vital signs recorded yet. Click "New Entry" to start tracking.</p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
         <TabsContent value="attachments" className="mt-4">
           <div className="flex justify-end mb-4">
             <Button size="sm" onClick={onAddAttachment}><Plus className="h-4 w-4 mr-2" />{t('common.add')} {t('pages.records.files')}</Button>
