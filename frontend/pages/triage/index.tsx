@@ -357,7 +357,8 @@ export default function Triage() {
       return b.riskScore - a.riskScore;
     });
 
-    setResults(triageResults.slice(0, 10));
+    // Keep all results but pass them to component (component will show only top 1-2 by default)
+    setResults(triageResults.slice(0, 8));
   };
 
   const startQuiz = (result: TriageResult) => {
