@@ -195,7 +195,8 @@ export default function AddVisitDialog({ isOpen, onClose, patientId, addVisit, u
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="visitDate">Date</Label>
-              <Input id="visitDate" type="date" value={newVisit.date} onChange={(e) => setNewVisit(p => ({...p, date: e.target.value}))} />
+              <Input id="visitDate" type="date" value={newVisit.date} onChange={(e) => setNewVisit(p => ({...p, date: e.target.value}))} aria-invalid={!!validationErrors.date} />
+              {validationErrors.date && <p className="text-sm text-red-600 error-message mt-1">{validationErrors.date}</p>}
             </div>
             <div>
               <Label htmlFor="visitType">Type</Label>
@@ -213,7 +214,8 @@ export default function AddVisitDialog({ isOpen, onClose, patientId, addVisit, u
           </div>
           <div>
             <Label htmlFor="chiefComplaint">Chief Complaint</Label>
-            <Input id="chiefComplaint" value={newVisit.chiefComplaint} onChange={(e) => setNewVisit(p => ({...p, chiefComplaint: e.target.value}))} />
+            <Input id="chiefComplaint" value={newVisit.chiefComplaint} onChange={(e) => setNewVisit(p => ({...p, chiefComplaint: e.target.value}))} aria-invalid={!!validationErrors.chiefComplaint} />
+            {validationErrors.chiefComplaint && <p className="text-sm text-red-600 error-message mt-1">{validationErrors.chiefComplaint}</p>}
           </div>
           <div>
             <Label htmlFor="symptoms">Symptoms (one per line)</Label>
