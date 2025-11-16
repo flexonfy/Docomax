@@ -577,7 +577,9 @@ export default function Triage() {
             </Button>
             {stage !== 'results' ? (
               <Button onClick={handleNext} disabled={stage === 'symptomSelection' && selectedSymptoms.length === 0}>
-                {stage === 'detailedQuestions' && currentQuestionIndex === questionsToAsk.length - 1 ? 'Analyze' : t('common.next')} <ArrowRight className="h-4 w-4 ml-2" />
+                {stage === 'detailedQuestions' && currentQuestionIndex === questionsToAsk.length - 1
+                  ? (refinementPhase === 'initial' ? 'Analyze Symptoms' : 'Refine Results')
+                  : t('common.next')} <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
             ) : (
               <Button onClick={resetTriage}>
