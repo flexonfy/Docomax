@@ -335,7 +335,7 @@ export default function KidneyFunctionCalculator() {
                 <div className="flex justify-between items-start p-3 bg-red-200 rounded border border-red-400">
                   <div>
                     <div className="font-semibold text-red-950">G5 - Kidney Failure</div>
-                    <div className="text-sm text-red-900">eGFR < 15 mL/min/1.73m²</div>
+                    <div className="text-sm text-red-900">eGFR {'<'} 15 mL/min/1.73m²</div>
                   </div>
                 </div>
               </div>
