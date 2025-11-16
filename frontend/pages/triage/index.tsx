@@ -118,22 +118,35 @@ export default function Triage() {
 
   const handleBack = () => {
     if (stage === 'results') {
+      // From results, go back to refining questions only if in refining/exploring phase
       if (refinementPhase === 'refining' || refinementPhase === 'exploring') {
-        setStage('results');
+        setStage('detailedQuestions');
+        setRefinementPhase('initial');
+        setCurrentQuestionIndex(0);
+      } else {
+        // Reset and go back to symptoms
+        setStage('symptomSelection');
         setRefinementPhase('initial');
       }
     }
     else if (stage === 'detailedQuestions') {
       if (currentQuestionIndex > 0) {
+        // Go to previous question
         setCurrentQuestionIndex(prev => prev - 1);
       } else if (refinementPhase === 'initial') {
+        // First question in initial phase - go back to symptom selection
         setStage('symptomSelection');
+        setQuestionsToAsk([]);
+        setAnswers({});
       } else {
+        // Back from refinement phase - go to results
         setStage('results');
         setRefinementPhase('initial');
       }
     }
-    else if (stage === 'symptomSelection') setStage('userInfo');
+    else if (stage === 'symptomSelection') {
+      setStage('userInfo');
+    }
   };
 
   const handleSymptomAdd = (symptom: string) => {
