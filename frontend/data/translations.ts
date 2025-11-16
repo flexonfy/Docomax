@@ -95,6 +95,7 @@ export const translations = {
       completed: 'Completed',
       weeks: 'Weeks',
       diseases: 'Diseases',
+      services: 'Services',
     },
     pages: {
       home: {
