@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useMode } from '../../contexts/ModeContext';
+import { usePatientRecords } from '../../contexts/PatientRecordsContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { AlertTriangle, Plus, X, Search, Pill } from 'lucide-react';
+import { AlertTriangle, Plus, X, Search, Pill, Download } from 'lucide-react';
 
 interface Drug {
   id: string;
@@ -167,9 +169,33 @@ const drugInteractions: Record<string, Interaction> = {
 
 export default function DrugInteractionChecker() {
   const { t } = useLanguage();
+  const { mode } = useMode();
+  const { patients } = usePatientRecords();
   const [selectedDrugs, setSelectedDrugs] = useState<Drug[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [interactions, setInteractions] = useState<any[]>([]);
+
+  const currentPatient = mode === 'personal' ? patients[0] : null;
+  const hasMedications = currentPatient?.currentMedications && currentPatient.currentMedications.length > 0;
+
+  const loadMedicationsFromRecord = () => {
+    if (!currentPatient?.currentMedications) return;
+
+    const patientMedNames = currentPatient.currentMedications.map(med => med.name.toLowerCase());
+    const matchedDrugs = commonDrugs.filter(drug =>
+      patientMedNames.some(medName =>
+        drug.name.toLowerCase().includes(medName) ||
+        drug.commonNames.some(commonName => commonName.toLowerCase().includes(medName)) ||
+        medName.includes(drug.name.toLowerCase())
+      )
+    );
+
+    const newDrugs = matchedDrugs.filter(drug =>
+      !selectedDrugs.find(selected => selected.id === drug.id)
+    );
+
+    setSelectedDrugs([...selectedDrugs, ...newDrugs]);
+  };
 
   const filteredDrugs = commonDrugs.filter(drug =>
     drug.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -282,10 +308,25 @@ export default function DrugInteractionChecker() {
           <div className="space-y-6">
             <Card className="shadow-lg">
               <CardHeader>
-                <CardTitle>{t('tools.drugInteraction.addMeds')}</CardTitle>
-                <CardDescription>
-                  {t('tools.drugInteraction.addMedsDesc')}
-                </CardDescription>
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <CardTitle>{t('tools.drugInteraction.addMeds')}</CardTitle>
+                    <CardDescription>
+                      {t('tools.drugInteraction.addMedsDesc')}
+                    </CardDescription>
+                  </div>
+                  {hasMedications && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={loadMedicationsFromRecord}
+                      className="ml-2"
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      Load My Meds
+                    </Button>
+                  )}
+                </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="relative">
