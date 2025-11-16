@@ -133,16 +133,16 @@ export default function FAQ() {
           </div>
         </div>
 
-        <div className="mt-12 bg-gradient-to-r from-teal-50 to-cyan-50 border border-teal-200 rounded-xl p-6 shadow-lg">
+        <div className="mt-12 bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-6 shadow-lg">
           <div className="flex items-start space-x-4">
-            <div className="p-3 bg-teal-600 rounded-full text-white">
+            <div className="p-3 bg-blue-600 rounded-full text-white">
               <Shield className="h-6 w-6" />
             </div>
             <div>
-              <h3 className="font-semibold text-teal-900 mb-2 text-lg">
+              <h3 className="font-semibold text-blue-900 mb-2 text-lg">
                 {t('pages.faq.privacy')}
               </h3>
-              <p className="text-teal-800 text-sm leading-relaxed">
+              <p className="text-blue-800 text-sm leading-relaxed">
                 {t('pages.faq.privacyText')}
               </p>
             </div>

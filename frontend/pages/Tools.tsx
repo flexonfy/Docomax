@@ -219,20 +219,20 @@ export default function Tools() {
   const categories = ['All', ...new Set(allTools.filter(tool => tool.audience.includes(mode)).map(tool => tool.category))];
 
   const stats = [
-    { icon: Calculator, value: allTools.filter(tool => tool.audience.includes(mode)).length.toString(), label: t('common.tools'), color: 'text-teal-600' },
-    { icon: Shield, value: 'WHO', label: t('tools.compliant'), color: 'text-teal-600' },
-    { icon: Globe, value: '3', label: t('pages.home.languages'), color: 'text-cyan-600' },
+    { icon: Calculator, value: allTools.filter(tool => tool.audience.includes(mode)).length.toString(), label: t('common.tools'), color: 'text-blue-600' },
+    { icon: Shield, value: 'WHO', label: t('tools.compliant'), color: 'text-blue-600' },
+    { icon: Globe, value: '3', label: t('pages.home.languages'), color: 'text-green-600' },
     { icon: Zap, value: '100%', label: t('tools.offline'), color: 'text-amber-600' }
   ];
 
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
       case 'high':
-        return <Badge className="bg-rose-100 text-rose-800 text-xs">{t('common.high')}</Badge>;
+        return <Badge className="bg-red-100 text-red-800 text-xs">{t('common.high')}</Badge>;
       case 'medium':
         return <Badge className="bg-amber-100 text-amber-800 text-xs">{t('common.medium')}</Badge>;
       case 'low':
-        return <Badge className="bg-teal-100 text-teal-800 text-xs">{t('common.low')}</Badge>;
+        return <Badge className="bg-green-100 text-green-800 text-xs">{t('common.low')}</Badge>;
       default:
         return null;
     }
@@ -243,11 +243,11 @@ export default function Tools() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="p-3 bg-gradient-to-r from-teal-600 to-cyan-700 rounded-xl text-white shadow-lg">
+            <div className="p-3 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl text-white shadow-lg">
               <Calculator className="h-8 w-8" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-teal-600 to-cyan-700 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
                 {t('common.tools')}
               </h1>
               <p className="text-lg text-gray-600">
@@ -327,8 +327,8 @@ export default function Tools() {
           </Card>
         )}
 
-        <div className="mt-12 bg-gradient-to-r from-teal-600 to-cyan-700 rounded-2xl p-8 text-white text-center shadow-xl relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-teal-700/20 via-cyan-700/20 to-slate-800/20 animate-pulse"></div>
+        <div className="mt-12 bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-8 text-white text-center shadow-xl relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-700/20 via-blue-700/20 to-blue-800/20 animate-pulse"></div>
           <div className="relative z-10">
             <div className="flex items-center justify-center space-x-3 mb-4">
               <Shield className="h-8 w-8" />
@@ -336,7 +336,7 @@ export default function Tools() {
                 Comprehensive Medical Toolkit
               </h3>
             </div>
-            <p className="text-teal-100 text-lg max-w-3xl mx-auto mb-6">
+            <p className="text-blue-100 text-lg max-w-3xl mx-auto mb-6">
               {t('tools.toolkitDescription', { count: allTools.filter(tool => tool.audience.includes(mode)).length })}
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm">
