@@ -83,8 +83,12 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-3">
             <Link to="/" className="flex items-center space-x-3 hover:opacity-90 transition-opacity" aria-label="Docomax - Healthcare Advisor Home">
-              <div className="p-2 bg-white/12 rounded-lg backdrop-blur-sm border border-white/15" aria-hidden="true">
-                <Heart className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
+              <div className="p-2 bg-white/12 rounded-lg backdrop-blur-sm border border-white/15 relative" aria-hidden="true">
+                <svg className="h-6 w-6 sm:h-8 sm:w-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="6" y="9" width="12" height="14" rx="2" />
+                  <path d="M12 5v4M9 7h6" />
+                  <circle cx="12" cy="19" r="2" fill="currentColor" />
+                </svg>
               </div>
               <div className="hidden sm:block">
                 <h1 className="text-lg sm:text-xl font-bold tracking-tight">{t('pages.home.title')}</h1>
