@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import LanguageSelector from './LanguageSelector';
-import { Heart, Wifi, WifiOff, Menu, User, Briefcase, HelpCircle } from 'lucide-react';
+import { Activity, Wifi, WifiOff, Menu, User, Briefcase, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Link, useLocation } from 'react-router-dom';
