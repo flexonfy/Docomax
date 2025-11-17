@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="docoBg512" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e40af;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="docoAccent512" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="512" height="512" fill="url(#docoBg512)"/>
+  
+  <!-- Outer decorative circles -->
+  <circle cx="256" cy="256" r="256" fill="none" stroke="url(#docoAccent512)" stroke-width="4" opacity="0.2"/>
+  <circle cx="256" cy="256" r="240" fill="none" stroke="url(#docoAccent512)" stroke-width="2" opacity="0.15"/>
+  
+  <!-- Main icon container -->
+  <g transform="translate(256, 256)">
+    <!-- Primary circle background -->
+    <circle cx="0" cy="0" r="120" fill="rgba(255, 255, 255, 0.08)" stroke="#ffffff" stroke-width="3"/>
+    
+    <!-- Medical shield shape -->
+    <path d="M 0,-80 C -40,-80 -80,-60 -80,-20 C -80,40 0,100 0,100 C 0,100 80,40 80,-20 C 80,-60 40,-80 0,-80 Z" 
+          fill="none" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"/>
+    
+    <!-- Large medical cross/plus -->
+    <rect x="-30" y="-65" width="60" height="130" fill="#ffffff" rx="8"/>
+    <rect x="-65" y="-30" width="130" height="60" fill="#ffffff" rx="8"/>
+    
+    <!-- Decorative heartbeat line -->
+    <path d="M -95,50 L -75,50 L -65,35 L -55,55 L -45,35 L -35,55 L -25,50 L 20,50" 
+          stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+    
+    <!-- Small accent dots -->
+    <circle cx="-70" cy="-50" r="4" fill="#10b981" opacity="0.8"/>
+    <circle cx="70" cy="-50" r="4" fill="#06b6d4" opacity="0.8"/>
+    <circle cx="0" cy="85" r="4" fill="#10b981" opacity="0.8"/>
+  </g>
+</svg>

@@ -12,6 +12,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
+import { getStorageItem, setStorageItem } from '../../lib/localStorage';
 
 interface JournalEntry {
   date: string;
@@ -62,22 +63,12 @@ export default function MentalHealth() {
   const [assessmentResult, setAssessmentResult] = useState<number | null>(null);
   const [journalEntry, setJournalEntry] = useState('');
   const [journalEntries, setJournalEntries] = useState<JournalEntry[]>(() => {
-    const saved = localStorage.getItem('docomax-journal');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          return parsed;
-        }
-      } catch (e) {
-        console.error("Failed to parse journal entries from localStorage", e);
-      }
-    }
-    return [];
+    const saved = getStorageItem<JournalEntry[]>('docomax-journal', []);
+    return Array.isArray(saved) ? saved : [];
   });
 
   useEffect(() => {
-    localStorage.setItem('docomax-journal', JSON.stringify(journalEntries));
+    setStorageItem('docomax-journal', journalEntries);
   }, [journalEntries]);
 
   const handleSaveJournal = () => {

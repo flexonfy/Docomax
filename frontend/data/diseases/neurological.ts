@@ -73,11 +73,7 @@ export const neurologicalDiseases: ComprehensiveDisease[] = [
     source: 'mayo',
     prevalenceInAfrica: 'high',
     ageGroup: 'all',
-    gender: 'all',
-    quizQuestions: [
-      { en: 'Did you lose consciousness during the event?', fr: 'Avez-vous perdu connaissance pendant l\'événement ?', sw: 'Je, ulipoteza fahamu wakati wa tukio?', isRiskFactor: false },
-      { en: 'Did you experience uncontrollable jerking movements of your arms or legs?', fr: 'Avez-vous eu des mouvements saccadés incontrôlables des bras ou des jambes ?', sw: 'Je, ulipata miondoko isiyodhibitiwa ya mikono au miguu?', isRiskFactor: false }
-    ]
+    gender: 'all'
   },
   {
     id: 'migraine',
@@ -89,9 +85,9 @@ export const neurologicalDiseases: ComprehensiveDisease[] = [
     category: 'neurological',
     severity: 'medium',
     symptoms: {
-      en: ['throbbing or pulsing headache, often on one side', 'sensitivity to light, sound, and sometimes smell', 'nausea and vomiting', 'aura (visual disturbances like flashes of light or blind spots)', 'throbbing headache', 'severe headache'],
-      fr: ['mal de tête pulsatile, souvent d\'un seul côté', 'sensibilité à la lumière, au son et parfois aux odeurs', 'nausées et vomissements', 'aura (troubles visuels comme des éclairs de lumière ou des angles morts)', 'mal de tête pulsatile', 'mal de tête sévère'],
-      sw: ['maumivu ya kichwa yanayopiga, mara nyingi upande mmoja', 'unyeti kwa mwanga, sauti, na wakati mwingine harufu', 'kichefuchefu na kutapika', 'aura (usumbufu wa kuona kama miale ya mwanga au maeneo yasiyoonekana)', 'maumivu ya kichwa yanayopiga', 'maumivu makali ya kichwa']
+      en: ['throbbing or pulsing headache, often on one side', 'sensitivity to light, sound, and sometimes smell', 'nausea and vomiting', 'aura (visual disturbances like flashes of light or blind spots)'],
+      fr: ['mal de tête pulsatile, souvent d\'un seul côté', 'sensibilité à la lumière, au son et parfois aux odeurs', 'nausées et vomissements', 'aura (troubles visuels comme des éclairs de lumière ou des angles morts)'],
+      sw: ['maumivu ya kichwa yanayopiga, mara nyingi upande mmoja', 'unyeti kwa mwanga, sauti, na wakati mwingine harufu', 'kichefuchefu na kutapika', 'aura (usumbufu wa kuona kama miale ya mwanga au maeneo yasiyoonekana)']
     },
     commonSymptoms: {
       en: ['throbbing headache', 'sensitivity to light', 'nausea'],
@@ -104,57 +100,255 @@ export const neurologicalDiseases: ComprehensiveDisease[] = [
       sw: ['kizunguzungu', 'ugumu wa kuongea', 'udhaifu wa muda upande mmoja wa mwili']
     },
     causes: {
-      en: ['exact cause unknown, involves genetic and environmental factors', 'changes in the brainstem and its interactions with the trigeminal nerve', 'imbalances in brain chemicals, including serotonin'],
-      fr: ['cause exacte inconnue, implique des facteurs génétiques et environnementaux', 'changements dans le tronc cérébral et ses interactions avec le nerf trijumeau', 'déséquilibres des substances chimiques du cerveau, y compris la sérotonine'],
-      sw: ['sababu halisi haijulikani, inahusisha mambo ya kijeni na kimazingira', 'mabadiliko katika shina la ubongo na mwingiliano wake na ujasiri wa trigeminal', 'kutokuwepo usawa katika kemikali za ubongo, ikiwa ni pamoja na serotonin']
+      en: ['genetic and environmental factors', 'changes in the brainstem', 'imbalances in brain chemicals'],
+      fr: ['facteurs génétiques et environnementaux', 'changements dans le tronc cérébral', 'déséquilibres des substances chimiques du cerveau'],
+      sw: ['mambo ya kijeni na kimazingira', 'mabadiliko katika shina la ubongo', 'kutokuwepo usawa katika kemikali za ubongo']
     },
     riskFactors: {
-      en: ['family history', 'female gender', 'hormonal changes in women', 'stress', 'certain foods and drinks', 'changes in sleep patterns'],
-      fr: ['antécédents familiaux', 'sexe féminin', 'changements hormonaux chez les femmes', 'stress', 'certains aliments et boissons', 'changements dans les habitudes de sommeil'],
-      sw: ['historia ya familia', 'jinsia ya kike', 'mabadiliko ya homoni kwa wanawake', 'msongo', 'vyakula na vinywaji fulani', 'mabadiliko katika mifumo ya usingizi']
+      en: ['family history', 'female gender', 'hormonal changes', 'stress', 'certain foods and drinks'],
+      fr: ['antécédents familiaux', 'sexe féminin', 'changements hormonaux', 'stress', 'certains aliments et boissons'],
+      sw: ['historia ya familia', 'jinsia ya kike', 'mabadiliko ya homoni', 'msongo', 'vyakula na vinywaji fulani']
     },
     treatment: {
-      en: 'Pain-relieving medications (NSAIDs, triptans), preventive medications (beta-blockers, antidepressants, anti-seizure drugs), lifestyle adjustments.',
-      fr: 'Médicaments analgésiques (AINS, triptans), médicaments préventifs (bêta-bloquants, antidépresseurs, anti-épileptiques), ajustements du mode de vie.',
-      sw: 'Dawa za kupunguza maumivu (NSAIDs, triptans), dawa za kuzuia (beta-blockers, antidepressants, dawa za kuzuia mshtuko), marekebisho ya mtindo wa maisha.'
+      en: 'Pain-relieving medications, preventive medications, lifestyle adjustments.',
+      fr: 'Médicaments analgésiques, médicaments préventifs, ajustements du mode de vie.',
+      sw: 'Dawa za kupunguza maumivu, dawa za kuzuia, marekebisho ya mtindo wa maisha.'
     },
     prevention: {
-      en: 'Identifying and avoiding triggers, regular sleep schedule, managing stress, regular exercise, staying hydrated.',
-      fr: 'Identifier et éviter les déclencheurs, horaire de sommeil régulier, gestion du stress, exercice régulier, rester hydraté.',
-      sw: 'Kutambua na kuepuka vichocheo, ratiba ya usingizi ya kawaida, kudhibiti msongo, mazoezi ya kawaida, kunywa maji ya kutosha.'
+      en: 'Avoid triggers, regular sleep, stress management, exercise, stay hydrated.',
+      fr: 'Éviter les déclencheurs, sommeil régulier, gestion du stress, exercice, rester hydraté.',
+      sw: 'Epuka vichocheo, usingizi wa kawaida, dhibiti msongo, mazoezi, kunywa maji ya kutosha.'
     },
     whenToSeekHelp: {
-      en: 'See a doctor for severe or frequent headaches, or if headache pattern changes. Seek immediate help for abrupt, severe headache or headache with fever, stiff neck, confusion, or seizures.',
-      fr: 'Consultez un médecin pour des maux de tête sévères ou fréquents, ou si le schéma des maux de tête change. Consultez immédiatement pour un mal de tête brutal et sévère ou un mal de tête avec fièvre, raideur de la nuque, confusion ou convulsions.',
-      sw: 'Muone daktari kwa maumivu makali au ya mara kwa mara ya kichwa, au ikiwa muundo wa maumivu ya kichwa unabadilika. Tafuta msaada wa haraka kwa maumivu ya kichwa ya ghafla, makali au maumivu ya kichwa yenye homa, shingo ngumu, kuchanganyikiwa, au mshtuko.'
+      en: 'See a doctor for severe or frequent headaches, or if headache pattern changes.',
+      fr: 'Consultez un médecin pour des maux de tête sévères ou fréquents.',
+      sw: 'Muone daktari kwa maumivu makali au ya mara kwa mara ya kichwa.'
     },
     complications: {
-      en: ['chronic migraine', 'status migrainosus (migraine lasting > 72 hours)', 'migrainous infarction (stroke)'],
-      fr: ['migraine chronique', 'état de mal migraineux (migraine durant > 72 heures)', 'infarctus migraineux (AVC)'],
-      sw: ['migraine sugu', 'status migrainosus (migraine inayodumu > masaa 72)', 'infarction ya migraine (kiharusi)']
+      en: ['chronic migraine', 'stroke-like symptoms'],
+      fr: ['migraine chronique', 'symptômes d\'accident vasculaire cérébral'],
+      sw: ['migraine sugu', 'dalili kama kiharusi']
     },
     diagnosis: {
-      en: 'Based on medical history, symptoms, and neurological examination. Imaging tests (MRI, CT) may be used to rule out other causes.',
-      fr: 'Basé sur les antécédents médicaux, les symptômes et l\'examen neurologique. Des tests d\'imagerie (IRM, scanner) peuvent être utilisés pour exclure d\'autres causes.',
-      sw: 'Kulingana na historia ya matibabu, dalili, na uchunguzi wa neva. Vipimo vya picha (MRI, CT) vinaweza kutumika kuondoa sababu zingine.'
-    },
-    possibleTests: {
-      en: ['Neurological examination', 'MRI or CT scan to rule out other conditions', 'Keeping a headache diary'],
-      fr: ['Examen neurologique', 'IRM ou scanner pour exclure d\'autres conditions', 'Tenir un journal des maux de tête'],
-      sw: ['Uchunguzi wa neva', 'MRI au CT scan kuondoa hali zingine', 'Kuweka shajara ya maumivu ya kichwa']
+      en: 'Medical history, symptoms, neurological examination.',
+      fr: 'Antécédents médicaux, symptômes, examen neurologique.',
+      sw: 'Historia ya matibabu, dalili, uchunguzi wa neva.'
     },
     prognosis: {
-      en: 'Chronic condition, but can be managed with treatment and lifestyle changes.',
-      fr: 'Condition chronique, mais peut être gérée avec un traitement et des changements de mode de vie.',
-      sw: 'Hali sugu, lakini inaweza kudhibitiwa na matibabu na mabadiliko ya mtindo wa maisha.'
+      en: 'Chronic condition, manageable with treatment and lifestyle changes.',
+      fr: 'Condition chronique, gérable avec un traitement et des changements de mode de vie.',
+      sw: 'Hali sugu, inaweza kudhibitiwa na matibabu na mabadiliko ya mtindo wa maisha.'
     },
     source: 'mayo',
     prevalenceInAfrica: 'high',
     ageGroup: 'all',
-    gender: 'female',
-    quizQuestions: [
-      { en: 'Is your headache typically on one side of your head?', fr: 'Votre mal de tête est-il généralement d\'un seul côté de la tête ?', sw: 'Je, maumivu yako ya kichwa huwa upande mmoja wa kichwa?', isRiskFactor: false },
-      { en: 'Are you sensitive to light and sound during the headache?', fr: 'Êtes-vous sensible à la lumière et au son pendant le mal de tête ?', sw: 'Je, unahisi usumbufu kwa mwanga na sauti wakati wa maumivu ya kichwa?', isRiskFactor: false }
-    ]
+    gender: 'all'
+  },
+  {
+    id: 'stroke',
+    name: {
+      en: 'Stroke (Cerebrovascular Accident)',
+      fr: 'Accident Vasculaire Cérébral (AVC)',
+      sw: 'Kiharusi (Ajali ya Mishipa ya Ubongo)'
+    },
+    category: 'neurological',
+    severity: 'emergency',
+    symptoms: {
+      en: ['sudden weakness on one side of the face, arm, or leg', 'sudden confusion or difficulty speaking', 'sudden vision problems', 'sudden difficulty walking or dizziness', 'sudden severe headache'],
+      fr: ['faiblesse soudaine d\'un côté du visage, du bras ou de la jambe', 'confusion soudaine ou difficulté à parler', 'problèmes de vision soudains', 'difficulté soudaine à marcher', 'mal de tête soudain et sévère'],
+      sw: ['udhaifu wa ghafla upande mmoja wa uso, mkono, au mguu', 'kuchanganyikiwa kwa ghafla au shida ya kuongea', 'shida ya ghafla ya kuona', 'ugumu wa ghafla wa kutembea', 'maumivu ya ghafla ya kichwa']
+    },
+    commonSymptoms: {
+      en: ['sudden weakness on one side', 'sudden difficulty speaking', 'sudden vision problems'],
+      fr: ['faiblesse soudaine d\'un côté', 'difficulté soudaine à parler', 'problèmes de vision soudains'],
+      sw: ['udhaifu wa ghafla upande mmoja', 'ugumu wa ghafla wa kuongea', 'matatizo ya macho ya ghafla']
+    },
+    rareSymptoms: {
+      en: ['loss of consciousness', 'death'],
+      fr: ['perte de conscience', 'décès'],
+      sw: ['kupoteza fahamu', 'kifo']
+    },
+    causes: {
+      en: ['blockage of blood vessel', 'bleeding in the brain', 'blood clots', 'atherosclerosis'],
+      fr: ['blocage du vaisseau sanguin', 'saignement dans le cerveau', 'caillots sanguins', 'athérosclérose'],
+      sw: ['kuziba kwa njia ya damu', 'kutokwa na damu ubongoni', 'maganda ya damu', 'atherosclerosis']
+    },
+    riskFactors: {
+      en: ['high blood pressure', 'diabetes', 'high cholesterol', 'smoking', 'atrial fibrillation', 'obesity'],
+      fr: ['hypertension artérielle', 'diabète', 'cholestérol élevé', 'tabagisme', 'fibrillation auriculaire', 'obésité'],
+      sw: ['shinikizo la damu la juu', 'kisukari', 'kolesterol ya juu', 'sigara', 'atrial fibrillation', 'unene kupita kiasi']
+    },
+    treatment: {
+      en: 'Emergency treatment, thrombolytic drugs, rehabilitation, aspirin, blood pressure management.',
+      fr: 'Traitement d\'urgence, médicaments thrombolytiques, réadaptation, aspirine, gestion de la tension artérielle.',
+      sw: 'Matibabu ya dharura, dawa za thrombolytic, urekebishaji, aspirin, usimamizi wa shinikizo la damu.'
+    },
+    prevention: {
+      en: 'Manage blood pressure, control diabetes and cholesterol, stop smoking, exercise, healthy diet.',
+      fr: 'Gérer la tension artérielle, contrôler le diabète et le cholestérol, arrêter de fumer, exercice, régime sain.',
+      sw: 'Dhibiti shinikizo la damu, dhibiti kisukari na kolesterol, acha sigara, mazoezi, lishe nzuri.'
+    },
+    whenToSeekHelp: {
+      en: 'Call emergency services immediately. Time is critical for stroke treatment.',
+      fr: 'Appelez les services d\'urgence immédiatement. Le temps est critique.',
+      sw: 'Piga simu dharura mara moja. Muda ni muhimu.'
+    },
+    complications: {
+      en: ['paralysis', 'speech difficulties', 'memory loss', 'post-stroke depression'],
+      fr: ['paralysie', 'difficultés d\'élocution', 'perte de mémoire', 'dépression post-AVC'],
+      sw: ['kupooza', 'ugumu wa kuongea', 'kupoteza kumbukumbu', 'unyogovu baada ya kiharusi']
+    },
+    diagnosis: {
+      en: 'CT or MRI scan, blood tests, carotid ultrasound, heart monitoring.',
+      fr: 'Tomodensitométrie ou IRM, analyses de sang, échotomographie carotidienne, surveillance cardiaque.',
+      sw: 'CT au MRI scan, vipimo vya damu, ultrasound ya carotid, ufuatiliaji wa moyo.'
+    },
+    prognosis: {
+      en: 'Depends on extent of damage and treatment timing. Early treatment improves outcomes.',
+      fr: 'Dépend de l\'ampleur des dommages et du moment du traitement.',
+      sw: 'Inaetegemea upande wa uharibifu na muda wa matibabu.'
+    },
+    source: 'who',
+    prevalenceInAfrica: 'high',
+    ageGroup: 'all',
+    gender: 'all'
+  },
+  {
+    id: 'parkinsons',
+    name: {
+      en: 'Parkinson\'s Disease',
+      fr: 'Maladie de Parkinson',
+      sw: 'Ugonjwa wa Parkinson'
+    },
+    category: 'neurological',
+    severity: 'high',
+    symptoms: {
+      en: ['tremors (shaking)', 'rigidity (stiffness)', 'bradykinesia (slow movement)', 'postural instability (balance problems)', 'cognitive changes', 'sleep problems'],
+      fr: ['tremblements', 'rigidité', 'bradykinésie (mouvement lent)', 'instabilité posturale (problèmes d\'équilibre)', 'changements cognitifs', 'problèmes de sommeil'],
+      sw: ['kutetetemeka', 'ugumu', 'bradykinesia (miondoko polepole)', 'instability ya posturale (matatizo ya usawa)', 'mabadiliko ya akili', 'matatizo ya usingizi']
+    },
+    commonSymptoms: {
+      en: ['tremors', 'stiffness', 'slow movement', 'balance problems'],
+      fr: ['tremblements', 'rigidité', 'mouvement lent', 'problèmes d\'équilibre'],
+      sw: ['kutetetemeka', 'ugumu', 'miondoko polepole', 'matatizo ya usawa']
+    },
+    rareSymptoms: {
+      en: ['dementia', 'severe depression', 'hallucinations'],
+      fr: ['démence', 'dépression sévère', 'hallucinations'],
+      sw: ['dementia', 'unyogovu mkali', 'macho macheza']
+    },
+    causes: {
+      en: ['loss of dopamine-producing neurons', 'genetic factors', 'environmental toxins'],
+      fr: ['perte de neurones producteurs de dopamine', 'facteurs génétiques', 'toxines environnementales'],
+      sw: ['kupoteza neuroni znazo tengeneza dopamine', 'sababu za kijeni', 'sumu za mazingira']
+    },
+    riskFactors: {
+      en: ['age', 'family history', 'male gender', 'head trauma', 'pesticide exposure'],
+      fr: ['âge', 'antécédents familiaux', 'sexe masculin', 'traumatisme crânien', 'exposition aux pesticides'],
+      sw: ['umri', 'historia ya familia', 'jinsia ya kiume', 'jeraha la kichwa', 'kufichuliwa na mbu ya wadudu']
+    },
+    treatment: {
+      en: 'Levodopa (L-DOPA), dopamine agonists, inhibitors, physical therapy, surgery (deep brain stimulation).',
+      fr: 'Lévodopa (L-DOPA), agonistes de la dopamine, inhibiteurs, physiothérapie, chirurgie (stimulation cérébrale profonde).',
+      sw: 'Levodopa (L-DOPA), agonists za dopamine, inhibitors, jitherapy ya mwili, upasuaji (stimulation ya ubongo).'
+    },
+    prevention: {
+      en: 'Maintain physical activity, cognitive engagement, healthy diet, head injury prevention.',
+      fr: 'Maintenir l\'activité physique, l\'engagement cognitif, un régime sain, la prévention des traumatismes crâniens.',
+      sw: 'Dumisha shughuli ya mwili, kujiingiza katika kazi ya akili, lishe nzuri, kuzuia majeraha ya kichwa.'
+    },
+    whenToSeekHelp: {
+      en: 'See a doctor if you experience tremor, stiffness, or slowness of movement.',
+      fr: 'Consultez un médecin si vous souffrez de tremblements, de rigidité ou de lenteur des mouvements.',
+      sw: 'Muone daktari ikiwa una kutetetemeka, ugumu, au polepole ya miondoko.'
+    },
+    complications: {
+      en: ['falls', 'fractures', 'pneumonia', 'dementia', 'depression'],
+      fr: ['chutes', 'fractures', 'pneumonie', 'démence', 'dépression'],
+      sw: ['kuanguka', 'kuvunjika', 'nimonia', 'dementia', 'unyogovu']
+    },
+    diagnosis: {
+      en: 'Clinical diagnosis based on symptoms and neurological examination.',
+      fr: 'Diagnostic clinique basé sur les symptômes et l\'examen neurologique.',
+      sw: 'Utambuzi wa kimatibabu kulingana na dalili na uchunguzi wa neva.'
+    },
+    prognosis: {
+      en: 'Progressive disease, but symptoms manageable with treatment. Life expectancy near normal.',
+      fr: 'Maladie progressive, mais les symptômes peuvent être gérés. L\'espérance de vie est proche de la normale.',
+      sw: 'Ugonjwa unaoendelea, lakini dalili zinaweza kudhibitiwa. Umri wa maisha ni karibu kawaida.'
+    },
+    source: 'mayo',
+    prevalenceInAfrica: 'low',
+    ageGroup: 'elderly',
+    gender: 'male'
+  },
+  {
+    id: 'vertigo',
+    name: {
+      en: 'Vertigo/Dizziness',
+      fr: 'Vertige/Étourdissement',
+      sw: 'Kizunguzungu'
+    },
+    category: 'neurological',
+    severity: 'medium',
+    symptoms: {
+      en: ['spinning sensation', 'dizziness', 'loss of balance', 'nausea', 'vomiting', 'vision problems'],
+      fr: ['sensation de rotation', 'étourdissement', 'perte d\'équilibre', 'nausées', 'vomissement', 'problèmes de vision'],
+      sw: ['hisi ya kuzunguka', 'kizunguzungu', 'kupoteza usawa', 'kichefuchefu', 'kutapika', 'matatizo ya macho']
+    },
+    commonSymptoms: {
+      en: ['spinning sensation', 'dizziness', 'loss of balance'],
+      fr: ['sensation de rotation', 'étourdissement', 'perte d\'équilibre'],
+      sw: ['hisi ya kuzunguka', 'kizunguzungu', 'kupoteza usawa']
+    },
+    rareSymptoms: {
+      en: ['severe falling', 'prolonged symptoms'],
+      fr: ['chutes graves', 'symptômes prolongés'],
+      sw: ['kuanguka kwingi', 'dalili za muda mrefu']
+    },
+    causes: {
+      en: ['benign paroxysmal positional vertigo (BPPV)', 'Meniere\'s disease', 'vestibulitis', 'head injury', 'stroke'],
+      fr: ['vertige paroxystique positionnel bénin (VPPB)', 'maladie de Meniere', 'vestibulite', 'traumatisme crânien', 'AVC'],
+      sw: ['benign paroxysmal positional vertigo (BPPV)', 'ugonjwa wa Meniere', 'vestibulitis', 'jeraha la kichwa', 'kiharusi']
+    },
+    riskFactors: {
+      en: ['age', 'head injury history', 'vestibular disorder history', 'anxiety disorder'],
+      fr: ['âge', 'antécédents de traumatisme crânien', 'antécédents de trouble vestibulaire', 'trouble d\'anxiété'],
+      sw: ['umri', 'historia ya jeraha la kichwa', 'historia ya tatanishi wa vestibular', 'tatanishi wa wasiwasi']
+    },
+    treatment: {
+      en: 'Canalith repositioning procedures (Epley maneuver), vestibular rehabilitation, medications for nausea.',
+      fr: 'Procédures de repositionnement des canalithes (manœuvre d\'Epley), réadaptation vestibulaire, médicaments contre les nausées.',
+      sw: 'Utaratibu wa uongezaji wa canalith (maneuver ya Epley), urekebishaji wa vestibular, dawa za kichefuchefu.'
+    },
+    prevention: {
+      en: 'Head injury prevention, manage anxiety, treat underlying conditions.',
+      fr: 'Prévention des traumatismes crâniens, gestion de l\'anxiété, traitement des conditions sous-jacentes.',
+      sw: 'Kuzuia majeraha ya kichwa, dhibiti wasiwasi, tibu hali za chini.'
+    },
+    whenToSeekHelp: {
+      en: 'See a doctor if dizziness is severe, persistent, or accompanied by other symptoms.',
+      fr: 'Consultez un médecin si les étourdissements sont graves, persistants ou accompagnés d\'autres symptômes.',
+      sw: 'Muone daktari ikiwa kizunguzungu ni kikali, kinaendelea, au kinaongezwa na dalili zingine.'
+    },
+    complications: {
+      en: ['falls', 'injuries', 'anxiety', 'depression'],
+      fr: ['chutes', 'blessures', 'anxiété', 'dépression'],
+      sw: ['kuanguka', 'majeraha', 'wasiwasi', 'unyogovu']
+    },
+    diagnosis: {
+      en: 'Clinical history, examination, Dix-Hallpike test, imaging if needed.',
+      fr: 'Antécédents cliniques, examen, test de Dix-Hallpike, imagerie si nécessaire.',
+      sw: 'Historia ya kimatibabu, uchunguzi, kipimo cha Dix-Hallpike, upigaji picha ikiwa inahitajika.'
+    },
+    prognosis: {
+      en: 'Depends on cause. Many improve with treatment. Some may be chronic.',
+      fr: 'Dépend de la cause. Beaucoup s\'améliorent avec le traitement.',
+      sw: 'Inaetegemea sababu. Hali nyingi zinaboresha na matibabu.'
+    },
+    source: 'mayo',
+    prevalenceInAfrica: 'high',
+    ageGroup: 'all',
+    gender: 'all'
   }
 ];

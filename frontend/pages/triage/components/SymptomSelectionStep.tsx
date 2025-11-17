@@ -5,7 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Search, X, Zap } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Search, X, Zap, AlertCircle } from 'lucide-react';
+import { isRedFlagSymptom } from '../../../data/symptomMetadata';
 import BodyMap from './BodyMap';
 
 interface SymptomSelectionStepProps {
@@ -32,9 +34,31 @@ export default function SymptomSelectionStep({ selectedSymptoms, onSymptomAdd, o
     setSearchTerm('');
   };
 
+  const redFlagSymptoms = selectedSymptoms.filter(s => isRedFlagSymptom(s));
+  const hasRedFlags = redFlagSymptoms.length > 0;
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div className="lg:col-span-2 space-y-6">
+        {hasRedFlags && (
+          <Card className="border-red-200 bg-red-50">
+            <CardContent className="pt-6">
+              <div className="flex items-start space-x-3">
+                <AlertCircle className="h-6 w-6 text-red-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-semibold text-red-900 mb-1">⚠️ Red Flag Symptoms Detected</h3>
+                  <p className="text-sm text-red-800 mb-2">The following symptoms may require urgent medical attention:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {redFlagSymptoms.map(symptom => (
+                      <Badge key={symptom} className="bg-red-600 text-white">{symptom}</Badge>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         <Card>
           <CardHeader>
             <CardTitle>{t('pages.triage.selectSymptoms')}</CardTitle>
@@ -60,9 +84,14 @@ export default function SymptomSelectionStep({ selectedSymptoms, onSymptomAdd, o
                       <button
                         key={symptom}
                         onClick={() => handleAddSymptom(symptom)}
-                        className="w-full text-left px-3 py-2 hover:bg-gray-50 border-b last:border-b-0"
+                        className={`w-full text-left px-3 py-2 hover:bg-gray-50 border-b last:border-b-0 ${
+                          isRedFlagSymptom(symptom) ? 'bg-red-50' : ''
+                        }`}
                       >
-                        {symptom}
+                        <div className="flex items-center justify-between">
+                          <span>{symptom}</span>
+                          {isRedFlagSymptom(symptom) && <AlertCircle className="h-4 w-4 text-red-600" />}
+                        </div>
                       </button>
                     ))
                   ) : (
@@ -81,9 +110,15 @@ export default function SymptomSelectionStep({ selectedSymptoms, onSymptomAdd, o
               <div className="space-y-2 max-h-48 overflow-y-auto p-1 border rounded-lg min-h-[50px]">
                 {selectedSymptoms.length > 0 ? (
                   selectedSymptoms.map((symptom) => (
-                    <div key={symptom} className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg p-2">
-                      <span className="text-sm text-blue-800">{symptom}</span>
-                      <Button variant="ghost" size="sm" onClick={() => onSymptomRemove(symptom)} className="h-6 w-6 p-0 text-blue-600 hover:text-red-600">
+                    <div key={symptom} className={`flex items-center justify-between border rounded-lg p-2 ${
+                      isRedFlagSymptom(symptom)
+                        ? 'bg-red-50 border-red-200'
+                        : 'bg-blue-50 border-blue-200'
+                    }`}>
+                      <span className={`text-sm ${isRedFlagSymptom(symptom) ? 'text-red-800' : 'text-blue-800'}`}>
+                        {isRedFlagSymptom(symptom) && '🚨 '}{symptom}
+                      </span>
+                      <Button variant="ghost" size="sm" onClick={() => onSymptomRemove(symptom)} className="h-6 w-6 p-0 hover:text-red-600">
                         <X className="h-3 w-3" />
                       </Button>
                     </div>

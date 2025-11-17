@@ -5,8 +5,18 @@ import { PatientRecordsProvider } from './contexts/PatientRecordsContext';
 import { MoodTrackingProvider } from './contexts/MoodTrackingContext';
 import { PainAssessmentProvider } from './contexts/PainAssessmentContext';
 import { AddictionTrackingProvider } from './contexts/AddictionTrackingContext';
+import { MedicationTrackingProvider } from './contexts/MedicationTrackingContext';
+import { MedicationAdherenceProvider } from './contexts/MedicationAdherenceContext';
+import { VitalsTrackingProvider } from './contexts/VitalsTrackingContext';
+import { MedicationRemindersProvider } from './contexts/MedicationRemindersContext';
+import { AppointmentRemindersProvider } from './contexts/AppointmentRemindersContext';
+import { AuditLoggingProvider } from './contexts/AuditLoggingContext';
 import { ModeProvider } from './contexts/ModeContext';
+import { PatientAccessProvider } from './contexts/PatientAccessContext';
 import { Toaster } from '@/components/ui/toaster';
+import ErrorBoundary from './components/ErrorBoundary';
+import ServiceWorkerUpdateNotification from './components/ServiceWorkerUpdateNotification';
+import AccessibilityEnhancements from './components/AccessibilityEnhancements';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Triage from './pages/triage';
@@ -31,51 +41,76 @@ import GlasgowComaScale from './pages/tools/GlasgowComaScale';
 import APGARScore from './pages/tools/APGARScore';
 import PainScale from './pages/tools/PainScale';
 import AntiAddictionToolkit from './pages/tools/AntiAddictionToolkit';
+import KidneyFunctionCalculator from './pages/tools/KidneyFunctionCalculator';
+import NEWS2Calculator from './pages/tools/NEWS2Calculator';
+import AllergyMedicationReconciliation from './pages/tools/AllergyMedicationReconciliation';
 
 function App() {
   return (
-    <LanguageProvider>
-      <ModeProvider>
-        <PatientRecordsProvider>
-          <MoodTrackingProvider>
-            <PainAssessmentProvider>
-              <AddictionTrackingProvider>
-                <Router>
-                  <Layout>
-                    <Routes>
-                      <Route path="/" element={<Home />} />
-                      <Route path="/triage" element={<Triage />} />
-                      <Route path="/records" element={<Records />} />
-                      <Route path="/encyclopedia" element={<Encyclopedia />} />
-                      <Route path="/tools" element={<Tools />} />
-                      <Route path="/guides" element={<Guides />} />
-                      <Route path="/faq" element={<FAQ />} />
-                      <Route path="/tools/dosage" element={<DosageCalculator />} />
-                      <Route path="/tools/bmi" element={<BMICalculator />} />
-                      <Route path="/tools/pregnancy" element={<PregnancyTracker />} />
-                      <Route path="/tools/ors" element={<ORSGuide />} />
-                      <Route path="/tools/first-aid" element={<FirstAid />} />
-                      <Route path="/tools/vaccination" element={<VaccinationPlanner />} />
-                      <Route path="/tools/facilities" element={<FacilityFinder />} />
-                      <Route path="/tools/mental-health" element={<MentalHealth />} />
-                      <Route path="/tools/sanitation" element={<SanitationGuide />} />
-                      <Route path="/tools/drug-interactions" element={<DrugInteractionChecker />} />
-                      <Route path="/tools/medical-converter" element={<MedicalConverter />} />
-                      <Route path="/tools/iv-calculator" element={<IVCalculator />} />
-                      <Route path="/tools/glasgow-coma-scale" element={<GlasgowComaScale />} />
-                      <Route path="/tools/apgar-score" element={<APGARScore />} />
-                      <Route path="/tools/pain-scale" element={<PainScale />} />
-                      <Route path="/tools/anti-addiction" element={<AntiAddictionToolkit />} />
-                    </Routes>
-                  </Layout>
-                  <Toaster />
-                </Router>
-              </AddictionTrackingProvider>
-            </PainAssessmentProvider>
-          </MoodTrackingProvider>
-        </PatientRecordsProvider>
-      </ModeProvider>
-    </LanguageProvider>
+    <AccessibilityEnhancements>
+      <ErrorBoundary>
+        <LanguageProvider>
+          <ModeProvider>
+            <PatientAccessProvider>
+              <AuditLoggingProvider>
+                <PatientRecordsProvider>
+              <MoodTrackingProvider>
+                <PainAssessmentProvider>
+                  <AddictionTrackingProvider>
+                    <MedicationTrackingProvider>
+                      <MedicationAdherenceProvider>
+                        <VitalsTrackingProvider>
+                          <MedicationRemindersProvider>
+                            <AppointmentRemindersProvider>
+                              <Router>
+                        <Layout>
+                          <Routes>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/triage" element={<Triage />} />
+                            <Route path="/records" element={<Records />} />
+                            <Route path="/encyclopedia" element={<Encyclopedia />} />
+                            <Route path="/tools" element={<Tools />} />
+                            <Route path="/guides" element={<Guides />} />
+                            <Route path="/faq" element={<FAQ />} />
+                            <Route path="/tools/dosage" element={<DosageCalculator />} />
+                            <Route path="/tools/bmi" element={<BMICalculator />} />
+                            <Route path="/tools/pregnancy" element={<PregnancyTracker />} />
+                            <Route path="/tools/ors" element={<ORSGuide />} />
+                            <Route path="/tools/first-aid" element={<FirstAid />} />
+                            <Route path="/tools/vaccination" element={<VaccinationPlanner />} />
+                            <Route path="/tools/facilities" element={<FacilityFinder />} />
+                            <Route path="/tools/mental-health" element={<MentalHealth />} />
+                            <Route path="/tools/sanitation" element={<SanitationGuide />} />
+                            <Route path="/tools/drug-interactions" element={<DrugInteractionChecker />} />
+                            <Route path="/tools/medical-converter" element={<MedicalConverter />} />
+                            <Route path="/tools/iv-calculator" element={<IVCalculator />} />
+                            <Route path="/tools/glasgow-coma-scale" element={<GlasgowComaScale />} />
+                            <Route path="/tools/apgar-score" element={<APGARScore />} />
+                            <Route path="/tools/pain-scale" element={<PainScale />} />
+                            <Route path="/tools/anti-addiction" element={<AntiAddictionToolkit />} />
+                            <Route path="/tools/kidney-function" element={<KidneyFunctionCalculator />} />
+                            <Route path="/tools/news2" element={<NEWS2Calculator />} />
+                            <Route path="/tools/allergy-medication" element={<AllergyMedicationReconciliation />} />
+                          </Routes>
+                        </Layout>
+                        <Toaster />
+                        <ServiceWorkerUpdateNotification />
+                              </Router>
+                            </AppointmentRemindersProvider>
+                          </MedicationRemindersProvider>
+                        </VitalsTrackingProvider>
+                      </MedicationAdherenceProvider>
+                    </MedicationTrackingProvider>
+                  </AddictionTrackingProvider>
+                </PainAssessmentProvider>
+              </MoodTrackingProvider>
+                </PatientRecordsProvider>
+              </AuditLoggingProvider>
+            </PatientAccessProvider>
+          </ModeProvider>
+        </LanguageProvider>
+      </ErrorBoundary>
+    </AccessibilityEnhancements>
   );
 }
 

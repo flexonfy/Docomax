@@ -40,6 +40,7 @@ export default function AddVisitDialog({ isOpen, onClose, patientId, addVisit, u
     referrals: '',
     prescriptions: []
   });
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (editingVisit) {
@@ -76,12 +77,74 @@ export default function AddVisitDialog({ isOpen, onClose, patientId, addVisit, u
         respiratoryRate: '', oxygenSaturation: '', weight: '', height: '', painScale: '' },
         physicalExam: '', referrals: '', prescriptions: []
       });
+      setValidationErrors({});
     }
   }, [editingVisit, isOpen]);
 
+  const validateVisitForm = (): boolean => {
+    const errors: Record<string, string> = {};
+
+    // Required field
+    if (!newVisit.chiefComplaint.trim()) {
+      errors.chiefComplaint = 'Chief complaint is required';
+    }
+
+    // Date validation
+    if (!newVisit.date) {
+      errors.date = 'Visit date is required';
+    }
+
+    // Follow-up date validation
+    if (newVisit.followUpDate) {
+      const visitDate = new Date(newVisit.date);
+      const followUpDate = new Date(newVisit.followUpDate);
+      if (followUpDate <= visitDate) {
+        errors.followUpDate = 'Follow-up date must be after visit date';
+      }
+    }
+
+    // Cost validation
+    if (newVisit.cost) {
+      const cost = parseFloat(newVisit.cost);
+      if (isNaN(cost) || cost < 0) {
+        errors.cost = 'Cost must be a valid positive number';
+      }
+    }
+
+    // Vitals validation
+    if (newVisit.vitals.temperature) {
+      const temp = parseFloat(newVisit.vitals.temperature);
+      if (isNaN(temp) || temp < 35 || temp > 42) {
+        errors.temperature = 'Temperature must be between 35°C and 42°C';
+      }
+    }
+
+    if (newVisit.vitals.heartRate) {
+      const hr = parseInt(newVisit.vitals.heartRate, 10);
+      if (isNaN(hr) || hr < 30 || hr > 200) {
+        errors.heartRate = 'Heart rate must be between 30 and 200 bpm';
+      }
+    }
+
+    if (newVisit.vitals.respiratoryRate) {
+      const rr = parseInt(newVisit.vitals.respiratoryRate, 10);
+      if (isNaN(rr) || rr < 8 || rr > 60) {
+        errors.respiratoryRate = 'Respiratory rate must be between 8 and 60';
+      }
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSave = () => {
-    if (!patientId || !newVisit.chiefComplaint) {
+    if (!patientId) {
       toast({ title: t('common.error'), description: t('common.pleaseFillFields'), variant: "destructive" });
+      return;
+    }
+
+    if (!validateVisitForm()) {
+      toast({ title: t('common.error'), description: 'Please fix validation errors', variant: "destructive" });
       return;
     }
 
@@ -132,7 +195,8 @@ export default function AddVisitDialog({ isOpen, onClose, patientId, addVisit, u
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="visitDate">Date</Label>
-              <Input id="visitDate" type="date" value={newVisit.date} onChange={(e) => setNewVisit(p => ({...p, date: e.target.value}))} />
+              <Input id="visitDate" type="date" value={newVisit.date} onChange={(e) => setNewVisit(p => ({...p, date: e.target.value}))} aria-invalid={!!validationErrors.date} />
+              {validationErrors.date && <p className="text-sm text-red-600 error-message mt-1">{validationErrors.date}</p>}
             </div>
             <div>
               <Label htmlFor="visitType">Type</Label>
@@ -150,7 +214,8 @@ export default function AddVisitDialog({ isOpen, onClose, patientId, addVisit, u
           </div>
           <div>
             <Label htmlFor="chiefComplaint">Chief Complaint</Label>
-            <Input id="chiefComplaint" value={newVisit.chiefComplaint} onChange={(e) => setNewVisit(p => ({...p, chiefComplaint: e.target.value}))} />
+            <Input id="chiefComplaint" value={newVisit.chiefComplaint} onChange={(e) => setNewVisit(p => ({...p, chiefComplaint: e.target.value}))} aria-invalid={!!validationErrors.chiefComplaint} />
+            {validationErrors.chiefComplaint && <p className="text-sm text-red-600 error-message mt-1">{validationErrors.chiefComplaint}</p>}
           </div>
           <div>
             <Label htmlFor="symptoms">Symptoms (one per line)</Label>
@@ -171,11 +236,13 @@ export default function AddVisitDialog({ isOpen, onClose, patientId, addVisit, u
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="followUpDate">Follow-up Date</Label>
-              <Input id="followUpDate" type="date" value={newVisit.followUpDate} onChange={(e) => setNewVisit(p => ({...p, followUpDate: e.target.value}))} />
+              <Input id="followUpDate" type="date" value={newVisit.followUpDate} onChange={(e) => setNewVisit(p => ({...p, followUpDate: e.target.value}))} aria-invalid={!!validationErrors.followUpDate} />
+              {validationErrors.followUpDate && <p className="text-sm text-red-600 error-message mt-1">{validationErrors.followUpDate}</p>}
             </div>
             <div>
               <Label htmlFor="cost">Cost</Label>
-              <Input id="cost" type="number" value={newVisit.cost} onChange={(e) => setNewVisit(p => ({...p, cost: e.target.value}))} />
+              <Input id="cost" type="number" value={newVisit.cost} onChange={(e) => setNewVisit(p => ({...p, cost: e.target.value}))} aria-invalid={!!validationErrors.cost} />
+              {validationErrors.cost && <p className="text-sm text-red-600 error-message mt-1">{validationErrors.cost}</p>}
             </div>
           </div>
           <div>
@@ -192,10 +259,19 @@ export default function AddVisitDialog({ isOpen, onClose, patientId, addVisit, u
           </div>
           <h3 className="font-semibold">Vitals</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Input placeholder="Temp (°C)" value={newVisit.vitals.temperature} onChange={(e) => setNewVisit(p => ({...p, vitals: {...p.vitals, temperature: e.target.value}}))} />
+            <div>
+              <Input placeholder="Temp (°C)" value={newVisit.vitals.temperature} onChange={(e) => setNewVisit(p => ({...p, vitals: {...p.vitals, temperature: e.target.value}}))} aria-invalid={!!validationErrors.temperature} />
+              {validationErrors.temperature && <p className="text-xs text-red-600 error-message mt-1">{validationErrors.temperature}</p>}
+            </div>
             <Input placeholder="BP" value={newVisit.vitals.bloodPressure} onChange={(e) => setNewVisit(p => ({...p, vitals: {...p.vitals, bloodPressure: e.target.value}}))} />
-            <Input placeholder="HR (bpm)" value={newVisit.vitals.heartRate} onChange={(e) => setNewVisit(p => ({...p, vitals: {...p.vitals, heartRate: e.target.value}}))} />
-            <Input placeholder="RR" value={newVisit.vitals.respiratoryRate} onChange={(e) => setNewVisit(p => ({...p, vitals: {...p.vitals, respiratoryRate: e.target.value}}))} />
+            <div>
+              <Input placeholder="HR (bpm)" value={newVisit.vitals.heartRate} onChange={(e) => setNewVisit(p => ({...p, vitals: {...p.vitals, heartRate: e.target.value}}))} aria-invalid={!!validationErrors.heartRate} />
+              {validationErrors.heartRate && <p className="text-xs text-red-600 error-message mt-1">{validationErrors.heartRate}</p>}
+            </div>
+            <div>
+              <Input placeholder="RR" value={newVisit.vitals.respiratoryRate} onChange={(e) => setNewVisit(p => ({...p, vitals: {...p.vitals, respiratoryRate: e.target.value}}))} aria-invalid={!!validationErrors.respiratoryRate} />
+              {validationErrors.respiratoryRate && <p className="text-xs text-red-600 error-message mt-1">{validationErrors.respiratoryRate}</p>}
+            </div>
           </div>
         </div>
         <DialogFooter>

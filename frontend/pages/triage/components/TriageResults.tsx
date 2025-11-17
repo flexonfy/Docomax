@@ -5,15 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
-import { AlertTriangle, CheckCircle, Clock, Info, Shield, Sparkles, Stethoscope, TestTube, Heart, Activity } from 'lucide-react';
+import { AlertTriangle, CheckCircle, Clock, Info, Shield, Sparkles, Stethoscope, TestTube, Heart, Activity, Zap, Lightbulb, HelpCircle } from 'lucide-react';
+import type { EnhancedDiseaseResult } from '../../../data/triageAlgorithm';
+import { calculatePresentationCompleteness, getPresentationSummary } from '../../../data/typicalPresentations';
 
-interface TriageResult {
-  disease: ComprehensiveDisease;
-  confidence: number;
+interface TriageResult extends EnhancedDiseaseResult {
   refinedConfidence?: number;
-  matchedSymptoms: string[];
-  severity: string;
-  riskScore: number;
 }
 
 interface TriageResultsProps {
@@ -24,32 +21,82 @@ interface TriageResultsProps {
 export default function TriageResults({ results, onStartQuiz }: TriageResultsProps) {
   const { t, language } = useLanguage();
   const [showDetailsFor, setShowDetailsFor] = useState<TriageResult | null>(null);
+  const [showAllResults, setShowAllResults] = useState(false);
+  const [showConfirmingIndicators, setShowConfirmingIndicators] = useState<TriageResult | null>(null);
+
+  // Show only top 1-2 by default, unless user clicks "View Other Possibilities"
+  const visibleResults = showAllResults ? results : results.slice(0, 2);
+
+  const getEmergencyIcon = (level: string) => {
+    switch (level) {
+      case 'critical': return <Zap className="h-5 w-5 text-red-600" />;
+      case 'emergent': return <AlertTriangle className="h-5 w-5 text-red-600" />;
+      case 'urgent': return <AlertTriangle className="h-5 w-5 text-orange-600" />;
+      case 'routine': return <CheckCircle className="h-5 w-5 text-green-600" />;
+      default: return <Info className="h-5 w-5 text-blue-600" />;
+    }
+  };
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
-      case 'emergency': return <AlertTriangle className="h-5 w-5 text-red-500" />;
-      case 'high': return <AlertTriangle className="h-5 w-5 text-orange-500" />;
-      case 'medium': return <Clock className="h-5 w-5 text-yellow-500" />;
-      case 'low': return <CheckCircle className="h-5 w-5 text-green-500" />;
-      default: return <Info className="h-5 w-5 text-blue-500" />;
+      case 'emergency': return <AlertTriangle className="h-5 w-5 text-red-600" />;
+      case 'high': return <AlertTriangle className="h-5 w-5 text-orange-600" />;
+      case 'medium': return <Clock className="h-5 w-5 text-amber-600" />;
+      case 'low': return <CheckCircle className="h-5 w-5 text-green-600" />;
+      default: return <Info className="h-5 w-5 text-blue-600" />;
+    }
+  };
+
+  const getEmergencyColor = (level: string) => {
+    switch (level) {
+      case 'critical': return 'bg-red-100 text-red-900 border-red-300';
+      case 'emergent': return 'bg-red-50 text-red-800 border-red-200';
+      case 'urgent': return 'bg-orange-50 text-orange-800 border-orange-200';
+      case 'routine': return 'bg-green-50 text-green-800 border-green-200';
+      default: return 'bg-blue-50 text-blue-800 border-blue-200';
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'emergency': return 'bg-red-100 text-red-800 border-red-200';
-      case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low': return 'bg-green-100 text-green-800 border-green-200';
-      default: return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'emergency': return 'bg-red-100 text-red-900 border-red-300';
+      case 'high': return 'bg-orange-100 text-orange-900 border-orange-300';
+      case 'medium': return 'bg-amber-100 text-amber-900 border-amber-300';
+      case 'low': return 'bg-green-100 text-green-900 border-green-300';
+      default: return 'bg-blue-100 text-blue-900 border-blue-300';
     }
   };
 
   const getRiskColor = (riskScore: number) => {
-    if (riskScore >= 80) return 'bg-red-100 text-red-800 border-red-200';
-    if (riskScore >= 60) return 'bg-orange-100 text-orange-800 border-orange-200';
-    if (riskScore >= 40) return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-    return 'bg-green-100 text-green-800 border-green-200';
+    if (riskScore >= 80) return 'bg-red-100 text-red-900 border-red-300';
+    if (riskScore >= 60) return 'bg-orange-100 text-orange-900 border-orange-300';
+    if (riskScore >= 40) return 'bg-amber-100 text-amber-900 border-amber-300';
+    return 'bg-green-100 text-green-900 border-green-300';
+  };
+
+  const getConfidenceLabel = (confidence: number, index: number, totalResults: number): string => {
+    // Only "Most Likely" if confident AND top ranked AND >50% confidence
+    if (index === 0 && confidence >= 50) return '✓ Most Likely';
+    if (index === 1 && confidence >= 45) return '◇ Consider';
+    if (confidence >= 40) return '? Possible';
+    if (confidence < 30) return '⚠️ Low Confidence';
+    return '△ Less Likely';
+  };
+
+  const shouldWarnLowConfidence = (confidence: number): boolean => confidence < 40;
+
+  const getPresentationStatus = (diseaseId: string, matchedSymptoms: string[]): string => {
+    const analysis = calculatePresentationCompleteness(matchedSymptoms, diseaseId);
+    if (analysis.hasRequiredSymptoms && analysis.completeness >= 70) {
+      return '✓ Classic presentation';
+    }
+    if (analysis.hasRequiredSymptoms && analysis.completeness < 70) {
+      return `⚠️ Atypical: Missing ${analysis.missingCommon.length} common symptoms`;
+    }
+    if (!analysis.hasRequiredSymptoms && analysis.missingRequired.length <= 1) {
+      return `⚠️ Incomplete: Missing key symptom`;
+    }
+    return `❌ Doesn't match typical presentation`;
   };
 
   const getRecommendation = (severity: string, riskScore: number) => {
@@ -62,74 +109,169 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
   return (
     <>
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold text-gray-900">Differential Diagnosis</h2>
-        {results.map((result, index) => (
-          <Card key={result.disease.id} className={`border-l-4 shadow-lg ${getSeverityColor(result.severity).replace('bg-', 'border-l-').replace('-100', '-500').replace(' text-red-800', '')}`}>
-            <CardHeader>
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <CardTitle className="flex items-center space-x-2 text-lg">
-                  {getSeverityIcon(result.severity)}
-                  <span>{result.disease.name?.[language] || result.disease.name?.en}</span>
-                  {index === 0 && <Badge variant="secondary" className="animate-pulse">{t('pages.triage.mostLikely')}</Badge>}
-                </CardTitle>
-                <div className="flex flex-wrap items-center gap-2">
-                  <Badge variant="outline" className="flex items-center">
-                    {result.refinedConfidence && <Sparkles className="h-3 w-3 mr-1 text-yellow-500" />}
-                    {t('pages.triage.confidence')}: 
-                    {result.refinedConfidence ? (
-                      <>
-                        <span className="line-through text-gray-500 mr-1">{result.confidence}%</span>
-                        <span className="font-bold">{result.refinedConfidence}%</span>
-                      </>
-                    ) : (
-                      `${result.confidence}%`
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold text-gray-900">Most Likely Diagnosis</h2>
+          {results.length > 2 && !showAllResults && (
+            <button
+              onClick={() => setShowAllResults(true)}
+              className="text-sm font-medium text-blue-600 hover:text-blue-700 underline"
+            >
+              View {results.length - 2} other possibilities
+            </button>
+          )}
+          {showAllResults && (
+            <button
+              onClick={() => setShowAllResults(false)}
+              className="text-sm font-medium text-gray-600 hover:text-gray-700 underline"
+            >
+              Show top 2 only
+            </button>
+          )}
+        </div>
+        {visibleResults.map((result, index) => {
+          const confidence = result.refinedConfidence || result.finalConfidence || result.confidence;
+          const confidenceLabel = getConfidenceLabel(confidence, index, results.length);
+          const isLowConfidence = shouldWarnLowConfidence(confidence);
+          const presentationStatus = getPresentationStatus(result.disease.id, result.matchedSymptoms);
+
+          return (
+            <Card
+              key={result.disease.id}
+              className={`border-l-4 shadow-lg ${
+                isLowConfidence ? 'border-l-yellow-500 bg-yellow-50' : ''
+              } ${getSeverityColor(result.severity).replace('bg-', 'border-l-').replace('-100', '-500').replace(' text-red-800', '')}`}
+            >
+              <CardHeader>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <CardTitle className="flex items-center space-x-2 text-lg">
+                    {getSeverityIcon(result.severity)}
+                    <span>{result.disease.name?.[language] || result.disease.name?.en}</span>
+                    {confidenceLabel && (
+                      <Badge variant="secondary" className={confidence >= 50 ? 'animate-pulse' : ''}>
+                        {confidenceLabel}
+                      </Badge>
                     )}
-                  </Badge>
-                  <Badge className={getRiskColor(result.riskScore)}>{t('pages.triage.risk')}: {result.riskScore}%</Badge>
-                  <Badge className={getSeverityColor(result.severity)}>{result.severity.toUpperCase()}</Badge>
+                  </CardTitle>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge variant="outline" className="flex items-center">
+                      {result.refinedConfidence && <Sparkles className="h-3 w-3 mr-1 text-yellow-500" />}
+                      {t('pages.triage.confidence')}:
+                      {result.refinedConfidence ? (
+                        <>
+                          <span className="line-through text-gray-500 mr-1">{result.confidence}%</span>
+                          <span className="font-bold">{result.refinedConfidence}%</span>
+                        </>
+                      ) : (
+                        `${confidence}%`
+                      )}
+                    </Badge>
+                    <Badge className={getRiskColor(result.riskScore)}>{t('pages.triage.risk')}: {result.riskScore}%</Badge>
+                    {result.emergencyLevel && (
+                      <Badge className={getEmergencyColor(result.emergencyLevel)}>
+                        {getEmergencyIcon(result.emergencyLevel) && <span className="mr-1">{result.emergencyLevel.toUpperCase()}</span>}
+                      </Badge>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-2 text-sm">{t('pages.triage.matchedSymptoms')}:</h4>
-                <div className="flex flex-wrap gap-1">
-                  {result.matchedSymptoms.map((symptom, idx) => (
-                    <Badge key={idx} variant="secondary" className="bg-orange-50 text-orange-800">{symptom}</Badge>
-                  ))}
-                </div>
-              </div>
-              <div className={`p-3 rounded-lg border ${getSeverityColor(result.severity)}`}>
-                <h4 className="font-semibold mb-1 text-sm">{t('pages.triage.recommendations')}:</h4>
-                <p className="text-sm">{getRecommendation(result.severity, result.riskScore)}</p>
-              </div>
-              <div className="flex flex-wrap gap-2 mt-4">
-                {result.disease.quizQuestions && result.disease.quizQuestions.length > 0 && (
-                  <Button onClick={() => onStartQuiz(result)} size="sm" variant="outline" className="flex-1">
-                    <Sparkles className="h-4 w-4 mr-2 text-yellow-500" />
-                    Refine with Follow-up Questions
-                  </Button>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Low Confidence Warning */}
+                {isLowConfidence && (
+                  <div className="p-3 bg-yellow-100 rounded-lg border border-yellow-300">
+                    <div className="flex items-start space-x-2">
+                      <HelpCircle className="h-4 w-4 text-yellow-700 mt-0.5 flex-shrink-0" />
+                      <div className="text-sm">
+                        <p className="font-semibold text-yellow-900">Low Confidence Diagnosis</p>
+                        <p className="text-yellow-800 text-xs mt-1">
+                          Based on limited information. Additional symptoms or clarifications would improve accuracy.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 )}
-                <Button onClick={() => setShowDetailsFor(result)} size="sm" variant="outline" className="flex-1">
-                  <Info className="h-4 w-4 mr-2" />
-                  More Info
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+
+                {/* Presentation Status */}
+                <div className="p-2 bg-blue-50 rounded border border-blue-200">
+                  <p className="text-xs text-blue-800">
+                    <strong>Presentation Match:</strong> {presentationStatus}
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-2 text-sm">{t('pages.triage.matchedSymptoms')}:</h4>
+                  <div className="flex flex-wrap gap-1">
+                    {result.matchedSymptoms.map((symptom, idx) => (
+                      <Badge key={idx} variant="secondary" className="bg-orange-50 text-orange-800">
+                        {symptom}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+
+                {result.reasoning?.symptomCombinations?.length > 0 && (
+                  <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                    <div className="flex items-start space-x-2">
+                      <Lightbulb className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-semibold text-blue-900 text-sm">Pattern Match</h4>
+                        <p className="text-xs text-blue-800">{result.reasoning.symptomCombinations[0]}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className={`p-3 rounded-lg border ${getSeverityColor(result.severity)}`}>
+                  <h4 className="font-semibold mb-1 text-sm">{t('pages.triage.recommendations')}:</h4>
+                  <p className="text-sm">{getRecommendation(result.severity, result.riskScore)}</p>
+                </div>
+
+                <div className="flex flex-col gap-2 mt-4">
+                  <div className="flex flex-wrap gap-2">
+                    {isLowConfidence && (
+                      <Button size="sm" variant="default" className="flex-1 bg-blue-600 hover:bg-blue-700">
+                        <HelpCircle className="h-4 w-4 mr-2" />
+                        Ask More
+                      </Button>
+                    )}
+                    {result.disease.quizQuestions && result.disease.quizQuestions.length > 0 && (
+                      <Button onClick={() => onStartQuiz(result)} size="sm" variant="outline" className="flex-1">
+                        <Sparkles className="h-4 w-4 mr-2 text-yellow-500" />
+                        Refine
+                      </Button>
+                    )}
+                    <Button onClick={() => setShowDetailsFor(result)} size="sm" variant="outline" className="flex-1">
+                      <Info className="h-4 w-4 mr-2" />
+                      Details
+                    </Button>
+                  </div>
+                  <Button
+                    onClick={() => setShowConfirmingIndicators(result)}
+                    size="sm"
+                    variant="outline"
+                    className="w-full bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
+                  >
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    What would confirm this?
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
 
       <Dialog open={!!showDetailsFor} onOpenChange={() => setShowDetailsFor(null)}>
         <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">
+              {showDetailsFor?.disease.name[language] || 'Disease Details'}
+            </DialogTitle>
+            <DialogDescription>
+              {showDetailsFor ? `Detailed information about ${showDetailsFor.disease.name[language]}.` : 'Loading disease details...'}
+            </DialogDescription>
+          </DialogHeader>
           {showDetailsFor && (
             <>
-              <DialogHeader>
-                <DialogTitle className="text-2xl">{showDetailsFor.disease.name[language]}</DialogTitle>
-                <DialogDescription>
-                  Detailed information about {showDetailsFor.disease.name[language]}.
-                </DialogDescription>
-              </DialogHeader>
               <div className="max-h-[70vh] overflow-y-auto pr-4 space-y-6">
                 <div className="space-y-2">
                   <h3 className="font-semibold flex items-center"><Stethoscope className="h-4 w-4 mr-2" />All Symptoms</h3>
@@ -186,6 +328,87 @@ export default function TriageResults({ results, onStartQuiz }: TriageResultsPro
                   <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
                     {showDetailsFor.disease.complications[language].map((comp, idx) => <li key={idx}>{comp}</li>)}
                   </ul>
+                </div>
+              </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button type="button" variant="secondary">
+                    Close
+                  </Button>
+                </DialogClose>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!showConfirmingIndicators} onOpenChange={() => setShowConfirmingIndicators(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">
+              {showConfirmingIndicators ? `What would confirm ${showConfirmingIndicators.disease.name[language]}?` : 'Confirming Indicators'}
+            </DialogTitle>
+            <DialogDescription>
+              {showConfirmingIndicators ? 'These are additional signs or symptoms that would make us more confident about this diagnosis.' : 'Loading confirming indicators...'}
+            </DialogDescription>
+          </DialogHeader>
+          {showConfirmingIndicators && (
+            <>
+              <div className="max-h-[70vh] overflow-y-auto pr-4 space-y-6">
+                <div className="space-y-3">
+                  <h3 className="font-semibold flex items-center"><Zap className="h-4 w-4 mr-2 text-orange-500" />Additional Symptoms to Look For</h3>
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-700">
+                      If you develop any of these symptoms, it would strengthen the possibility of {showConfirmingIndicators.disease.name[language]}:
+                    </p>
+                    <ul className="space-y-2">
+                      {showConfirmingIndicators.disease.rareSymptoms?.[language]?.slice(0, 5).map((symptom, idx) => (
+                        <li key={idx} className="flex items-start space-x-2">
+                          <span className="text-green-600 font-bold">+</span>
+                          <span className="text-sm text-gray-700">{symptom}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="space-y-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <h3 className="font-semibold flex items-center"><TestTube className="h-4 w-4 mr-2 text-blue-600" />Tests That Would Help Confirm</h3>
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-700 mb-2">
+                      These tests, if performed by a doctor, would help confirm this diagnosis:
+                    </p>
+                    <ul className="space-y-1">
+                      {(showConfirmingIndicators.disease.possibleTests?.[language] || showConfirmingIndicators.disease.possibleTests?.en || []).slice(0, 4).map((test, idx) => (
+                        <li key={idx} className="text-sm text-blue-700 flex items-start space-x-2">
+                          <span>•</span>
+                          <span>{test}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="space-y-3 p-3 bg-amber-50 rounded-lg border border-amber-200">
+                  <h3 className="font-semibold flex items-center"><AlertTriangle className="h-4 w-4 mr-2 text-amber-600" />Risk Factors That Match</h3>
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-700 mb-2">
+                      These factors increase the likelihood of {showConfirmingIndicators.disease.name[language]}:
+                    </p>
+                    <ul className="space-y-1">
+                      {showConfirmingIndicators.disease.riskFactors?.[language]?.slice(0, 4).map((factor, idx) => (
+                        <li key={idx} className="text-sm text-amber-700 flex items-start space-x-2">
+                          <span>•</span>
+                          <span>{factor}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <h3 className="font-semibold flex items-center text-red-800"><AlertTriangle className="h-4 w-4 mr-2" />When to Seek Immediate Help</h3>
+                  <p className="text-sm text-red-700 mt-2">{showConfirmingIndicators.disease.whenToSeekHelp[language]}</p>
                 </div>
               </div>
               <DialogFooter>

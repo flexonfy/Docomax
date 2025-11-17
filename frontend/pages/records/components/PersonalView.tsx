@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useLanguage } from '../../../contexts/LanguageContext';
 import { usePatientRecords, PatientRecord, Visit, Appointment } from '../../../contexts/PatientRecordsContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
+import { Download, Upload } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import PatientDetailView from './PatientDetailView';
 import AddPatientDialog from './dialogs/AddPatientDialog';
 import AddVisitDialog from './dialogs/AddVisitDialog';
@@ -17,13 +19,15 @@ import autoTable from 'jspdf-autotable';
 
 export default function PersonalView() {
   const { t } = useLanguage();
-  const { 
+  const {
     patients, addPatient, deletePatient, addVisit, updateVisit, deleteVisit,
     addVaccination, deleteVaccination, addLabResult, deleteLabResult, addAttachment, deleteAttachment,
     addMedication, deleteMedication, addReferral, deleteReferral,
-    appointments, addAppointment, updateAppointment, deleteAppointment
+    appointments, addAppointment, updateAppointment, deleteAppointment,
+    exportData, importData
   } = usePatientRecords();
   const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [showAddPatient, setShowAddPatient] = useState(false);
   const [showAddVisit, setShowAddVisit] = useState(false);
@@ -33,6 +37,7 @@ export default function PersonalView() {
   const [showAddMedication, setShowAddMedication] = useState(false);
   const [showAddAppointment, setShowAddAppointment] = useState(false);
   const [editingVisit, setEditingVisit] = useState<Visit | null>(null);
+  const [showBackupDialog, setShowBackupDialog] = useState(false);
 
   const myProfile = patients[0];
 
@@ -165,6 +170,55 @@ export default function PersonalView() {
     setShowAddVisit(true);
   };
 
+  const handleExportAllData = () => {
+    const dataStr = exportData();
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `docomax_personal_backup_${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast({
+      title: t('common.success'),
+      description: 'Your health data has been exported as a secure backup. Keep it safe in case you need to restore it later.'
+    });
+    setShowBackupDialog(false);
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileImport = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const text = e.target?.result;
+      if (typeof text === 'string') {
+        if (importData(text)) {
+          toast({
+            title: t('common.success'),
+            description: 'Your health data has been successfully restored from backup.'
+          });
+          setShowBackupDialog(false);
+        } else {
+          toast({
+            title: "Import Failed",
+            description: "The selected file is not a valid Docomax backup.",
+            variant: "destructive"
+          });
+        }
+      }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+  };
+
   if (!myProfile) {
     return (
       <>
@@ -191,6 +245,72 @@ export default function PersonalView() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Backup and Export Actions */}
+        <div className="mb-6 flex gap-2 justify-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowBackupDialog(true)}
+          >
+            <Download className="h-4 w-4 mr-2" />
+            Backup My Data
+          </Button>
+        </div>
+
+        {/* Backup/Restore Dialog */}
+        <Dialog open={showBackupDialog} onOpenChange={setShowBackupDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Backup & Restore Your Health Data</DialogTitle>
+              <DialogDescription>
+                Create a backup of your personal health record or restore from a previous backup. Your data is stored securely on your device.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="space-y-4">
+              <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <h4 className="font-semibold text-blue-900 mb-2">Why Backup?</h4>
+                <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
+                  <li>Protect your health data from accidental loss</li>
+                  <li>Transfer data between devices</li>
+                  <li>Keep a historical record of your health</li>
+                </ul>
+              </div>
+
+              <div className="flex gap-2">
+                <Button
+                  onClick={handleExportAllData}
+                  className="flex-1 bg-green-600 hover:bg-green-700"
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Export Backup
+                </Button>
+                <Button
+                  onClick={handleImportClick}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  <Upload className="h-4 w-4 mr-2" />
+                  Restore from Backup
+                </Button>
+              </div>
+
+              <p className="text-xs text-gray-500">
+                📁 Backup files are stored on your device and can be shared securely. Never share with untrusted parties.
+              </p>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Hidden file input for import */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".json"
+          onChange={handleFileImport}
+          style={{ display: 'none' }}
+        />
+
         <PatientDetailView 
           patient={myProfile} 
           recordActions={{ deleteVisit, deleteVaccination, deleteLabResult, deleteAttachment, deleteMedication, deleteReferral }} 

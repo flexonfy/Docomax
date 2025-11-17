@@ -133,9 +133,9 @@ export default function FAQ() {
           </div>
         </div>
 
-        <div className="mt-12 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-xl p-6 shadow-lg">
+        <div className="mt-12 bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-6 shadow-lg">
           <div className="flex items-start space-x-4">
-            <div className="p-3 bg-blue-500 rounded-full text-white">
+            <div className="p-3 bg-blue-600 rounded-full text-white">
               <Shield className="h-6 w-6" />
             </div>
             <div>

@@ -3008,5 +3008,530 @@ export const healthcareFacilities: HealthcareFacility[] = [
     address: '2 Park Rd, Grafton, Auckland 1023',
     phone: '+64-9-367-0000',
     services: ['Emergency', 'Specialist Care', 'Surgery', 'Maternity']
+  },
+  // Ethiopia
+  {
+    id: 'addis-ababa-university-hospital-eth',
+    name: 'Addis Ababa University Hospital',
+    type: 'hospital',
+    country: 'Ethiopia',
+    city: 'Addis Ababa',
+    address: 'Addis Ababa',
+    phone: '+251-11-515-7700',
+    services: ['Emergency', 'Surgery', 'Internal Medicine', 'Pediatrics', 'Maternity']
+  },
+  {
+    id: 'yekatit-12-hospital-eth',
+    name: 'Yekatit 12 Hospital',
+    type: 'hospital',
+    country: 'Ethiopia',
+    city: 'Addis Ababa',
+    address: 'Addis Ababa',
+    phone: '+251-11-551-2300',
+    services: ['General Surgery', 'Orthopedics', 'Trauma', 'Emergency Care']
+  },
+  // Rwanda
+  {
+    id: 'kigali-central-hospital-rwa',
+    name: 'Kigali Central Hospital',
+    type: 'hospital',
+    country: 'Rwanda',
+    city: 'Kigali',
+    address: 'KG 3 Ave, Kigali',
+    phone: '+250-78-854-0000',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Pediatrics', 'Maternity']
+  },
+  {
+    id: 'university-teaching-hospital-kigali-rwa',
+    name: 'University Teaching Hospital of Kigali',
+    type: 'hospital',
+    country: 'Rwanda',
+    city: 'Kigali',
+    address: 'KG 8 Ave, Kigali',
+    phone: '+250-78-800-2000',
+    services: ['Emergency', 'ICU', 'Surgery', 'Oncology', 'Neurology']
+  },
+  // Zimbabwe
+  {
+    id: 'parirenyatwa-hospital-zim',
+    name: 'Parirenyatwa Hospital',
+    type: 'hospital',
+    country: 'Zimbabwe',
+    city: 'Harare',
+    address: 'Mazoe Street, Harare',
+    phone: '+263-4-776-1300',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Pediatrics', 'Maternity']
+  },
+  {
+    id: 'sally-mugabe-hospital-zim',
+    name: 'Sally Mugabe Central Hospital',
+    type: 'hospital',
+    country: 'Zimbabwe',
+    city: 'Harare',
+    address: 'Harare',
+    phone: '+263-4-798-2300',
+    services: ['Emergency', 'Surgery', 'Internal Medicine', 'Obstetrics']
+  },
+  // Morocco
+  {
+    id: 'ibn-sina-hospital-morocco',
+    name: 'Ibn Sina Hospital',
+    type: 'hospital',
+    country: 'Morocco',
+    city: 'Rabat',
+    address: 'Rabat',
+    phone: '+212-5-3770-3000',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Neurology', 'Pediatrics']
+  },
+  {
+    id: 'cheikh-zaid-hospital-morocco',
+    name: 'Cheikh Zaid Hospital',
+    type: 'hospital',
+    country: 'Morocco',
+    city: 'Rabat',
+    address: 'Rabat',
+    phone: '+212-5-3730-2000',
+    services: ['General Surgery', 'Orthopedics', 'Emergency Care', 'Maternity']
+  },
+  // Tunisia
+  {
+    id: 'abderrahman-mami-hospital-tunisia',
+    name: 'Abderrahman Mami Hospital',
+    type: 'hospital',
+    country: 'Tunisia',
+    city: 'Ariana',
+    address: 'Ariana',
+    phone: '+216-71-235-000',
+    services: ['Cardiothoracic Surgery', 'Cardiology', 'Emergency', 'Intensive Care']
+  },
+  {
+    id: 'la-rabta-hospital-tunisia',
+    name: 'La Rabta Hospital',
+    type: 'hospital',
+    country: 'Tunisia',
+    city: 'Tunis',
+    address: 'Tunis',
+    phone: '+216-71-560-000',
+    services: ['Emergency', 'General Surgery', 'Internal Medicine', 'Pediatrics']
+  },
+  // Switzerland
+  {
+    id: 'university-hospital-zurich-ch',
+    name: 'University Hospital Zurich',
+    type: 'hospital',
+    country: 'Switzerland',
+    city: 'Zurich',
+    address: 'Rämistrasse 100, 8091 Zurich',
+    phone: '+41-44-255-1111',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Oncology', 'Neurology', 'Intensive Care']
+  },
+  {
+    id: 'inselspital-bern-ch',
+    name: 'Inselspital Bern University Hospital',
+    type: 'hospital',
+    country: 'Switzerland',
+    city: 'Bern',
+    address: '3010 Bern',
+    phone: '+41-31-632-2111',
+    services: ['Emergency', 'Surgery', 'Pediatrics', 'Maternity', 'ICU']
+  },
+  // Netherlands
+  {
+    id: 'amsterdam-umc-nl',
+    name: 'Amsterdam University Medical Center',
+    type: 'hospital',
+    country: 'Netherlands',
+    city: 'Amsterdam',
+    address: 'Meibergdreef 9, Amsterdam',
+    phone: '+31-20-5664-000',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Oncology', 'Neurology', 'Pediatrics']
+  },
+  {
+    id: 'erasmus-medical-center-nl',
+    name: 'Erasmus Medical Center',
+    type: 'hospital',
+    country: 'Netherlands',
+    city: 'Rotterdam',
+    address: '3015 CE Rotterdam',
+    phone: '+31-10-704-0000',
+    services: ['Emergency', 'Surgery', 'Cardiothoracic Surgery', 'Oncology', 'Intensive Care']
+  },
+  // Sweden
+  {
+    id: 'karolinska-hospital-se',
+    name: 'Karolinska University Hospital',
+    type: 'hospital',
+    country: 'Sweden',
+    city: 'Stockholm',
+    address: 'Stockholm',
+    phone: '+46-8-517-70-000',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Oncology', 'Neurology', 'Intensive Care']
+  },
+  {
+    id: 'sahlgrenska-hospital-se',
+    name: 'Sahlgrenska University Hospital',
+    type: 'hospital',
+    country: 'Sweden',
+    city: 'Gothenburg',
+    address: 'Gothenburg',
+    phone: '+46-31-343-0000',
+    services: ['Emergency', 'Surgery', 'Pediatrics', 'Maternity', 'Cardiology']
+  },
+  // Turkey
+  {
+    id: 'istanbul-medical-faculty-hospital-tr',
+    name: 'Istanbul University Medical Faculty Hospital',
+    type: 'hospital',
+    country: 'Turkey',
+    city: 'Istanbul',
+    address: 'Capa, Istanbul',
+    phone: '+90-212-414-2000',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Neurology', 'Pediatrics', 'Maternity']
+  },
+  {
+    id: 'hacettepe-hospital-tr',
+    name: 'Hacettepe University Hospital',
+    type: 'hospital',
+    country: 'Turkey',
+    city: 'Ankara',
+    address: 'Ankara',
+    phone: '+90-312-305-5000',
+    services: ['Emergency', 'Surgery', 'Oncology', 'Cardiothoracic Surgery', 'Intensive Care']
+  },
+  // Saudi Arabia
+  {
+    id: 'king-faisal-specialist-hospital-sa',
+    name: 'King Faisal Specialist Hospital & Research Centre',
+    type: 'hospital',
+    country: 'Saudi Arabia',
+    city: 'Riyadh',
+    address: 'P.O. Box 3354, Riyadh 11211',
+    phone: '+966-1-4647-1111',
+    services: ['Emergency', 'Oncology', 'Cardiothoracic Surgery', 'Neurosurgery', 'Intensive Care']
+  },
+  {
+    id: 'king-abdulaziz-university-hospital-sa',
+    name: 'King Abdulaziz University Hospital',
+    type: 'hospital',
+    country: 'Saudi Arabia',
+    city: 'Jeddah',
+    address: 'Jeddah',
+    phone: '+966-2-6400-0000',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Pediatrics', 'Maternity']
+  },
+  // United Arab Emirates
+  {
+    id: 'emirates-hospital-uae',
+    name: 'Emirates Hospital',
+    type: 'hospital',
+    country: 'United Arab Emirates',
+    city: 'Dubai',
+    address: 'Al Manara, Dubai',
+    phone: '+971-4-308-6666',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Neurology', 'Intensive Care']
+  },
+  {
+    id: 'tawam-hospital-uae',
+    name: 'Tawam Hospital',
+    type: 'hospital',
+    country: 'United Arab Emirates',
+    city: 'Abu Dhabi',
+    address: 'Abu Dhabi',
+    phone: '+971-3-707-4141',
+    services: ['Emergency', 'Surgery', 'Pediatrics', 'Maternity', 'Cardiology']
+  },
+  // Pakistan
+  {
+    id: 'shifa-international-hospital-pk',
+    name: 'Shifa International Hospital',
+    type: 'hospital',
+    country: 'Pakistan',
+    city: 'Islamabad',
+    address: 'H-8/4, Islamabad',
+    phone: '+92-51-846-1000',
+    services: ['Emergency', 'Surgery', 'Cardiothoracic Surgery', 'Neurology', 'Pediatrics', 'Intensive Care']
+  },
+  {
+    id: 'aga-khan-hospital-pk',
+    name: 'Aga Khan University Hospital',
+    type: 'hospital',
+    country: 'Pakistan',
+    city: 'Karachi',
+    address: 'Karachi',
+    phone: '+92-21-3486-1000',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Oncology', 'Pediatrics']
+  },
+  // South Korea
+  {
+    id: 'seoul-national-university-hospital-kr',
+    name: 'Seoul National University Hospital',
+    type: 'hospital',
+    country: 'South Korea',
+    city: 'Seoul',
+    address: '101 Daehak-ro, Jongno-gu, Seoul',
+    phone: '+82-2-2072-2114',
+    services: ['Emergency', 'Surgery', 'Cardiothoracic Surgery', 'Oncology', 'Neurology', 'Intensive Care']
+  },
+  {
+    id: 'samsung-medical-center-kr',
+    name: 'Samsung Medical Center',
+    type: 'hospital',
+    country: 'South Korea',
+    city: 'Seoul',
+    address: 'Seoul',
+    phone: '+82-2-3410-2114',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Oncology', 'Pediatrics', 'Intensive Care']
+  },
+  // Thailand
+  {
+    id: 'chulalongkorn-hospital-th',
+    name: 'Chulalongkorn Hospital',
+    type: 'hospital',
+    country: 'Thailand',
+    city: 'Bangkok',
+    address: 'Rama IV Road, Bangkok',
+    phone: '+66-2-256-4000',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Pediatrics', 'Maternity', 'Intensive Care']
+  },
+  {
+    id: 'bumrungrad-international-hospital-th',
+    name: 'Bumrungrad International Hospital',
+    type: 'hospital',
+    country: 'Thailand',
+    city: 'Bangkok',
+    address: 'Soi 3, Sukhumvit Rd, Bangkok',
+    phone: '+66-2-011-3000',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Oncology', 'Neurology', 'Pediatrics']
+  },
+  // Indonesia
+  {
+    id: 'cipto-mangunkusumo-hospital-id',
+    name: 'Cipto Mangunkusumo Hospital',
+    type: 'hospital',
+    country: 'Indonesia',
+    city: 'Jakarta',
+    address: 'Jalan Diponegoro No. 71, Jakarta',
+    phone: '+62-21-3161-7888',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Pediatrics', 'Maternity', 'Intensive Care']
+  },
+  {
+    id: 'rs-persahabatan-id',
+    name: 'RS Persahabatan',
+    type: 'hospital',
+    country: 'Indonesia',
+    city: 'Jakarta',
+    address: 'Jakarta',
+    phone: '+62-21-4891-7777',
+    services: ['Emergency', 'Pulmonology', 'Infectious Diseases', 'Internal Medicine']
+  },
+  // Philippines
+  {
+    id: 'philippine-general-hospital-ph',
+    name: 'Philippine General Hospital',
+    type: 'hospital',
+    country: 'Philippines',
+    city: 'Manila',
+    address: 'Taft Avenue, Manila',
+    phone: '+63-2-5548-8000',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Pediatrics', 'Maternity', 'Intensive Care']
+  },
+  {
+    id: 'st-lukes-medical-center-ph',
+    name: "St. Luke's Medical Center",
+    type: 'hospital',
+    country: 'Philippines',
+    city: 'Manila',
+    address: 'E. Rodriguez Sr. Boulevard, Manila',
+    phone: '+63-2-7895-8000',
+    services: ['Emergency', 'Surgery', 'Cardiothoracic Surgery', 'Oncology', 'Pediatrics']
+  },
+  // Malaysia
+  {
+    id: 'kuala-lumpur-hospital-my',
+    name: 'Kuala Lumpur Hospital',
+    type: 'hospital',
+    country: 'Malaysia',
+    city: 'Kuala Lumpur',
+    address: 'Jalan Pahang, Kuala Lumpur',
+    phone: '+60-3-4045-3000',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Pediatrics', 'Maternity', 'Intensive Care']
+  },
+  {
+    id: 'universiti-malaya-medical-center-my',
+    name: 'Universiti Malaya Medical Centre',
+    type: 'hospital',
+    country: 'Malaysia',
+    city: 'Kuala Lumpur',
+    address: 'Kuala Lumpur',
+    phone: '+60-3-7949-2063',
+    services: ['Emergency', 'Surgery', 'Cardiothoracic Surgery', 'Oncology', 'Neurology']
+  },
+  // Vietnam
+  {
+    id: 'bach-mai-hospital-vn',
+    name: 'Bach Mai Hospital',
+    type: 'hospital',
+    country: 'Vietnam',
+    city: 'Hanoi',
+    address: 'Giai Phong Road, Hanoi',
+    phone: '+84-24-3956-5000',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Pediatrics', 'Maternity', 'Intensive Care']
+  },
+  {
+    id: 'cho-ray-hospital-vn',
+    name: 'Cho Ray Hospital',
+    type: 'hospital',
+    country: 'Vietnam',
+    city: 'Ho Chi Minh City',
+    address: '201B Nguyen Chi Thanh, Ho Chi Minh City',
+    phone: '+84-28-3824-4111',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Pediatrics', 'Internal Medicine']
+  },
+  // Chile
+  {
+    id: 'hospital-del-salvador-cl',
+    name: 'Hospital del Salvador',
+    type: 'hospital',
+    country: 'Chile',
+    city: 'Santiago',
+    address: 'Avenida Salvador 364, Santiago',
+    phone: '+56-2-2580-5000',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Pediatrics', 'Maternity', 'Intensive Care']
+  },
+  {
+    id: 'hospital-clinico-university-cl',
+    name: 'Hospital Clínico Universidad de Chile',
+    type: 'hospital',
+    country: 'Chile',
+    city: 'Santiago',
+    address: 'Santiago',
+    phone: '+56-2-2978-8000',
+    services: ['Emergency', 'Surgery', 'Cardiothoracic Surgery', 'Pediatrics', 'Oncology']
+  },
+  // Peru
+  {
+    id: 'hospital-nacional-cayetano-heredia-pe',
+    name: 'Hospital Nacional Cayetano Heredia',
+    type: 'hospital',
+    country: 'Peru',
+    city: 'Lima',
+    address: 'San Martin de Porres, Lima',
+    phone: '+51-1-3190-0000',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Pediatrics', 'Infectious Diseases', 'Intensive Care']
+  },
+  {
+    id: 'hospital-nacional-edgardo-rebagliati-pe',
+    name: 'Hospital Nacional Edgardo Rebagliati Martins',
+    type: 'hospital',
+    country: 'Peru',
+    city: 'Lima',
+    address: 'Lima',
+    phone: '+51-1-3191-1000',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Maternity', 'Pediatrics']
+  },
+  // Norway
+  {
+    id: 'oslo-university-hospital-no',
+    name: 'Oslo University Hospital',
+    type: 'hospital',
+    country: 'Norway',
+    city: 'Oslo',
+    address: 'Oslo',
+    phone: '+47-2293-2000',
+    services: ['Emergency', 'Surgery', 'Cardiothoracic Surgery', 'Oncology', 'Neurology', 'Intensive Care']
+  },
+  {
+    id: 'haukeland-university-hospital-no',
+    name: 'Haukeland University Hospital',
+    type: 'hospital',
+    country: 'Norway',
+    city: 'Bergen',
+    address: 'Bergen',
+    phone: '+47-5597-5000',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Pediatrics', 'Maternity']
+  },
+  // Belgium
+  {
+    id: 'ghent-university-hospital-be',
+    name: 'Ghent University Hospital',
+    type: 'hospital',
+    country: 'Belgium',
+    city: 'Ghent',
+    address: 'De Pintelaan 185, Ghent',
+    phone: '+32-9-332-3111',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Oncology', 'Pediatrics', 'Intensive Care']
+  },
+  {
+    id: 'saint-luc-university-hospital-be',
+    name: 'Saint Luc University Hospital',
+    type: 'hospital',
+    country: 'Belgium',
+    city: 'Brussels',
+    address: 'Avenue Hippocrate 10, Brussels',
+    phone: '+32-2-764-1111',
+    services: ['Emergency', 'Surgery', 'Cardiothoracic Surgery', 'Neurology', 'Pediatrics']
+  },
+  // Greece
+  {
+    id: 'atten-ico-hospital-gr',
+    name: 'Attiko University Hospital',
+    type: 'hospital',
+    country: 'Greece',
+    city: 'Athens',
+    address: 'Rimini Street, Athens',
+    phone: '+30-21-5832-2000',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Pediatrics', 'Intensive Care']
+  },
+  {
+    id: 'hippokration-general-hospital-gr',
+    name: 'Hippokration General Hospital',
+    type: 'hospital',
+    country: 'Greece',
+    city: 'Athens',
+    address: '114 Vassilissis Sofias Avenue, Athens',
+    phone: '+30-21-7769-0000',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Internal Medicine', 'Pediatrics']
+  },
+  // Portugal
+  {
+    id: 'centro-hospitalar-lisbon-pt',
+    name: 'Centro Hospitalar e Universitário de Lisboa Central',
+    type: 'hospital',
+    country: 'Portugal',
+    city: 'Lisbon',
+    address: 'Avenida Miguel Bombarda, Lisbon',
+    phone: '+351-21-799-5000',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Pediatrics', 'Intensive Care']
+  },
+  {
+    id: 'porto-hospital-pt',
+    name: 'Centro Hospitalar e Universitário do Porto',
+    type: 'hospital',
+    country: 'Portugal',
+    city: 'Porto',
+    address: 'Porto',
+    phone: '+351-22-2077-500',
+    services: ['Emergency', 'Surgery', 'Cardiothoracic Surgery', 'Pediatrics', 'Intensive Care']
+  },
+  // Ireland
+  {
+    id: 'st-james-hospital-ie',
+    name: "St. James's Hospital",
+    type: 'hospital',
+    country: 'Ireland',
+    city: 'Dublin',
+    address: 'James Street, Dublin',
+    phone: '+353-1-4103000',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Pediatrics', 'Intensive Care']
+  },
+  {
+    id: 'cork-university-hospital-ie',
+    name: 'Cork University Hospital',
+    type: 'hospital',
+    country: 'Ireland',
+    city: 'Cork',
+    address: 'Wilton, Cork',
+    phone: '+353-21-492-0000',
+    services: ['Emergency', 'Surgery', 'Cardiology', 'Pediatrics', 'Maternity']
   }
 ];

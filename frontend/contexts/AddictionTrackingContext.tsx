@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { getStorageItem, setStorageItem, removeStorageItem } from '../lib/localStorage';
 
 export type AddictionType = 'smoking' | 'alcohol' | 'drugs' | 'pornography';
 
@@ -31,25 +32,23 @@ const AddictionTrackingContext = createContext<AddictionTrackingContextType | un
 
 export function AddictionTrackingProvider({ children }: { children: ReactNode }) {
   const [addiction, setAddictionState] = useState<Addiction | null>(() => {
-    const saved = localStorage.getItem('docomax-addiction');
-    return saved ? JSON.parse(saved) : null;
+    return getStorageItem<Addiction | null>('docomax-addiction', null);
   });
 
   const [checkIns, setCheckIns] = useState<CheckIn[]>(() => {
-    const saved = localStorage.getItem('docomax-addiction-checkins');
-    return saved ? JSON.parse(saved) : [];
+    return getStorageItem<CheckIn[]>('docomax-addiction-checkins', []);
   });
 
   useEffect(() => {
     if (addiction) {
-      localStorage.setItem('docomax-addiction', JSON.stringify(addiction));
+      setStorageItem('docomax-addiction', addiction);
     } else {
-      localStorage.removeItem('docomax-addiction');
+      removeStorageItem('docomax-addiction');
     }
   }, [addiction]);
 
   useEffect(() => {
-    localStorage.setItem('docomax-addiction-checkins', JSON.stringify(checkIns));
+    setStorageItem('docomax-addiction-checkins', checkIns);
   }, [checkIns]);
 
   const setAddiction = (newAddiction: Omit<Addiction, 'startDate'> & { startDate: Date }) => {

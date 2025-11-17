@@ -24,16 +24,52 @@ export default function AddLabResultDialog({ isOpen, onClose, patientId, addLabR
     notes: '',
     results: [{ parameter: '', value: '' }]
   });
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (!isOpen) {
       setNewLabResult({ testName: '', date: new Date().toISOString().split('T')[0], notes: '', results: [{ parameter: '', value: '' }] });
+      setValidationErrors({});
     }
   }, [isOpen]);
 
+  const validateLabResult = (): boolean => {
+    const errors: Record<string, string> = {};
+
+    if (!newLabResult.testName.trim()) {
+      errors.testName = 'Test name is required';
+    }
+
+    if (!newLabResult.date) {
+      errors.date = 'Test date is required';
+    }
+
+    const filledResults = newLabResult.results.filter(r => r.parameter && r.value);
+    if (filledResults.length === 0) {
+      errors.results = 'At least one result parameter and value must be provided';
+    }
+
+    // Check for invalid values (non-numeric)
+    filledResults.forEach((result, index) => {
+      if (result.value && isNaN(parseFloat(result.value))) {
+        if (!errors.results) {
+          errors.results = 'All result values must be numbers';
+        }
+      }
+    });
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSave = () => {
-    if (!patientId || !newLabResult.testName) {
+    if (!patientId) {
       toast({ title: t('common.error'), description: t('common.pleaseFillFields'), variant: "destructive" });
+      return;
+    }
+
+    if (!validateLabResult()) {
+      toast({ title: t('common.error'), description: 'Please fix validation errors', variant: "destructive" });
       return;
     }
 
@@ -65,11 +101,13 @@ export default function AddLabResultDialog({ isOpen, onClose, patientId, addLabR
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="testName">Test Name</Label>
-              <Input id="testName" value={newLabResult.testName} onChange={(e) => setNewLabResult(p => ({...p, testName: e.target.value}))} />
+              <Input id="testName" value={newLabResult.testName} onChange={(e) => setNewLabResult(p => ({...p, testName: e.target.value}))} aria-invalid={!!validationErrors.testName} />
+              {validationErrors.testName && <p className="text-sm text-red-600 error-message mt-1">{validationErrors.testName}</p>}
             </div>
             <div>
               <Label htmlFor="labDate">Date</Label>
-              <Input id="labDate" type="date" value={newLabResult.date} onChange={(e) => setNewLabResult(p => ({...p, date: e.target.value}))} />
+              <Input id="labDate" type="date" value={newLabResult.date} onChange={(e) => setNewLabResult(p => ({...p, date: e.target.value}))} aria-invalid={!!validationErrors.date} />
+              {validationErrors.date && <p className="text-sm text-red-600 error-message mt-1">{validationErrors.date}</p>}
             </div>
           </div>
           <div>
@@ -77,6 +115,7 @@ export default function AddLabResultDialog({ isOpen, onClose, patientId, addLabR
             <Textarea id="labNotes" value={newLabResult.notes} onChange={(e) => setNewLabResult(p => ({...p, notes: e.target.value}))} />
           </div>
           <h3 className="font-semibold">Results</h3>
+          {validationErrors.results && <p className="text-sm text-red-600 error-message">{validationErrors.results}</p>}
           {newLabResult.results.map((result, index) => (
             <div key={index} className="grid grid-cols-2 gap-2 border p-2 rounded-lg">
               <Input placeholder="Parameter" value={result.parameter} onChange={(e) => {

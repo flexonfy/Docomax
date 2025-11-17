@@ -5,14 +5,14 @@ import { useMode } from '../contexts/ModeContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { 
-  Calculator, 
-  Scale, 
-  Baby, 
-  Droplets, 
-  Heart, 
-  Shield, 
-  MapPin, 
+import {
+  Calculator,
+  Scale,
+  Baby,
+  Droplets,
+  Heart,
+  Shield,
+  MapPin,
   Brain,
   Sparkles,
   Zap,
@@ -27,7 +27,8 @@ import {
   Bot,
   Search,
   HelpCircle,
-  HeartHandshake
+  HeartHandshake,
+  Activity
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -197,6 +198,36 @@ export default function Tools() {
       category: 'Assessment',
       priority: 'high',
       audience: ['personal', 'specialist']
+    },
+    {
+      title: 'Kidney Function (eGFR)',
+      description: 'CKD-EPI equation calculator for estimating kidney function and disease staging',
+      icon: Droplets,
+      path: '/tools/kidney-function',
+      color: 'bg-gradient-to-br from-cyan-500 to-teal-600 hover:from-cyan-600 hover:to-teal-700',
+      category: 'Medical',
+      priority: 'high',
+      audience: ['personal', 'specialist']
+    },
+    {
+      title: 'NEWS2 Score',
+      description: 'National Early Warning Score 2 - Patient deterioration alert system for acute care',
+      icon: Activity,
+      path: '/tools/news2',
+      color: 'bg-gradient-to-br from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700',
+      category: 'Emergency',
+      priority: 'high',
+      audience: ['personal', 'specialist']
+    },
+    {
+      title: 'Allergy & Medication Reconciliation',
+      description: 'Comprehensive medication and allergy management with drug-allergy conflict checking',
+      icon: Shield,
+      path: '/tools/allergy-medication',
+      color: 'bg-gradient-to-br from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700',
+      category: 'Medical',
+      priority: 'high',
+      audience: ['personal', 'specialist']
     }
   ], [t]);
 
@@ -219,10 +250,10 @@ export default function Tools() {
   const categories = ['All', ...new Set(allTools.filter(tool => tool.audience.includes(mode)).map(tool => tool.category))];
 
   const stats = [
-    { icon: Calculator, value: allTools.filter(tool => tool.audience.includes(mode)).length.toString(), label: t('common.tools'), color: 'text-blue-500' },
-    { icon: Shield, value: 'WHO', label: t('tools.compliant'), color: 'text-green-500' },
-    { icon: Globe, value: '3', label: t('pages.home.languages'), color: 'text-purple-500' },
-    { icon: Zap, value: '100%', label: t('tools.offline'), color: 'text-orange-500' }
+    { icon: Calculator, value: allTools.filter(tool => tool.audience.includes(mode)).length.toString(), label: t('common.tools'), color: 'text-blue-600' },
+    { icon: Shield, value: 'WHO', label: t('tools.compliant'), color: 'text-blue-600' },
+    { icon: Globe, value: '3', label: t('pages.home.languages'), color: 'text-green-600' },
+    { icon: Zap, value: '100%', label: t('tools.offline'), color: 'text-amber-600' }
   ];
 
   const getPriorityBadge = (priority: string) => {
@@ -230,7 +261,7 @@ export default function Tools() {
       case 'high':
         return <Badge className="bg-red-100 text-red-800 text-xs">{t('common.high')}</Badge>;
       case 'medium':
-        return <Badge className="bg-yellow-100 text-yellow-800 text-xs">{t('common.medium')}</Badge>;
+        return <Badge className="bg-amber-100 text-amber-800 text-xs">{t('common.medium')}</Badge>;
       case 'low':
         return <Badge className="bg-green-100 text-green-800 text-xs">{t('common.low')}</Badge>;
       default:
@@ -239,15 +270,15 @@ export default function Tools() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="p-3 bg-gradient-to-r from-green-500 to-blue-500 rounded-xl text-white shadow-lg">
+            <div className="p-3 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl text-white shadow-lg">
               <Calculator className="h-8 w-8" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
                 {t('common.tools')}
               </h1>
               <p className="text-lg text-gray-600">
@@ -327,8 +358,8 @@ export default function Tools() {
           </Card>
         )}
 
-        <div className="mt-12 bg-gradient-to-r from-green-500 to-blue-500 rounded-2xl p-8 text-white text-center shadow-xl relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-green-600/20 via-blue-600/20 to-teal-600/20 animate-pulse"></div>
+        <div className="mt-12 bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-8 text-white text-center shadow-xl relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-700/20 via-blue-700/20 to-blue-800/20 animate-pulse"></div>
           <div className="relative z-10">
             <div className="flex items-center justify-center space-x-3 mb-4">
               <Shield className="h-8 w-8" />
@@ -336,7 +367,7 @@ export default function Tools() {
                 Comprehensive Medical Toolkit
               </h3>
             </div>
-            <p className="text-green-100 text-lg max-w-3xl mx-auto mb-6">
+            <p className="text-blue-100 text-lg max-w-3xl mx-auto mb-6">
               {t('tools.toolkitDescription', { count: allTools.filter(tool => tool.audience.includes(mode)).length })}
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm">

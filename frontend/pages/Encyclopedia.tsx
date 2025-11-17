@@ -11,16 +11,18 @@ import { Search, Book, AlertTriangle, CheckCircle, Clock, Info, Globe, Shield, F
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
 import FavoritesManager from '../lib/favorites';
+import EmptyState from '../components/EmptyState';
 
 // Renders a comprehensive disease encyclopedia from a static JSON data source. Features client-side search and filtering by various attributes like category, prevalence, and severity.
 export default function Encyclopedia() {
   const { t, language } = useLanguage();
   const { toast } = useToast();
+  const [searchInput, setSearchInput] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedSource, setSelectedSource] = useState('all');
   const [selectedSeverity, setSelectedSeverity] = useState('all');
-  const [selectedPrevalence, setSelectedPrevalence] = useState('all');
+  const [selectedGlobalPrevalence, setSelectedGlobalPrevalence] = useState('all');
   const [selectedAgeGroup, setSelectedAgeGroup] = useState('all');
   const [selectedDisease, setSelectedDisease] = useState<ComprehensiveDisease | null>(null);
   const [showFilters, setShowFilters] = useState(window.innerWidth >= 1024);
@@ -33,6 +35,14 @@ export default function Encyclopedia() {
   useEffect(() => {
     setFavoriteIds(FavoritesManager.getFavoriteIds());
   }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchTerm(searchInput);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchInput]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -67,8 +77,17 @@ export default function Encyclopedia() {
       diseases = diseases.filter(d => d.severity === selectedSeverity);
     }
 
-    if (selectedPrevalence !== 'all') {
-      diseases = diseases.filter(d => d.prevalenceInAfrica === selectedPrevalence);
+    if (selectedGlobalPrevalence !== 'all') {
+      // Map Africa-specific prevalence to global understanding
+      const prevalenceMapping: { [key: string]: string[] } = {
+        'very-high': ['very-high'],
+        'high': ['high', 'very-high'],
+        'medium': ['medium', 'high', 'very-high'],
+        'low': ['low', 'medium', 'high', 'very-high']
+      };
+
+      const matchingLevels = prevalenceMapping[selectedGlobalPrevalence] || [];
+      diseases = diseases.filter(d => matchingLevels.includes(d.prevalenceInAfrica));
     }
 
     if (selectedAgeGroup !== 'all') {
@@ -76,7 +95,7 @@ export default function Encyclopedia() {
     }
 
     return diseases;
-  }, [searchTerm, selectedCategory, selectedSource, selectedSeverity, selectedPrevalence, selectedAgeGroup, showFavoritesOnly, favoriteIds]);
+  }, [searchTerm, selectedCategory, selectedSource, selectedSeverity, selectedGlobalPrevalence, selectedAgeGroup, showFavoritesOnly, favoriteIds]);
 
   const getRelatedDiseases = (disease: ComprehensiveDisease): ComprehensiveDisease[] => {
     if (!disease) return [];
@@ -228,16 +247,17 @@ export default function Encyclopedia() {
   };
 
   const clearFilters = () => {
+    setSearchInput('');
     setSearchTerm('');
     setSelectedCategory('all');
     setSelectedSource('all');
     setSelectedSeverity('all');
-    setSelectedPrevalence('all');
+    setSelectedGlobalPrevalence('all');
     setSelectedAgeGroup('all');
     setShowFavoritesOnly(false);
   };
 
-  const hasActiveFilters = searchTerm.trim() || selectedCategory !== 'all' || selectedSource !== 'all' || selectedSeverity !== 'all' || selectedPrevalence !== 'all' || selectedAgeGroup !== 'all' || showFavoritesOnly;
+  const hasActiveFilters = searchTerm.trim() || selectedCategory !== 'all' || selectedSource !== 'all' || selectedSeverity !== 'all' || selectedGlobalPrevalence !== 'all' || selectedAgeGroup !== 'all' || showFavoritesOnly;
 
   const totalDiseases = comprehensiveDiseases.length;
   const categoryStats = categories.map(cat => ({
@@ -341,8 +361,8 @@ export default function Encyclopedia() {
                   <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                   <Input
                     placeholder={t('pages.encyclopedia.searchPlaceholder')}
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
                     className="pl-10 text-sm"
                   />
                 </div>
@@ -419,19 +439,18 @@ export default function Encyclopedia() {
 
                     <div>
                       <label className="text-sm font-medium text-gray-700 mb-2 block">
-                        {t('common.prevalence')} in Africa
+                        Global {t('common.prevalence')}
                       </label>
-                      <Select value={selectedPrevalence} onValueChange={setSelectedPrevalence}>
+                      <Select value={selectedGlobalPrevalence} onValueChange={setSelectedGlobalPrevalence}>
                         <SelectTrigger className="text-sm">
                           <SelectValue placeholder={t('pages.encyclopedia.allPrevalences')} />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="all">{t('pages.encyclopedia.allPrevalences')}</SelectItem>
-                          <SelectItem value="very-high">{t('pages.encyclopedia.veryHigh')}</SelectItem>
-                          <SelectItem value="high">{t('pages.encyclopedia.high')}</SelectItem>
-                          <SelectItem value="medium">{t('pages.encyclopedia.medium')}</SelectItem>
-                          <SelectItem value="low">{t('pages.encyclopedia.low')}</SelectItem>
-                          <SelectItem value="rare">{t('pages.encyclopedia.rare')}</SelectItem>
+                          <SelectItem value="very-high">Very High (Common worldwide)</SelectItem>
+                          <SelectItem value="high">High (Common in many regions)</SelectItem>
+                          <SelectItem value="medium">Medium (Moderate prevalence)</SelectItem>
+                          <SelectItem value="low">Low (Rare in most regions)</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -524,12 +543,22 @@ export default function Encyclopedia() {
                 </div>
 
                 {filteredDiseases.length === 0 && (
-                  <div className="text-center py-8">
-                    <Search className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                    <p className="text-gray-500 text-sm">
-                      {t('pages.encyclopedia.noDiseasesFound')}
-                    </p>
-                  </div>
+                  <EmptyState
+                    icon="search"
+                    title={t('pages.encyclopedia.noDiseasesFound')}
+                    description="Try adjusting your filters or search terms"
+                    secondaryAction={{
+                      label: 'Clear Filters',
+                      onClick: () => {
+                        setSearchTerm('');
+                        setSelectedCategory('all');
+                        setSelectedSource('all');
+                        setSelectedSeverity('all');
+                        setSelectedGlobalPrevalence('all');
+                        setSelectedAgeGroup('all');
+                      }
+                    }}
+                  />
                 )}
               </CardContent>
             </Card>

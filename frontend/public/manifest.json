@@ -1,0 +1,90 @@
+{
+  "name": "Docomax - Healthcare Advisor",
+  "short_name": "Docomax",
+  "description": "Your personal healthcare advisor with symptom checker, medical tools, and health records management",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#0ea5e9",
+  "background_color": "#ffffff",
+  "categories": ["medical", "health", "productivity"],
+  "icons": [
+    {
+      "src": "/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Symptom Checker",
+      "short_name": "Symptoms",
+      "description": "Check your symptoms quickly",
+      "url": "/triage",
+      "icons": [
+        {
+          "src": "/icon-192.svg",
+          "sizes": "192x192",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "My Health Records",
+      "short_name": "Records",
+      "description": "View and manage your health records",
+      "url": "/records",
+      "icons": [
+        {
+          "src": "/icon-192.svg",
+          "sizes": "192x192",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Medical Tools",
+      "short_name": "Tools",
+      "description": "Access medical calculators and tools",
+      "url": "/tools",
+      "icons": [
+        {
+          "src": "/icon-192.svg",
+          "sizes": "192x192",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "application/x-www-form-urlencoded",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}

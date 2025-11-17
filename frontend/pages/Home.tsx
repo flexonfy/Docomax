@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import AddAppointmentDialog from './records/components/dialogs/AddAppointmentDialog';
+import EmptyState from '../components/EmptyState';
 import { 
   Stethoscope, 
   FileText, 
@@ -60,28 +61,28 @@ const PersonalHome = () => {
       description: t('pages.home.viewHealthInfo'),
       icon: FileText,
       path: '/records',
-      color: 'bg-gradient-to-br from-green-500 to-green-600'
+      color: 'bg-gradient-to-br from-blue-600 to-blue-700'
     },
     {
       title: t('common.triage'),
       description: t('pages.home.checkSymptoms'),
       icon: Stethoscope,
       path: '/triage',
-      color: 'bg-gradient-to-br from-red-500 to-red-600'
+      color: 'bg-gradient-to-br from-red-600 to-red-700'
     },
     {
       title: t('tools.mentalHealth.title'),
       description: t('pages.home.trackWellbeing'),
       icon: Brain,
       path: '/tools/mental-health',
-      color: 'bg-gradient-to-br from-purple-500 to-purple-600'
+      color: 'bg-gradient-to-br from-green-600 to-green-700'
     },
     {
       title: t('tools.facilities.title'),
       description: t('pages.home.findFacilities'),
       icon: MapPin,
       path: '/tools/facilities',
-      color: 'bg-gradient-to-br from-orange-500 to-orange-600'
+      color: 'bg-gradient-to-br from-amber-600 to-orange-700'
     }
   ];
 
@@ -90,7 +91,7 @@ const PersonalHome = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="text-center mb-12">
           <div className="flex justify-center mb-6">
-            <div className="p-4 sm:p-6 bg-gradient-to-br from-green-500 to-blue-500 rounded-3xl shadow-2xl">
+            <div className="p-4 sm:p-6 bg-gradient-to-br from-blue-600 to-blue-700 rounded-3xl shadow-2xl">
               <User className="h-12 w-12 sm:h-16 sm:w-16 text-white" />
             </div>
           </div>
@@ -143,7 +144,19 @@ const PersonalHome = () => {
                   ))}
                 </div>
               ) : (
-                <p className="text-center text-gray-500 py-4">{t('pages.home.noAppointments')}</p>
+                <EmptyState
+                  icon="appointments"
+                  title={t('pages.home.noAppointments')}
+                  description="Schedule your next health appointment"
+                  action={{
+                    label: t('common.addAppointment'),
+                    onClick: () => setShowAddAppointment(true)
+                  }}
+                  secondaryAction={{
+                    label: 'View Calendar',
+                    onClick: () => {}
+                  }}
+                />
               )}
             </CardContent>
           </Card>
@@ -163,7 +176,15 @@ const PersonalHome = () => {
                   </div>
                 </div>
               ) : (
-                <p className="text-center text-gray-500 py-4">{t('pages.home.noMood')}</p>
+                <EmptyState
+                  icon="generic"
+                  title={t('pages.home.noMood')}
+                  description="Track your mood and mental well-being"
+                  action={{
+                    label: 'Start Tracking',
+                    onClick: () => {}
+                  }}
+                />
               )}
             </CardContent>
           </Card>
@@ -183,10 +204,10 @@ const PersonalHome = () => {
             </Card>
           )}
 
-          <Card className="lg:col-span-1 bg-gradient-to-r from-blue-50 to-green-50">
+          <Card className="lg:col-span-1 bg-gradient-to-r from-green-50 to-green-100 border border-green-200/50">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
-                <Lightbulb className="h-5 w-5 text-yellow-500" />
+                <Lightbulb className="h-5 w-5 text-green-600" />
                 <span>{t('pages.home.healthTip')}</span>
               </CardTitle>
             </CardHeader>
@@ -223,7 +244,7 @@ const SpecialistHome = () => {
       description: t('pages.home.quickSymptomAssessment'),
       icon: AlertTriangle,
       path: '/triage',
-      color: 'bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700',
+      color: 'bg-gradient-to-br from-red-600 to-red-700 hover:from-red-700 hover:to-red-800',
       badge: t('common.emergency'),
       priority: 'high'
     },
@@ -232,7 +253,7 @@ const SpecialistHome = () => {
       description: t('pages.home.whoCompliantTools'),
       icon: Calculator,
       path: '/tools',
-      color: 'bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700',
+      color: 'bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800',
       badge: t('common.tools'),
       priority: 'medium'
     },
@@ -241,7 +262,7 @@ const SpecialistHome = () => {
       description: t('pages.home.secureRecords'),
       icon: FileText,
       path: '/records',
-      color: 'bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700',
+      color: 'bg-gradient-to-br from-green-600 to-green-700 hover:from-green-700 hover:to-green-800',
       badge: t('common.records'),
       priority: 'medium'
     },
@@ -250,17 +271,17 @@ const SpecialistHome = () => {
       description: t('pages.home.trustedSources'),
       icon: Book,
       path: '/encyclopedia',
-      color: 'bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700',
+      color: 'bg-gradient-to-br from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800',
       badge: t('common.information'),
       priority: 'low'
     }
   ];
 
   const stats = [
-    { icon: Users, value: patients.length, label: t('pages.records.totalPatients'), color: 'text-blue-500' },
-    { icon: Calendar, value: upcomingAppointments.length, label: t('pages.home.upcomingAppointments'), color: 'text-purple-500' },
-    { icon: Stethoscope, value: '500+', label: t('pages.home.diseasesCovered'), color: 'text-red-500' },
-    { icon: Zap, value: '100%', label: t('pages.home.offlineReady'), color: 'text-green-500' }
+    { icon: Users, value: patients.length, label: t('pages.records.totalPatients'), color: 'text-blue-600' },
+    { icon: Calendar, value: upcomingAppointments.length, label: t('pages.home.upcomingAppointments'), color: 'text-green-600' },
+    { icon: Stethoscope, value: '500+', label: t('pages.home.diseasesCovered'), color: 'text-red-600' },
+    { icon: Zap, value: '100%', label: t('pages.home.offlineReady'), color: 'text-amber-600' }
   ];
 
   const features = [
@@ -288,16 +309,16 @@ const SpecialistHome = () => {
         <div className="text-center mb-12 lg:mb-16">
           <div className="flex justify-center mb-6">
             <div className="relative">
-              <div className="p-4 sm:p-6 bg-gradient-to-br from-green-500 to-blue-500 rounded-3xl shadow-2xl animate-pulse">
+              <div className="p-4 sm:p-6 bg-gradient-to-br from-blue-600 to-blue-700 rounded-3xl shadow-2xl animate-pulse">
                 <Heart className="h-12 w-12 sm:h-16 sm:w-16 text-white" />
               </div>
-              <div className="absolute -top-2 -right-2 bg-yellow-400 rounded-full p-1 animate-bounce">
-                <Star className="h-4 w-4 text-yellow-800" />
+              <div className="absolute -top-2 -right-2 bg-red-500 rounded-full p-1 animate-bounce">
+                <Star className="h-4 w-4 text-red-900" />
               </div>
             </div>
           </div>
-          
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-green-600 via-blue-600 to-teal-600 bg-clip-text text-transparent mb-4 leading-tight">
+
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 bg-clip-text text-transparent mb-4 leading-tight">
             {t('pages.home.title')}
           </h1>
           <p className="text-lg sm:text-xl text-gray-600 mb-2 font-medium">
@@ -306,7 +327,7 @@ const SpecialistHome = () => {
           <p className="text-base sm:text-lg text-gray-500 max-w-3xl mx-auto mb-8 leading-relaxed">
             {t('pages.home.description')}
           </p>
-          
+
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto mb-8">
             {stats.map((stat, index) => (
@@ -320,7 +341,7 @@ const SpecialistHome = () => {
 
           {/* CTA Button */}
           <Link to="/records">
-            <Button size="lg" className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
+            <Button size="lg" className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
               {t('common.records')}
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
@@ -336,7 +357,7 @@ const SpecialistHome = () => {
               </h2>
               <p className="text-gray-600 mt-1">{t('pages.home.frequentFeatures')}</p>
             </div>
-            <Badge variant="outline" className="text-green-600 border-green-200 bg-green-50 animate-pulse">
+            <Badge variant="outline" className="text-blue-600 border-blue-200 bg-blue-50 animate-pulse">
               {t('pages.home.popular')}
             </Badge>
           </div>
@@ -421,14 +442,14 @@ const SpecialistHome = () => {
         {/* Feature Highlights */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {features.map((feature, index) => (
-            <Card key={index} className="bg-gradient-to-br from-white to-gray-50/50 border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300 group">
+            <Card key={index} className="bg-gradient-to-br from-white to-slate-50/50 border-slate-200/50 shadow-lg hover:shadow-xl transition-all duration-300 group">
               <CardContent className="p-6">
                 <div className="flex items-start space-x-4">
-                  <div className="p-3 bg-gradient-to-br from-green-100 to-blue-100 rounded-xl group-hover:scale-110 transition-transform">
-                    <feature.icon className="h-6 w-6 text-green-600" />
+                  <div className="p-3 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl group-hover:scale-110 transition-transform">
+                    <feature.icon className="h-6 w-6 text-blue-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-green-600 transition-colors">{feature.title}</h3>
+                    <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">{feature.title}</h3>
                     <p className="text-gray-700 text-sm leading-relaxed">
                       {feature.description}
                     </p>
@@ -440,35 +461,35 @@ const SpecialistHome = () => {
         </div>
 
         {/* Trust Indicators */}
-        <div className="bg-gradient-to-r from-green-500 via-blue-500 to-teal-500 rounded-3xl p-6 sm:p-8 text-white text-center shadow-2xl relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-green-600/20 via-blue-600/20 to-teal-600/20 animate-pulse"></div>
+        <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 rounded-3xl p-6 sm:p-8 text-white text-center shadow-2xl relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-700/20 via-blue-700/20 to-blue-800/20 animate-pulse"></div>
           <div className="relative z-10">
             <div className="flex items-center justify-center space-x-3 mb-4">
-              <div className="p-2 bg-white/20 rounded-xl">
+              <div className="p-2 bg-white/15 rounded-xl">
                 <Heart className="h-6 w-6 sm:h-8 sm:w-8" />
               </div>
               <h3 className="text-xl sm:text-2xl font-bold">
                 {t('pages.home.trustedCompanion')}
               </h3>
             </div>
-            <p className="text-green-100 text-base sm:text-lg max-w-3xl mx-auto mb-6 leading-relaxed">
+            <p className="text-blue-100 text-base sm:text-lg max-w-3xl mx-auto mb-6 leading-relaxed">
               {t('pages.home.companionDescription')}
             </p>
-            
+
             <div className="flex flex-wrap justify-center gap-4 text-sm">
-              <div className="flex items-center space-x-2 bg-white/20 rounded-full px-4 py-2 hover:bg-white/30 transition-colors">
+              <div className="flex items-center space-x-2 bg-white/12 rounded-full px-4 py-2 hover:bg-white/20 transition-colors">
                 <CheckCircle className="h-4 w-4" />
                 <span>{t('pages.home.whoCompliant')}</span>
               </div>
-              <div className="flex items-center space-x-2 bg-white/20 rounded-full px-4 py-2 hover:bg-white/30 transition-colors">
+              <div className="flex items-center space-x-2 bg-white/12 rounded-full px-4 py-2 hover:bg-white/20 transition-colors">
                 <CheckCircle className="h-4 w-4" />
                 <span>{t('pages.home.offlineReady')}</span>
               </div>
-              <div className="flex items-center space-x-2 bg-white/20 rounded-full px-4 py-2 hover:bg-white/30 transition-colors">
+              <div className="flex items-center space-x-2 bg-white/12 rounded-full px-4 py-2 hover:bg-white/20 transition-colors">
                 <CheckCircle className="h-4 w-4" />
                 <span>{t('pages.home.multiLanguage')}</span>
               </div>
-              <div className="flex items-center space-x-2 bg-white/20 rounded-full px-4 py-2 hover:bg-white/30 transition-colors">
+              <div className="flex items-center space-x-2 bg-white/12 rounded-full px-4 py-2 hover:bg-white/20 transition-colors">
                 <CheckCircle className="h-4 w-4" />
                 <span>{t('pages.home.privacyFirst')}</span>
               </div>

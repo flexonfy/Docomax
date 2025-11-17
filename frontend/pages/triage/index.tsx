@@ -6,7 +6,7 @@ import { triageQuestions, TriageQuestion } from '../../data/triageQuestions';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogDescription } from '@/components/ui/dialog';
-import { AlertTriangle, Brain, Stethoscope, User, ListChecks, FileQuestion, Sparkles, ArrowLeft, ArrowRight, RotateCcw, HelpCircle } from 'lucide-react';
+import { AlertTriangle, Brain, Stethoscope, User, ListChecks, FileQuestion, Sparkles, ArrowLeft, ArrowRight, RotateCcw, HelpCircle, AlertCircle, Zap } from 'lucide-react';
 import UserInfoStep from './components/UserInfoStep';
 import SymptomSelectionStep from './components/SymptomSelectionStep';
 import TriageResults from './components/TriageResults';
@@ -14,21 +14,39 @@ import { useToast } from '@/components/ui/use-toast';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  calculateBayesianScore,
+  detectSymptomConflicts,
+  scoreSymptomCombinations,
+  assessEmergencyLevel,
+  generateReasoningExplanation,
+  getBaselineConfidence,
+  calculateRiskFactorBoost,
+  type EnhancedDiseaseResult
+} from '../../data/triageAlgorithm';
+import { isRedFlagSymptom } from '../../data/symptomMetadata';
+import { detectCriticalEmergency, checkDangerousSymptomCombinations, performComprehensiveSafetyCheck } from '../../data/safetyRules';
 
-interface TriageResult {
-  disease: ComprehensiveDisease;
-  confidence: number;
+interface TriageResult extends EnhancedDiseaseResult {
   refinedConfidence?: number;
-  matchedSymptoms: string[];
-  severity: string;
-  riskScore: number;
 }
 
 export default function Triage() {
   const { t, language } = useLanguage();
   const { toast } = useToast();
   const [stage, setStage] = useState<'userInfo' | 'symptomSelection' | 'detailedQuestions' | 'results'>('userInfo');
-  const [userInfo, setUserInfo] = useState({ age: '', gender: 'all', smoking: 'never', chronic: false });
+  const [userInfo, setUserInfo] = useState({
+    age: '',
+    gender: 'all',
+    smoking: 'never',
+    diabetes: false,
+    hypertension: false,
+    hiv: false,
+    asthma: false,
+    recentContact: false,
+    recentTravel: false,
+    malariaArea: false,
+  });
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
   const [results, setResults] = useState<TriageResult[]>([]);
   const [quizForDisease, setQuizForDisease] = useState<TriageResult | null>(null);
@@ -38,6 +56,28 @@ export default function Triage() {
   const [questionsToAsk, setQuestionsToAsk] = useState<TriageQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, any>>({});
+  const [refinementPhase, setRefinementPhase] = useState<'initial' | 'refining' | 'exploring'>('initial');
+
+  const selectInitialQuestions = (symptoms: string[]): TriageQuestion[] => {
+    // Get questions directly relevant to selected symptoms
+    const relevantQuestions = triageQuestions.filter(q =>
+      q.relevantSymptoms.some(symptomKeyword =>
+        symptoms.some(selected => selected.toLowerCase().includes(symptomKeyword))
+      )
+    );
+
+    // Always ask at least 3-5 questions to build diagnostic confidence
+    // If fewer than 3 relevant questions, add general diagnostic questions
+    if (relevantQuestions.length < 3) {
+      // Add duration and severity-related questions
+      const additionalQuestions = triageQuestions.filter(q =>
+        q.id.includes('duration') || q.id.includes('fever') || q.id.includes('pain')
+      );
+      return [...relevantQuestions, ...additionalQuestions].slice(0, 5);
+    }
+
+    return relevantQuestions.slice(0, 5);
+  };
 
   const handleNext = () => {
     if (stage === 'userInfo') {
@@ -52,24 +92,18 @@ export default function Triage() {
         toast({ title: "Symptoms Required", description: "Please select at least one symptom to continue.", variant: "destructive" });
         return;
       }
-      // Determine which detailed questions to ask
-      const relevantQuestions = triageQuestions.filter(q => 
-        q.relevantSymptoms.some(symptomKeyword => 
-          selectedSymptoms.some(selected => selected.toLowerCase().includes(symptomKeyword))
-        )
-      );
-      if (relevantQuestions.length > 0) {
-        setQuestionsToAsk(relevantQuestions);
-        setCurrentQuestionIndex(0);
-        setStage('detailedQuestions');
-      } else {
-        analyzeSymptoms();
-        setStage('results');
-      }
+      // Always transition to asking questions first, before showing results
+      const questionsToAsk = selectInitialQuestions(selectedSymptoms);
+      setQuestionsToAsk(questionsToAsk);
+      setCurrentQuestionIndex(0);
+      setAnswers({});
+      setRefinementPhase('initial');
+      setStage('detailedQuestions');
     } else if (stage === 'detailedQuestions') {
       const q = questionsToAsk[currentQuestionIndex];
       const answer = answers[q.id];
 
+      // Validation for numeric inputs
       if (q.type === 'number' && answer) {
         const numAnswer = parseFloat(answer);
         if (q.id === 'fever_temp' && (numAnswer < 35 || numAnswer > 43)) {
@@ -82,9 +116,11 @@ export default function Triage() {
         }
       }
 
+      // Move to next question or finalize
       if (currentQuestionIndex < questionsToAsk.length - 1) {
         setCurrentQuestionIndex(prev => prev + 1);
       } else {
+        // After all questions are answered, analyze and show results
         analyzeSymptoms();
         setStage('results');
       }
@@ -92,15 +128,36 @@ export default function Triage() {
   };
 
   const handleBack = () => {
-    if (stage === 'results') setStage('detailedQuestions');
-    else if (stage === 'detailedQuestions') {
-      if (currentQuestionIndex > 0) {
-        setCurrentQuestionIndex(prev => prev - 1);
+    if (stage === 'results') {
+      // From results, go back to refining questions only if in refining/exploring phase
+      if (refinementPhase === 'refining' || refinementPhase === 'exploring') {
+        setStage('detailedQuestions');
+        setRefinementPhase('initial');
+        setCurrentQuestionIndex(0);
       } else {
+        // Reset and go back to symptoms
         setStage('symptomSelection');
+        setRefinementPhase('initial');
       }
     }
-    else if (stage === 'symptomSelection') setStage('userInfo');
+    else if (stage === 'detailedQuestions') {
+      if (currentQuestionIndex > 0) {
+        // Go to previous question
+        setCurrentQuestionIndex(prev => prev - 1);
+      } else if (refinementPhase === 'initial') {
+        // First question in initial phase - go back to symptom selection
+        setStage('symptomSelection');
+        setQuestionsToAsk([]);
+        setAnswers({});
+      } else {
+        // Back from refinement phase - go to results
+        setStage('results');
+        setRefinementPhase('initial');
+      }
+    }
+    else if (stage === 'symptomSelection') {
+      setStage('userInfo');
+    }
   };
 
   const handleSymptomAdd = (symptom: string) => {
@@ -122,8 +179,30 @@ export default function Triage() {
   };
 
   const analyzeSymptoms = () => {
+    // SAFETY CHECK FIRST
+    const safetyCheck = detectCriticalEmergency(selectedSymptoms);
+    if (safetyCheck.requiresImmediateAction) {
+      toast({
+        title: safetyCheck.message,
+        description: safetyCheck.actionRequired,
+        variant: "destructive"
+      });
+    }
+
+    const dangerousCombinations = checkDangerousSymptomCombinations(selectedSymptoms);
+    dangerousCombinations.forEach(alert => {
+      toast({
+        title: '⚠️ Alert',
+        description: alert,
+        variant: "destructive"
+      });
+    });
+
     const triageResults: TriageResult[] = [];
     let filteredDiseases = comprehensiveDiseases;
+
+    // Check for critical red flag symptoms
+    const hasRedFlags = selectedSymptoms.some(s => isRedFlagSymptom(s));
 
     if (userInfo.age) {
       const ageNum = parseInt(userInfo.age);
@@ -145,87 +224,157 @@ export default function Triage() {
       const diseaseSymptoms = disease.symptoms?.[language] || disease.symptoms?.en || [];
       const commonSymptoms = disease.commonSymptoms?.[language] || disease.commonSymptoms?.en || [];
       const rareSymptoms = disease.rareSymptoms?.[language] || disease.rareSymptoms?.en || [];
-      
+      const diseaseRiskFactors = disease.riskFactors?.[language] || disease.riskFactors?.en || [];
+
       const matchedSymptoms: string[] = [];
-      let score = 0;
-      
+      const unmatchedCommonSymptoms: string[] = [];
+      let rareSymptomCount = 0;
+      let commonSymptomCount = 0;
+
+      // Find matched symptoms
       selectedSymptoms.forEach(selectedSymptom => {
         const lowerSelected = selectedSymptom.toLowerCase();
-        if (diseaseSymptoms.some(ds => ds.toLowerCase() === lowerSelected)) {
+        const isMatched = diseaseSymptoms.some(ds => ds.toLowerCase() === lowerSelected);
+
+        if (isMatched) {
           matchedSymptoms.push(selectedSymptom);
           if (rareSymptoms.some(rs => rs.toLowerCase() === lowerSelected)) {
-            score += 2.5;
+            rareSymptomCount++;
           } else if (commonSymptoms.some(cs => cs.toLowerCase() === lowerSelected)) {
-            score += 1.0;
-          } else {
-            score += 1.5;
+            commonSymptomCount++;
           }
         }
       });
 
+      // Find unmatched common symptoms (would expect to see)
+      commonSymptoms.forEach(cs => {
+        if (!matchedSymptoms.some(ms => ms.toLowerCase() === cs.toLowerCase())) {
+          unmatchedCommonSymptoms.push(cs);
+        }
+      });
+
       if (matchedSymptoms.length > 0) {
-        const maxPossibleScore = selectedSymptoms.reduce((acc, selectedSymptom) => {
-          const lowerSelected = selectedSymptom.toLowerCase();
-          if (rareSymptoms.some(rs => rs.toLowerCase() === lowerSelected)) return acc + 2.5;
-          if (commonSymptoms.some(cs => cs.toLowerCase() === lowerSelected)) return acc + 1.0;
-          return acc + 1.5;
-        }, 0);
+        // **PHASE 1: Enhanced Bayesian Score Calculation**
+        const baselineConfidence = getBaselineConfidence(disease.id, disease.prevalenceInAfrica);
 
-        let confidence = (score / Math.max(maxPossibleScore, 1)) * 100;
+        const bayesianScore = calculateBayesianScore(
+          matchedSymptoms.length,
+          selectedSymptoms.length,
+          diseaseSymptoms.length,
+          baselineConfidence,
+          commonSymptomCount,
+          rareSymptomCount
+        );
 
-        const commonMatchedRatio = commonSymptoms.length > 0 ? (matchedSymptoms.filter(s => commonSymptoms.includes(s)).length / commonSymptoms.length) : 0;
-        confidence += commonMatchedRatio * 20;
+        // **Detect symptom conflicts**
+        const conflictPenalty = detectSymptomConflicts(
+          selectedSymptoms,
+          commonSymptoms,
+          rareSymptoms
+        );
 
-        const unmatchedPenalty = (selectedSymptoms.length - matchedSymptoms.length) * 5;
-        confidence -= unmatchedPenalty;
+        // **Score symptom combinations**
+        const { combinationBonus, matchedPattern } = scoreSymptomCombinations(
+          selectedSymptoms,
+          disease
+        );
 
-        const prevalenceMultiplier = {
-          'very-high': 1.2, 'high': 1.1, 'medium': 1.0, 'low': 0.9, 'rare': 0.8
-        };
-        confidence *= prevalenceMultiplier[disease.prevalenceInAfrica] || 1.0;
+        // Risk factor boost
+        const ageNum = userInfo.age ? parseInt(userInfo.age) : 30;
+        const riskFactorBoost = calculateRiskFactorBoost(
+          {
+            smoking: userInfo.smoking as 'never' | 'former' | 'current',
+            diabetes: userInfo.diabetes,
+            hypertension: userInfo.hypertension,
+            hiv: userInfo.hiv,
+            asthma: userInfo.asthma,
+            recentContact: userInfo.recentContact,
+            recentTravel: userInfo.recentTravel,
+            malariaArea: userInfo.malariaArea,
+            age: ageNum,
+          },
+          diseaseRiskFactors,
+          disease.ageGroup
+        );
 
-        if (userInfo.smoking === 'current' && disease.riskFactors.en.some(rf => rf.toLowerCase().includes('smoking'))) {
-          confidence *= 1.1;
-        }
-        if (userInfo.chronic && disease.riskFactors.en.some(rf => ['diabetes', 'high blood pressure', 'heart disease'].some(c => rf.toLowerCase().includes(c)))) {
-          confidence *= 1.1;
-        }
-
-        // Apply triage rules
+        // Apply triage rules if answers exist
+        let triageRuleBoost = 1.0;
         if (disease.triageRules) {
           Object.entries(answers).forEach(([questionId, answer]) => {
             if (disease.triageRules![questionId]?.[answer]) {
-              confidence *= disease.triageRules![questionId][answer];
+              triageRuleBoost *= disease.triageRules![questionId][answer];
             }
           });
         }
 
-        const severityScore = { 'emergency': 90, 'high': 70, 'medium': 50, 'low': 20 };
-        let riskScore = severityScore[disease.severity] || 30;
-        riskScore += matchedSymptoms.length * 2;
-        if (userInfo.age && parseInt(userInfo.age) > 60 && disease.ageGroup === 'elderly') {
-          riskScore += 10;
-        }
+        // Combine all factors
+        let finalConfidence = bayesianScore;
+        finalConfidence = Math.round(finalConfidence * conflictPenalty * combinationBonus * riskFactorBoost * triageRuleBoost);
+        finalConfidence = Math.min(95, Math.max(5, finalConfidence));
+
+        // **Calculate risk score (0-100)**
+        const severityWeights = { 'emergency': 90, 'high': 70, 'medium': 50, 'low': 20 };
+        let riskScore = severityWeights[disease.severity as keyof typeof severityWeights] || 30;
+        riskScore += matchedSymptoms.length * 3;
+        riskScore = Math.min(100, Math.round(riskScore));
+
+        // **Assess emergency level**
+        const emergencyLevel = assessEmergencyLevel(
+          selectedSymptoms,
+          disease,
+          disease.severity,
+          riskScore
+        );
+
+        // **Generate reasoning**
+        const reasoning = generateReasoningExplanation(
+          matchedSymptoms,
+          unmatchedCommonSymptoms,
+          diseaseRiskFactors.slice(0, 2),
+          userInfo.age,
+          userInfo.gender
+        );
 
         triageResults.push({
           disease,
-          confidence: Math.min(95, Math.max(5, Math.round(confidence))),
+          baselineConfidence,
+          bayesianScore,
+          finalConfidence,
           matchedSymptoms,
+          unmatchedCommonSymptoms,
           severity: disease.severity,
-          riskScore: Math.min(100, Math.round(riskScore))
-        });
+          riskScore,
+          emergencyLevel,
+          reasoning,
+          confidence: finalConfidence,
+        } as unknown as TriageResult);
       }
     });
 
-    const severityOrder = { 'emergency': 4, 'high': 3, 'medium': 2, 'low': 1 };
+    // IMPROVED SORTING: Balance confidence + emergency weight
+    // Don't just rank by emergency - need actual diagnostic confidence
+    const emergencyWeights = { 'critical': 3.0, 'emergent': 2.0, 'urgent': 1.0, 'routine': 0.3 };
+
     triageResults.sort((a, b) => {
-      if (a.confidence !== b.confidence) return b.confidence - a.confidence;
-      if (a.riskScore !== b.riskScore) return b.riskScore - a.riskScore;
-      const severityA = severityOrder[a.severity as keyof typeof severityOrder] || 0;
-      const severityB = severityOrder[b.severity as keyof typeof severityOrder] || 0;
-      return severityB - severityA;
+      // Calculate composite score: (confidence * weight) + emergency_boost
+      const emergencyWeightA = emergencyWeights[a.emergencyLevel as keyof typeof emergencyWeights] || 0;
+      const emergencyWeightB = emergencyWeights[b.emergencyLevel as keyof typeof emergencyWeights] || 0;
+
+      const compositeA = (a.finalConfidence / 100) * emergencyWeightA;
+      const compositeB = (b.finalConfidence / 100) * emergencyWeightB;
+
+      if (Math.abs(compositeA - compositeB) > 0.1) {
+        return compositeB - compositeA;
+      }
+
+      // If composite scores are similar, sort by confidence
+      if (a.finalConfidence !== b.finalConfidence) return b.finalConfidence - a.finalConfidence;
+
+      // Then by risk score
+      return b.riskScore - a.riskScore;
     });
 
+    // Keep all results but pass them to component (component will show only top 1-2 by default)
     setResults(triageResults.slice(0, 8));
   };
 
@@ -272,12 +421,55 @@ export default function Triage() {
 
   const resetTriage = () => {
     setStage('userInfo');
-    setUserInfo({ age: '', gender: 'all', smoking: 'never', chronic: false });
+    setUserInfo({
+      age: '',
+      gender: 'all',
+      smoking: 'never',
+      diabetes: false,
+      hypertension: false,
+      hiv: false,
+      asthma: false,
+      recentContact: false,
+      recentTravel: false,
+      malariaArea: false,
+    });
     setSelectedSymptoms([]);
     setResults([]);
     setQuestionsToAsk([]);
     setCurrentQuestionIndex(0);
     setAnswers({});
+    setRefinementPhase('initial');
+  };
+
+  const askMoreQuestions = () => {
+    // Generate follow-up questions based on top results
+    if (results.length === 0) return;
+
+    const topResult = results[0];
+    const followUpQuestions = triageQuestions.filter(q =>
+      q.relevantSymptoms.some(symptomKeyword =>
+        topResult.disease.symptoms?.[language]?.some(s => s.toLowerCase().includes(symptomKeyword)) ||
+        topResult.disease.commonSymptoms?.[language]?.some(s => s.toLowerCase().includes(symptomKeyword))
+      ) && !answers[q.id]
+    ).slice(0, 4); // Ask up to 4 follow-up questions
+
+    if (followUpQuestions.length > 0) {
+      setQuestionsToAsk(followUpQuestions);
+      setCurrentQuestionIndex(0);
+      setRefinementPhase('refining');
+      setStage('detailedQuestions');
+    } else {
+      toast({ title: "No More Questions", description: "We've already asked all relevant follow-up questions.", variant: "default" });
+    }
+  };
+
+  const exploreOtherPossibilities = () => {
+    // Reset to explore other diagnoses
+    setQuestionsToAsk([]);
+    setCurrentQuestionIndex(0);
+    setRefinementPhase('exploring');
+    setStage('detailedQuestions');
+    toast({ title: "Exploring Other Possibilities", description: "Let's refine the diagnosis further.", variant: "default" });
   };
 
   const renderCurrentQuestion = () => {
@@ -285,45 +477,75 @@ export default function Triage() {
       return null;
     }
     const q = questionsToAsk[currentQuestionIndex];
+    const progressPercentage = Math.round(((currentQuestionIndex + 1) / questionsToAsk.length) * 100);
+
     return (
-      <Card className="max-w-2xl mx-auto">
-        <CardHeader>
-          <CardTitle>Question {currentQuestionIndex + 1} of {questionsToAsk.length}</CardTitle>
-          <CardDescription>Please provide more details to help refine the assessment.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Label className="text-lg">{q.question[language]}</Label>
-          {q.type === 'number' && (
-            <Input
-              type="number"
-              value={answers[q.id] || ''}
-              onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-              placeholder={q.unit}
-            />
-          )}
-          {q.type === 'select' && q.options && (
-            <Select
-              value={answers[q.id] || ''}
-              onValueChange={(value) => handleAnswerChange(q.id, value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select an option" />
-              </SelectTrigger>
-              <SelectContent>
-                {q.options.map((opt, optIndex) => (
-                  <SelectItem key={optIndex} value={opt.value}>{opt.label[language]}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
-          {q.type === 'boolean' && (
-            <div className="flex items-center space-x-4 pt-2">
-              <Button variant={answers[q.id] === true ? 'default' : 'outline'} onClick={() => handleAnswerChange(q.id, true)} className="flex-1">{t('common.yes')}</Button>
-              <Button variant={answers[q.id] === false ? 'default' : 'outline'} onClick={() => handleAnswerChange(q.id, false)} className="flex-1">{t('common.no')}</Button>
+      <div className="max-w-2xl mx-auto space-y-4">
+        <Card className="border-blue-200 shadow-lg">
+          <CardHeader>
+            <div className="flex items-center justify-between mb-4">
+              <CardTitle>Question {currentQuestionIndex + 1} of {questionsToAsk.length}</CardTitle>
+              <div className="text-sm font-medium text-gray-600">{progressPercentage}% complete</div>
             </div>
-          )}
-        </CardContent>
-      </Card>
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div
+                className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                style={{ width: `${progressPercentage}%` }}
+              />
+            </div>
+            <CardDescription className="pt-2">
+              {refinementPhase === 'initial'
+                ? 'These questions help us understand your symptoms better and build diagnostic confidence.'
+                : 'Answering these follow-up questions will help refine the diagnosis.'}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Label className="text-lg font-medium text-gray-900">{q.question[language]}</Label>
+            {q.type === 'number' && (
+              <Input
+                type="number"
+                value={answers[q.id] || ''}
+                onChange={(e) => handleAnswerChange(q.id, e.target.value)}
+                placeholder={q.unit}
+                className="text-base"
+              />
+            )}
+            {q.type === 'select' && q.options && (
+              <Select
+                value={answers[q.id] || ''}
+                onValueChange={(value) => handleAnswerChange(q.id, value)}
+              >
+                <SelectTrigger className="text-base">
+                  <SelectValue placeholder="Select an option" />
+                </SelectTrigger>
+                <SelectContent>
+                  {q.options.map((opt, optIndex) => (
+                    <SelectItem key={optIndex} value={opt.value}>{opt.label[language]}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+            {q.type === 'boolean' && (
+              <div className="flex items-center space-x-4 pt-2">
+                <Button
+                  variant={answers[q.id] === true ? 'default' : 'outline'}
+                  onClick={() => handleAnswerChange(q.id, true)}
+                  className="flex-1 text-base"
+                >
+                  {t('common.yes')}
+                </Button>
+                <Button
+                  variant={answers[q.id] === false ? 'default' : 'outline'}
+                  onClick={() => handleAnswerChange(q.id, false)}
+                  className="flex-1 text-base"
+                >
+                  {t('common.no')}
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
     );
   };
 
@@ -341,7 +563,15 @@ export default function Triage() {
     switch(stage) {
       case 'userInfo': return "Let's start with some basics";
       case 'symptomSelection': return "What symptoms are you experiencing?";
-      case 'detailedQuestions': return "A few more questions...";
+      case 'detailedQuestions': {
+        if (refinementPhase === 'initial') {
+          return `Building diagnosis confidence (${currentQuestionIndex + 1}/${questionsToAsk.length})`;
+        } else if (refinementPhase === 'refining') {
+          return `Refining the diagnosis (${currentQuestionIndex + 1}/${questionsToAsk.length})`;
+        } else {
+          return `Exploring other possibilities (${currentQuestionIndex + 1}/${questionsToAsk.length})`;
+        }
+      }
       case 'results': return "Analysis Results";
       default: return t('pages.triage.title');
     }
@@ -349,15 +579,15 @@ export default function Triage() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="mb-8">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="p-3 bg-gradient-to-br from-blue-500 to-green-500 rounded-xl text-white shadow-lg">
+              <div className="p-3 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl text-white shadow-lg">
                 {getStageIcon()}
               </div>
               <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
                   {getStageTitle()}
                 </h1>
                 <p className="text-lg text-gray-600">{t('pages.triage.systemDescription')}</p>
@@ -369,36 +599,89 @@ export default function Triage() {
           {stage === 'symptomSelection' && <SymptomSelectionStep selectedSymptoms={selectedSymptoms} onSymptomAdd={handleSymptomAdd} onSymptomRemove={handleSymptomRemove} onClearAll={handleClearAll} />}
           {stage === 'detailedQuestions' && renderCurrentQuestion()}
           {stage === 'results' && (
-            results.length > 0 ? (
-              <TriageResults results={results} onStartQuiz={startQuiz} />
-            ) : (
-              <Card className="text-center shadow-lg bg-white/90 backdrop-blur-sm">
-                <CardHeader>
-                  <div className="mx-auto w-12 h-12 flex items-center justify-center bg-blue-100 rounded-full mb-4">
-                    <HelpCircle className="h-6 w-6 text-blue-600" />
+            <>
+              {results.length > 0 && results.some(r => r.emergencyLevel === 'critical' || r.emergencyLevel === 'emergent') && (
+                <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg shadow-md">
+                  <div className="flex items-start space-x-3">
+                    <AlertCircle className="h-6 w-6 text-red-600 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <h3 className="font-bold text-red-900 mb-1">⚠️ Critical/Emergency Symptoms Detected</h3>
+                      <p className="text-red-800 text-sm">
+                        Based on your symptoms, you may need immediate medical attention. Please seek emergency care right away or call your local emergency number.
+                      </p>
+                    </div>
                   </div>
-                  <CardTitle>{t('pages.triage.noMatchTitle')}</CardTitle>
-                  <CardDescription>{t('pages.triage.noMatchDescription')}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-700 mb-4">{t('pages.triage.noMatchAdvice')}</p>
-                  <ul className="list-disc list-inside text-left max-w-md mx-auto text-gray-600 space-y-2">
-                    <li>{t('pages.triage.noMatchPoint1')}</li>
-                    <li>{t('pages.triage.noMatchPoint2')}</li>
-                    <li>{t('pages.triage.noMatchPoint3')}</li>
-                  </ul>
-                </CardContent>
-              </Card>
-            )
+                </div>
+              )}
+              {results.length > 0 ? (
+                <>
+                  <TriageResults results={results} onStartQuiz={startQuiz} />
+                  <div className="mt-8 space-y-4">
+                    {results[0]?.finalConfidence && results[0].finalConfidence < 70 && (
+                      <Card className="bg-blue-50 border border-blue-200 shadow-md">
+                        <CardContent className="pt-6">
+                          <p className="text-blue-900 mb-4">
+                            We're {results[0].finalConfidence}% confident in our assessment. Let's ask a few more questions to refine the diagnosis.
+                          </p>
+                          <Button onClick={askMoreQuestions} className="w-full bg-blue-600 hover:bg-blue-700">
+                            <FileQuestion className="h-4 w-4 mr-2" />
+                            Ask More Questions
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    )}
+                    {results[0]?.finalConfidence && results[0].finalConfidence >= 70 && results.length > 1 && (
+                      <Card className="bg-green-50 border border-green-200 shadow-md">
+                        <CardContent className="pt-6">
+                          <p className="text-green-900 mb-4">
+                            We're quite confident ({results[0].finalConfidence}%) in our assessment. Would you like to explore other possibilities?
+                          </p>
+                          <Button onClick={exploreOtherPossibilities} variant="outline" className="w-full border-green-300 text-green-700 hover:bg-green-50">
+                            <Sparkles className="h-4 w-4 mr-2" />
+                            Want to Explore Other Possibilities?
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <Card className="text-center shadow-lg bg-white/90 backdrop-blur-sm">
+                  <CardHeader>
+                    <div className="mx-auto w-12 h-12 flex items-center justify-center bg-blue-100 rounded-full mb-4">
+                      <HelpCircle className="h-6 w-6 text-blue-600" />
+                    </div>
+                    <CardTitle>{t('pages.triage.noMatchTitle')}</CardTitle>
+                    <CardDescription>{t('pages.triage.noMatchDescription')}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-700 mb-4">{t('pages.triage.noMatchAdvice')}</p>
+                    <ul className="list-disc list-inside text-left max-w-md mx-auto text-gray-600 space-y-2">
+                      <li>{t('pages.triage.noMatchPoint1')}</li>
+                      <li>{t('pages.triage.noMatchPoint2')}</li>
+                      <li>{t('pages.triage.noMatchPoint3')}</li>
+                    </ul>
+                  </CardContent>
+                </Card>
+              )}
+            </>
           )}
 
           <div className="mt-8 flex justify-between">
-            <Button onClick={handleBack} disabled={stage === 'userInfo'}>
+            <Button onClick={handleBack} disabled={stage === 'userInfo'} variant="outline">
               <ArrowLeft className="h-4 w-4 mr-2" /> {t('common.back')}
             </Button>
             {stage !== 'results' ? (
-              <Button onClick={handleNext} disabled={stage === 'symptomSelection' && selectedSymptoms.length === 0}>
-                {stage === 'detailedQuestions' && currentQuestionIndex === questionsToAsk.length - 1 ? 'Analyze' : t('common.next')} <ArrowRight className="h-4 w-4 ml-2" />
+              <Button
+                onClick={handleNext}
+                disabled={
+                  (stage === 'symptomSelection' && selectedSymptoms.length === 0) ||
+                  (stage === 'detailedQuestions' && !answers[questionsToAsk[currentQuestionIndex]?.id])
+                }
+              >
+                {stage === 'detailedQuestions' && currentQuestionIndex === questionsToAsk.length - 1
+                  ? 'Show Analysis Results'
+                  : t('common.next')} <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
             ) : (
               <Button onClick={resetTriage}>

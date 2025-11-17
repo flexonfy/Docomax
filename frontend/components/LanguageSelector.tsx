@@ -14,9 +14,9 @@ export default function LanguageSelector() {
 
   return (
     <div className="flex items-center space-x-2">
-      <Globe className="h-4 w-4 text-green-100" />
+      <Globe className="h-4 w-4 text-blue-100" />
       <Select value={language} onValueChange={setLanguage}>
-        <SelectTrigger className="w-32 sm:w-36 bg-green-700/50 border-green-500/50 text-white backdrop-blur-sm hover:bg-green-700/70 transition-colors text-sm">
+        <SelectTrigger className="w-32 sm:w-36 bg-blue-700/50 border-blue-500/50 text-white backdrop-blur-sm hover:bg-blue-700/70 transition-colors text-sm">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

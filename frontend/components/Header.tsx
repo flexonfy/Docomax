@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import LanguageSelector from './LanguageSelector';
-import { Heart, Wifi, WifiOff, Menu, User, Briefcase, HelpCircle } from 'lucide-react';
+import { Activity, Wifi, WifiOff, Menu, User, Briefcase, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Link, useLocation } from 'react-router-dom';
@@ -78,25 +78,29 @@ export default function Header() {
   ];
 
   return (
-    <header className="bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 text-white shadow-xl border-b border-green-500/20 sticky top-0 z-40">
+    <header className="bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 text-white shadow-2xl border-b border-blue-500/10 sticky top-0 z-40" role="banner">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-3">
-            <Link to="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-              <div className="p-2 bg-white/15 rounded-xl backdrop-blur-sm border border-white/20">
-                <Heart className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
+            <Link to="/" className="flex items-center space-x-3 hover:opacity-90 transition-opacity" aria-label="Docomax - Healthcare Advisor Home">
+              <div className="p-2 bg-white/12 rounded-lg backdrop-blur-sm border border-white/15 relative" aria-hidden="true">
+                <svg className="h-6 w-6 sm:h-8 sm:w-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="6" y="9" width="12" height="14" rx="2" />
+                  <path d="M12 5v4M9 7h6" />
+                  <circle cx="12" cy="19" r="2" fill="currentColor" />
+                </svg>
               </div>
               <div className="hidden sm:block">
-                <h1 className="text-lg sm:text-xl font-bold">{t('pages.home.title')}</h1>
-                <div className="flex items-center space-x-2 text-xs sm:text-sm text-green-100">
+                <h1 className="text-lg sm:text-xl font-bold tracking-tight">{t('pages.home.title')}</h1>
+                <div className="flex items-center space-x-2 text-xs sm:text-sm text-blue-100" aria-live="polite">
                   {isOnline ? (
                     <>
-                      <Wifi className="h-3 w-3" />
+                      <Wifi className="h-3 w-3" aria-hidden="true" />
                       <span>Online</span>
                     </>
                   ) : (
                     <>
-                      <WifiOff className="h-3 w-3" />
+                      <WifiOff className="h-3 w-3" aria-hidden="true" />
                       <span>Offline Mode</span>
                     </>
                   )}
@@ -106,16 +110,17 @@ export default function Header() {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-1">
+          <nav className="hidden lg:flex items-center space-x-1" aria-label="Main navigation">
             {navigationItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-700 ${
                   location.pathname === item.path
-                    ? 'bg-white/20 text-white shadow-sm'
-                    : 'text-green-100 hover:text-white hover:bg-white/10'
+                    ? 'bg-white/20 text-white shadow-md'
+                    : 'text-blue-50 hover:text-white hover:bg-white/15'
                 }`}
+                aria-current={location.pathname === item.path ? 'page' : undefined}
               >
                 {item.label}
               </Link>
@@ -124,11 +129,10 @@ export default function Header() {
 
           <div className="flex items-center space-x-3">
             <div className="hidden sm:flex items-center space-x-2">
-              <Label htmlFor="mode-switch" className="text-xs text-green-100 cursor-pointer flex items-center space-x-1">
+              <Label htmlFor="mode-switch" className="text-xs text-blue-100 cursor-pointer flex items-center space-x-1">
                 {mode === 'personal' ? <User className="h-3 w-3" /> : <Briefcase className="h-3 w-3" />}
                 <span>{mode === 'personal' ? 'Personal' : 'Specialist'}</span>
               </Label>
-              {/* The mode toggle switch allows users to flip between 'personal' and 'specialist' modes, which dynamically adjusts the available features and UI throughout the application. */}
               <Switch
                 id="mode-switch"
                 checked={mode === 'specialist'}
@@ -137,29 +141,39 @@ export default function Header() {
               />
             </div>
             <LanguageSelector />
-            
+
             {/* Mobile Menu */}
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="sm" className="lg:hidden text-white hover:bg-white/10">
-                  <Menu className="h-5 w-5" />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="lg:hidden text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-700"
+                  aria-label="Open navigation menu"
+                >
+                  <Menu className="h-5 w-5" aria-hidden="true" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-64">
-                <div className="flex flex-col space-y-4 mt-8">
-                  <div className="flex items-center space-x-3 pb-4 border-b">
-                    <Heart className="h-6 w-6 text-green-600" />
+                <nav className="flex flex-col space-y-4 mt-8" aria-label="Mobile navigation">
+                  <div className="flex items-center space-x-3 pb-4 border-b" aria-hidden="true">
+                    <svg className="h-6 w-6 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="6" y="9" width="12" height="14" rx="2" />
+                      <path d="M12 5v4M9 7h6" />
+                      <circle cx="12" cy="19" r="2" fill="currentColor" />
+                    </svg>
                     <span className="font-semibold text-gray-900">{t('pages.home.title')}</span>
                   </div>
                   {navigationItems.map((item) => (
                     <Link
                       key={item.path}
                       to={item.path}
-                      className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                         location.pathname === item.path
-                          ? 'bg-green-100 text-green-900'
+                          ? 'bg-blue-100 text-blue-900'
                           : 'text-gray-700 hover:bg-gray-100'
                       }`}
+                      aria-current={location.pathname === item.path ? 'page' : undefined}
                     >
                       {item.label}
                     </Link>
@@ -179,7 +193,7 @@ export default function Header() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </nav>
               </SheetContent>
             </Sheet>
           </div>

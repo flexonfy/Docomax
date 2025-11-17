@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../../../contexts/LanguageContext';
 import { PatientRecord, Visit, Appointment } from '../../../contexts/PatientRecordsContext';
+import { useMedicationAdherence } from '../../../contexts/MedicationAdherenceContext';
+import { useVitalsTracking } from '../../../contexts/VitalsTrackingContext';
+import { useMedicationReminders } from '../../../contexts/MedicationRemindersContext';
+import { useAppointmentReminders } from '../../../contexts/AppointmentRemindersContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, User, Edit, Trash2, Download, Check } from 'lucide-react';
+import { Plus, User, Edit, Trash2, Download, Check, X, TrendingUp, Activity, Heart, Clock, Bell, Calendar } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 interface PatientDetailViewProps {
@@ -48,7 +52,29 @@ export default function PatientDetailView({
 }: PatientDetailViewProps) {
   const { t } = useLanguage();
   const { toast } = useToast();
+  const { addAdherenceEntry, getAdherenceForMedication } = useMedicationAdherence();
+  const { addVitalEntry, getPatientVitals, deleteVitalEntry, getLatestVitals } = useVitalsTracking();
+  const { addReminder, updateReminder, deleteReminder, getRemindersForPatient, requestNotificationPermission } = useMedicationReminders();
+  const { addReminder: addAppointmentReminder, updateReminder: updateAppointmentReminder, deleteReminder: deleteAppointmentReminder, getRemindersForAppointment, downloadICS } = useAppointmentReminders();
   const [activeTab, setActiveTab] = useState('overview');
+  const [showVitalForm, setShowVitalForm] = useState(false);
+  const [vitalForm, setVitalForm] = useState({
+    temperature: '',
+    heartRate: '',
+    bloodPressure: '',
+    respiratoryRate: '',
+    oxygenSaturation: '',
+    weight: '',
+    notes: ''
+  });
+  const [showReminderForm, setShowReminderForm] = useState(false);
+  const [selectedMedicationForReminder, setSelectedMedicationForReminder] = useState<string>('');
+  const [reminderForm, setReminderForm] = useState({
+    time: '09:00',
+    frequency: 'daily' as const,
+    daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
+    notes: ''
+  });
 
   const {
     deleteVisit, deleteVaccination, deleteLabResult, deleteAttachment, deleteMedication, deleteReferral
@@ -127,12 +153,95 @@ export default function PatientDetailView({
             <TabsTrigger value="vaccinations">{t('pages.records.vaccines')}</TabsTrigger>
             <TabsTrigger value="labs">{t('pages.records.labResults')}</TabsTrigger>
             <TabsTrigger value="medications">{t('pages.records.medications')}</TabsTrigger>
+            {patient.currentMedications && patient.currentMedications.length > 0 && (
+              <TabsTrigger value="adherence">Medication Adherence</TabsTrigger>
+            )}
+            {isPersonalView && patient.currentMedications && patient.currentMedications.length > 0 && (
+              <TabsTrigger value="reminders">Reminders</TabsTrigger>
+            )}
+            <TabsTrigger value="vitals">Vital Signs</TabsTrigger>
             {!isPersonalView && <TabsTrigger value="referrals">{t('pages.records.referrals')}</TabsTrigger>}
             <TabsTrigger value="attachments">{t('pages.records.files')}</TabsTrigger>
           </TabsList>
         </div>
 
         <TabsContent value="overview" className="mt-4">
+          {isPersonalView && (
+            <Card className="mb-6 border-2 border-red-500 bg-red-50">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="bg-red-600 text-white p-2 rounded-full">
+                      <Activity className="h-5 w-5" />
+                    </div>
+                    <CardTitle className="text-red-700">Emergency Profile</CardTitle>
+                  </div>
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      const emergencyInfo = `EMERGENCY CONTACT INFO\n\nName: ${patient.name}\nAge: ${patient.age}\nBlood Type: ${patient.bloodType || 'Unknown'}\nGender: ${patient.gender}\n\nALLERGIES:\n${patient.allergies?.join(', ') || 'None known'}\n\nCHRONIC CONDITIONS:\n${patient.chronicConditions?.join(', ') || 'None'}\n\nCURRENT MEDICATIONS:\n${patient.currentMedications?.map(m => `${m.name} ${m.dosage}`).join(', ') || 'None'}\n\nEMERGENCY CONTACT:\n${patient.emergencyContact || 'Not provided'}\nPhone: ${patient.emergencyContactPhone || 'Not provided'}\n\nPhone: ${patient.phone || 'Not provided'}\nAddress: ${patient.address || 'Not provided'}`;
+
+                      const element = document.createElement('a');
+                      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(emergencyInfo));
+                      element.setAttribute('download', `emergency_profile_${patient.name.replace(/\s+/g, '_')}.txt`);
+                      element.style.display = 'none';
+                      document.body.appendChild(element);
+                      element.click();
+                      document.body.removeChild(element);
+
+                      toast({title: 'Emergency profile downloaded'});
+                    }}
+                  >
+                    <Download className="h-4 w-4 mr-2" /> Share
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 text-sm">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-gray-600 text-xs">BLOOD TYPE</p>
+                      <p className="font-bold text-lg">{patient.bloodType || 'Unknown'}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 text-xs">AGE</p>
+                      <p className="font-bold text-lg">{patient.age}</p>
+                    </div>
+                  </div>
+
+                  <div className="border-t pt-3">
+                    <p className="text-gray-600 text-xs font-semibold mb-1">ALLERGIES</p>
+                    <p className="text-red-700 font-medium">
+                      {patient.allergies?.length ? patient.allergies.join(', ') : 'None known'}
+                    </p>
+                  </div>
+
+                  <div className="border-t pt-3">
+                    <p className="text-gray-600 text-xs font-semibold mb-1">EMERGENCY CONTACT</p>
+                    <p>{patient.emergencyContact || 'Not provided'}</p>
+                    {patient.emergencyContactPhone && (
+                      <p className="font-mono text-sm">{patient.emergencyContactPhone}</p>
+                    )}
+                  </div>
+
+                  {patient.currentMedications && patient.currentMedications.length > 0 && (
+                    <div className="border-t pt-3">
+                      <p className="text-gray-600 text-xs font-semibold mb-1">KEY MEDICATIONS</p>
+                      <ul className="space-y-1 text-xs">
+                        {patient.currentMedications.slice(0, 3).map(med => (
+                          <li key={med.id}>{med.name} - {med.dosage}</li>
+                        ))}
+                        {patient.currentMedications.length > 3 && (
+                          <li className="text-gray-600">+{patient.currentMedications.length - 3} more</li>
+                        )}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
@@ -216,15 +325,73 @@ export default function PatientDetailView({
                 <h3 className="font-semibold mb-2">{t('pages.home.upcomingAppointments')}</h3>
                 {upcomingAppointments.length > 0 ? upcomingAppointments.map(app => (
                   <Card key={app.id} className="mb-2">
-                    <CardContent className="p-3 flex justify-between items-center">
-                      <div>
-                        <p className="font-medium">{app.title}</p>
-                        <p className="text-sm text-gray-500">{new Date(app.date).toLocaleString()}</p>
+                    <CardContent className="p-3">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <p className="font-medium">{app.title}</p>
+                          <p className="text-sm text-gray-500">{new Date(app.date).toLocaleString()}</p>
+                        </div>
+                        <div className="flex space-x-1">
+                          {isPersonalView && (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => downloadICS(app, `${app.title.replace(/\s+/g, '_')}.ics`)}
+                              title="Download as calendar file"
+                            >
+                              <Calendar className="h-4 w-4" />
+                            </Button>
+                          )}
+                          <Button size="sm" variant="outline" onClick={() => onUpdateAppointment(app.id, { completed: true })}><Check className="h-4 w-4 mr-1" /> {t('pages.records.markComplete')}</Button>
+                          <Button size="sm" variant="destructive" onClick={() => onDeleteAppointment(app.id)}><Trash2 className="h-4 w-4" /></Button>
+                        </div>
                       </div>
-                      <div className="flex space-x-2">
-                        <Button size="sm" variant="outline" onClick={() => onUpdateAppointment(app.id, { completed: true })}><Check className="h-4 w-4 mr-1" /> {t('pages.records.markComplete')}</Button>
-                        <Button size="sm" variant="destructive" onClick={() => onDeleteAppointment(app.id)}><Trash2 className="h-4 w-4" /></Button>
-                      </div>
+                      {isPersonalView && (
+                        <div className="mt-2 pt-2 border-t text-xs space-y-1">
+                          {getRemindersForAppointment(app.id).length > 0 ? (
+                            <>
+                              <p className="text-gray-600 font-medium">Reminders:</p>
+                              <div className="flex flex-wrap gap-1">
+                                {getRemindersForAppointment(app.id).map(reminder => (
+                                  <div
+                                    key={reminder.id}
+                                    className={`px-2 py-1 rounded text-xs ${
+                                      reminder.enabled
+                                        ? 'bg-blue-100 text-blue-700'
+                                        : 'bg-gray-100 text-gray-600'
+                                    }`}
+                                  >
+                                    {reminder.minutesBefore < 60
+                                      ? `${reminder.minutesBefore}m before`
+                                      : `${Math.floor(reminder.minutesBefore / 60)}h before`
+                                    }
+                                    <button
+                                      onClick={() => deleteAppointmentReminder(reminder.id)}
+                                      className="ml-1 font-bold hover:opacity-70"
+                                    >
+                                      ×
+                                    </button>
+                                  </div>
+                                ))}
+                              </div>
+                            </>
+                          ) : (
+                            <button
+                              onClick={() => {
+                                addAppointmentReminder({
+                                  appointmentId: app.id,
+                                  minutesBefore: 15,
+                                  enabled: true
+                                });
+                                toast({title: 'Reminder added', description: '15 minutes before appointment'});
+                              }}
+                              className="text-blue-600 hover:underline"
+                            >
+                              + Add reminder
+                            </button>
+                          )}
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 )) : <p className="text-sm text-gray-500">{t('pages.home.noAppointments')}</p>}
@@ -318,6 +485,295 @@ export default function PatientDetailView({
           )}
         </TabsContent>
 
+        {patient.currentMedications && patient.currentMedications.length > 0 && (
+          <TabsContent value="adherence" className="mt-4">
+            <div className="space-y-4">
+              {patient.currentMedications.map(med => {
+                const adherencePercentage = getAdherenceForMedication(med.id);
+                const adherenceColor = adherencePercentage >= 80 ? 'text-green-600' : adherencePercentage >= 50 ? 'text-yellow-600' : 'text-red-600';
+
+                return (
+                  <Card key={med.id} className="overflow-hidden">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <CardTitle className="text-lg">{med.name}</CardTitle>
+                          <CardDescription>{med.dosage} - {med.frequency}</CardDescription>
+                        </div>
+                        <div className="text-right">
+                          <div className={`text-3xl font-bold ${adherenceColor}`}>{adherencePercentage}%</div>
+                          <p className="text-xs text-gray-500">30-day adherence</p>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            className={`h-2 rounded-full transition-all ${
+                              adherencePercentage >= 80 ? 'bg-green-600' :
+                              adherencePercentage >= 50 ? 'bg-yellow-600' :
+                              'bg-red-600'
+                            }`}
+                            style={{ width: `${adherencePercentage}%` }}
+                          />
+                        </div>
+
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="flex-1 bg-green-50 border-green-300 hover:bg-green-100"
+                            onClick={() => {
+                              addAdherenceEntry(med.id, true);
+                              toast({
+                                title: 'Marked as taken',
+                                description: `${med.name} marked as taken today.`
+                              });
+                            }}
+                          >
+                            <Check className="h-4 w-4 mr-2" /> Taken Today
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="flex-1 bg-red-50 border-red-300 hover:bg-red-100"
+                            onClick={() => {
+                              addAdherenceEntry(med.id, false);
+                              toast({
+                                title: 'Marked as missed',
+                                description: `${med.name} marked as missed today.`
+                              });
+                            }}
+                          >
+                            <X className="h-4 w-4 mr-2" /> Missed Today
+                          </Button>
+                        </div>
+
+                        <div className="text-xs text-gray-600 bg-blue-50 p-2 rounded">
+                          <div className="flex items-center gap-1 mb-1">
+                            <TrendingUp className="h-3 w-3" />
+                            <span className="font-semibold">Adherence Trend</span>
+                          </div>
+                          <p>Click "Taken Today" or "Missed Today" to log today's adherence. Adherence is calculated based on the last 30 days of tracking.</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </TabsContent>
+        )}
+
+        {isPersonalView && patient.currentMedications && patient.currentMedications.length > 0 && (
+          <TabsContent value="reminders" className="mt-4">
+            <div className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Bell className="h-5 w-5 text-blue-600" />
+                      <CardTitle>Medication Reminders</CardTitle>
+                    </div>
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        requestNotificationPermission();
+                        setShowReminderForm(!showReminderForm);
+                      }}
+                    >
+                      <Plus className="h-4 w-4 mr-2" /> New Reminder
+                    </Button>
+                  </div>
+                </CardHeader>
+                {showReminderForm && (
+                  <CardContent>
+                    <div className="space-y-4 mb-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Medication</label>
+                        <select
+                          value={selectedMedicationForReminder}
+                          onChange={(e) => setSelectedMedicationForReminder(e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                        >
+                          <option value="">Select a medication</option>
+                          {patient.currentMedications?.map(med => (
+                            <option key={med.id} value={med.id}>
+                              {med.name} ({med.dosage})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium mb-1">Time</label>
+                          <input
+                            type="time"
+                            value={reminderForm.time}
+                            onChange={(e) => setReminderForm({...reminderForm, time: e.target.value})}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium mb-1">Frequency</label>
+                          <select
+                            value={reminderForm.frequency}
+                            onChange={(e) => setReminderForm({...reminderForm, frequency: e.target.value as any})}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                          >
+                            <option value="once">Once</option>
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      {reminderForm.frequency === 'weekly' && (
+                        <div>
+                          <label className="block text-sm font-medium mb-2">Days of Week</label>
+                          <div className="flex flex-wrap gap-2">
+                            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
+                              <button
+                                key={index}
+                                onClick={() => {
+                                  const newDays = reminderForm.daysOfWeek.includes(index)
+                                    ? reminderForm.daysOfWeek.filter(d => d !== index)
+                                    : [...reminderForm.daysOfWeek, index];
+                                  setReminderForm({...reminderForm, daysOfWeek: newDays});
+                                }}
+                                className={`px-3 py-2 rounded text-sm font-medium transition ${
+                                  reminderForm.daysOfWeek.includes(index)
+                                    ? 'bg-blue-600 text-white'
+                                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                }`}
+                              >
+                                {day}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Notes</label>
+                        <textarea
+                          placeholder="Any additional notes..."
+                          value={reminderForm.notes}
+                          onChange={(e) => setReminderForm({...reminderForm, notes: e.target.value})}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                          rows={2}
+                        />
+                      </div>
+
+                      <div className="flex gap-2">
+                        <Button
+                          onClick={() => {
+                            if (!selectedMedicationForReminder) {
+                              toast({title: 'Error', description: 'Please select a medication'});
+                              return;
+                            }
+
+                            const selectedMed = patient.currentMedications?.find(m => m.id === selectedMedicationForReminder);
+                            if (selectedMed) {
+                              addReminder({
+                                medicationId: selectedMedicationForReminder,
+                                medicationName: selectedMed.name,
+                                patientId: patient.id,
+                                time: reminderForm.time,
+                                frequency: reminderForm.frequency,
+                                daysOfWeek: reminderForm.frequency === 'weekly' ? reminderForm.daysOfWeek : undefined,
+                                enabled: true,
+                                notes: reminderForm.notes
+                              });
+                              setReminderForm({time: '09:00', frequency: 'daily', daysOfWeek: [0,1,2,3,4,5,6], notes: ''});
+                              setSelectedMedicationForReminder('');
+                              setShowReminderForm(false);
+                              toast({title: 'Reminder created', description: 'Medication reminder has been set up.'});
+                            }
+                          }}
+                          size="sm"
+                        >
+                          <Check className="h-4 w-4 mr-2" /> Create Reminder
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() => setShowReminderForm(false)}
+                          size="sm"
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                )}
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Clock className="h-5 w-5" />
+                    Active Reminders
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {getRemindersForPatient(patient.id).length > 0 ? (
+                    <div className="space-y-3">
+                      {getRemindersForPatient(patient.id).map(reminder => (
+                        <div key={reminder.id} className="border rounded-lg p-3 bg-gray-50">
+                          <div className="flex justify-between items-start mb-2">
+                            <div>
+                              <p className="font-medium">{reminder.medicationName}</p>
+                              <p className="text-sm text-gray-600">{reminder.time} • {reminder.frequency}</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => updateReminder(reminder.id, {enabled: !reminder.enabled})}
+                                className={`px-3 py-1 rounded text-sm font-medium transition ${
+                                  reminder.enabled
+                                    ? 'bg-green-100 text-green-700'
+                                    : 'bg-gray-200 text-gray-700'
+                                }`}
+                              >
+                                {reminder.enabled ? 'On' : 'Off'}
+                              </button>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => {
+                                  deleteReminder(reminder.id);
+                                  toast({title: 'Reminder deleted'});
+                                }}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                          {reminder.frequency === 'weekly' && reminder.daysOfWeek && (
+                            <div className="text-xs text-gray-600 mb-1">
+                              Days: {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+                                .filter((_, i) => reminder.daysOfWeek?.includes(i))
+                                .join(', ')}
+                            </div>
+                          )}
+                          {reminder.notes && (
+                            <p className="text-xs text-gray-600 italic">{reminder.notes}</p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-center text-gray-500 py-4">No reminders set up yet. Click "New Reminder" to get started.</p>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+        )}
+
         {!isPersonalView && (
           <TabsContent value="referrals" className="mt-4">
             <div className="flex justify-end mb-4">
@@ -344,6 +800,213 @@ export default function PatientDetailView({
             )}
           </TabsContent>
         )}
+
+        <TabsContent value="vitals" className="mt-4">
+          <div className="space-y-4">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Heart className="h-5 w-5 text-red-600" />
+                    <CardTitle>Record Vital Signs</CardTitle>
+                  </div>
+                  <Button
+                    size="sm"
+                    onClick={() => setShowVitalForm(!showVitalForm)}
+                  >
+                    <Plus className="h-4 w-4 mr-2" /> New Entry
+                  </Button>
+                </div>
+              </CardHeader>
+              {showVitalForm && (
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Temperature (°C)</label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        placeholder="36.5"
+                        value={vitalForm.temperature}
+                        onChange={(e) => setVitalForm({...vitalForm, temperature: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Heart Rate (bpm)</label>
+                      <input
+                        type="number"
+                        placeholder="70"
+                        value={vitalForm.heartRate}
+                        onChange={(e) => setVitalForm({...vitalForm, heartRate: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Blood Pressure (mmHg)</label>
+                      <input
+                        type="text"
+                        placeholder="120/80"
+                        value={vitalForm.bloodPressure}
+                        onChange={(e) => setVitalForm({...vitalForm, bloodPressure: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Respiratory Rate (breaths/min)</label>
+                      <input
+                        type="number"
+                        placeholder="16"
+                        value={vitalForm.respiratoryRate}
+                        onChange={(e) => setVitalForm({...vitalForm, respiratoryRate: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Oxygen Saturation (%)</label>
+                      <input
+                        type="number"
+                        placeholder="98"
+                        min="0"
+                        max="100"
+                        value={vitalForm.oxygenSaturation}
+                        onChange={(e) => setVitalForm({...vitalForm, oxygenSaturation: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Weight (kg)</label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        placeholder="70"
+                        value={vitalForm.weight}
+                        onChange={(e) => setVitalForm({...vitalForm, weight: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium mb-1">Notes</label>
+                      <textarea
+                        placeholder="Any additional notes..."
+                        value={vitalForm.notes}
+                        onChange={(e) => setVitalForm({...vitalForm, notes: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                        rows={3}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={() => {
+                        const entry: any = {};
+                        if (vitalForm.temperature) entry.temperature = parseFloat(vitalForm.temperature);
+                        if (vitalForm.heartRate) entry.heartRate = parseInt(vitalForm.heartRate);
+                        if (vitalForm.bloodPressure) entry.bloodPressure = vitalForm.bloodPressure;
+                        if (vitalForm.respiratoryRate) entry.respiratoryRate = parseInt(vitalForm.respiratoryRate);
+                        if (vitalForm.oxygenSaturation) entry.oxygenSaturation = parseInt(vitalForm.oxygenSaturation);
+                        if (vitalForm.weight) entry.weight = parseFloat(vitalForm.weight);
+                        if (vitalForm.notes) entry.notes = vitalForm.notes;
+
+                        addVitalEntry(patient.id, entry);
+                        setVitalForm({temperature: '', heartRate: '', bloodPressure: '', respiratoryRate: '', oxygenSaturation: '', weight: '', notes: ''});
+                        setShowVitalForm(false);
+                        toast({title: 'Vital signs recorded', description: 'New vital signs entry has been saved.'});
+                      }}
+                      size="sm"
+                    >
+                      <Check className="h-4 w-4 mr-2" /> Save Entry
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowVitalForm(false)}
+                      size="sm"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </CardContent>
+              )}
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Activity className="h-5 w-5" />
+                  Vital Signs History (Last 30 Days)
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {getPatientVitals(patient.id).length > 0 ? (
+                  <div className="space-y-3">
+                    {getPatientVitals(patient.id).reverse().map(vital => (
+                      <div key={vital.id} className="border rounded-lg p-3 bg-gray-50">
+                        <div className="flex justify-between items-start mb-2">
+                          <div className="text-sm text-gray-600">
+                            {new Date(vital.date).toLocaleString()}
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => {
+                              deleteVitalEntry(vital.id);
+                              toast({title: 'Entry deleted'});
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+                          {vital.temperature && (
+                            <div>
+                              <span className="text-gray-600">Temp:</span>
+                              <span className="font-medium ml-1">{vital.temperature}°C</span>
+                            </div>
+                          )}
+                          {vital.heartRate && (
+                            <div>
+                              <span className="text-gray-600">HR:</span>
+                              <span className="font-medium ml-1">{vital.heartRate} bpm</span>
+                            </div>
+                          )}
+                          {vital.bloodPressure && (
+                            <div>
+                              <span className="text-gray-600">BP:</span>
+                              <span className="font-medium ml-1">{vital.bloodPressure}</span>
+                            </div>
+                          )}
+                          {vital.respiratoryRate && (
+                            <div>
+                              <span className="text-gray-600">RR:</span>
+                              <span className="font-medium ml-1">{vital.respiratoryRate} br/min</span>
+                            </div>
+                          )}
+                          {vital.oxygenSaturation && (
+                            <div>
+                              <span className="text-gray-600">O₂:</span>
+                              <span className="font-medium ml-1">{vital.oxygenSaturation}%</span>
+                            </div>
+                          )}
+                          {vital.weight && (
+                            <div>
+                              <span className="text-gray-600">Weight:</span>
+                              <span className="font-medium ml-1">{vital.weight} kg</span>
+                            </div>
+                          )}
+                        </div>
+                        {vital.notes && (
+                          <p className="text-xs text-gray-600 mt-2 italic">{vital.notes}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-center text-gray-500 py-4">No vital signs recorded yet. Click "New Entry" to start tracking.</p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
 
         <TabsContent value="attachments" className="mt-4">
           <div className="flex justify-end mb-4">
