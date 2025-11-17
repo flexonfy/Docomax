@@ -157,7 +157,11 @@ export default function Header() {
               <SheetContent side="right" className="w-64">
                 <nav className="flex flex-col space-y-4 mt-8" aria-label="Mobile navigation">
                   <div className="flex items-center space-x-3 pb-4 border-b" aria-hidden="true">
-                    <Heart className="h-6 w-6 text-blue-600" />
+                    <svg className="h-6 w-6 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="6" y="9" width="12" height="14" rx="2" />
+                      <path d="M12 5v4M9 7h6" />
+                      <circle cx="12" cy="19" r="2" fill="currentColor" />
+                    </svg>
                     <span className="font-semibold text-gray-900">{t('pages.home.title')}</span>
                   </div>
                   {navigationItems.map((item) => (
